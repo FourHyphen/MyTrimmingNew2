@@ -25,6 +25,8 @@ namespace TestMyTrimmingNew2
         private dynamic MainWindow;
         private MainWindowDriver Driver;
 
+        private string BeforeEnvironment { get; set; }
+
         [TestInitialize]
         public void Init()
         {
@@ -34,6 +36,9 @@ namespace TestMyTrimmingNew2
             TestProcess = Process.GetProcessById(TestApp.ProcessId);
             MainWindow = TestApp.Type("System.Windows.Application").Current.MainWindow;
             Driver = new MainWindowDriver(MainWindow);
+
+            BeforeEnvironment = Environment.CurrentDirectory;
+            Environment.CurrentDirectory = Common.GetEnvironmentDirPath();
         }
 
         [TestCleanup]
@@ -41,11 +46,17 @@ namespace TestMyTrimmingNew2
         {
             TestApp.Dispose();
             TestProcess.CloseMainWindow();
+
+            Environment.CurrentDirectory = BeforeEnvironment;
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestSuccessImageOpen()
         {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            Assert.AreEqual(expected: 3840, actual: Driver.GetOriginalImageWidth());
+            Assert.AreEqual(expected: 2560, actual: Driver.GetOriginalImageHeight());
         }
     }
 }

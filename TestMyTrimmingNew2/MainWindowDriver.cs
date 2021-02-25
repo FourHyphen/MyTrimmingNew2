@@ -12,19 +12,30 @@ namespace TestMyTrimmingNew2
         private dynamic MainWindow { get; }
         private IWPFDependencyObjectCollection<System.Windows.DependencyObject> Tree { get; set; }
         private LabelAdapter OriginalImageWidth { get; }
+        private LabelAdapter OriginalImageHeight { get; }
 
         public MainWindowDriver(dynamic mainWindow)
         {
             MainWindow = mainWindow;
             Tree = new WindowControl(mainWindow).LogicalTree();
-            //OriginalImageWidth = new LabelAdapter("OriginalImageWidth");
+            OriginalImageWidth = new LabelAdapter("OriginalImageWidth");
+            OriginalImageHeight = new LabelAdapter("OriginalImageHeight");
         }
 
-        public int GetOriginalImageSize()
+        internal void EmurateOpenImage(string imagePath)
+        {
+            MainWindow.OpenImage(imagePath);
+        }
+
+        internal int GetOriginalImageWidth()
         {
             Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
-            string text = OriginalImageWidth.Content(Tree).Trim();
-            return int.Parse(text);
+            return OriginalImageWidth.ContentNum(Tree);
+        }
+
+        internal int GetOriginalImageHeight()
+        {
+            return OriginalImageHeight.ContentNum(Tree);
         }
     }
 }

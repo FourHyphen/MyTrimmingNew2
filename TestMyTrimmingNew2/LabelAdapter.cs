@@ -25,5 +25,12 @@ namespace TestMyTrimmingNew2
             str = str.Replace("System.Windows.Controls.Label", "");    // 文字列が空の場合の対応
             return str;
         }
+
+        public int ContentNum(IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
+        {
+            string str = Content(logicalTree);
+            str = str.Trim();
+            return int.Parse(str);
+        }
     }
 }
