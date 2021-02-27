@@ -10,10 +10,27 @@ namespace MyTrimmingNew2
         /// 表示用画像
         /// </summary>
         /// <returns></returns>
-        public static System.Windows.Media.Imaging.BitmapSource GetShowImage(string imagePath)
+        public static System.Windows.Media.Imaging.BitmapSource GetShowImage(string imagePath, int width, int height)
         {
-            Bitmap bitmap = new Bitmap(imagePath);
-            return CreateBitmapSourceImage(bitmap);
+            Bitmap resized = CreateBitmap(imagePath, width, height);
+            return CreateBitmapSourceImage(resized);
+        }
+
+        private static Bitmap CreateBitmap(string imagePath, int newWidth, int newHeight)
+        {
+            Bitmap reductionImage = new Bitmap(newWidth, newHeight);
+
+            // 縮小画像作成(TODO: 最も画像劣化の少ない縮小アルゴリズムの選定)
+            using (Bitmap bitmap = new Bitmap(imagePath))
+            {
+                using (Graphics g = Graphics.FromImage(reductionImage))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    g.DrawImage(bitmap, 0, 0, newWidth, newHeight);
+                }
+            }
+
+            return reductionImage;
         }
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
