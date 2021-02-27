@@ -15,14 +15,20 @@ using System.Windows.Shapes;
 
 namespace MyTrimmingNew2
 {
-    /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void MenuOpenFileClick(object sender, RoutedEventArgs e)
+        {
+            string filePath = DialogOpenImageFile.Show();
+            if (filePath != "")
+            {
+                OpenImage(filePath);
+            }
         }
 
         private void OpenImage(string imagePath)
