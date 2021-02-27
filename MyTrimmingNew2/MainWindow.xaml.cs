@@ -24,5 +24,13 @@ namespace MyTrimmingNew2
         {
             InitializeComponent();
         }
+
+        private void OpenImage(string imagePath)
+        {
+            BitmapSource bs = MyImage.GetShowImage(imagePath);
+            ShowImage.Source = bs;
+            OriginalImageWidth.Content = bs.PixelWidth.ToString();
+            OriginalImageHeight.Content = bs.PixelHeight.ToString();
+        }
     }
 }

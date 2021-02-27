@@ -7,6 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--image-->
+        <Grid Column="0">
+            <Image Name="ShowImage"
+                   HorizontalAlignment="Left"
+                   Panel.ZIndex="0"
+                   Stretch="None"
+                   VerticalAlignment="Top"/>
+        </Grid>
+
+        <!--parameter-->
+        <Grid Column="1">
+            <StackPanel>
+                <Label Content="画像実寸(pixel)"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="横"/>
+                    <Label x:Name="OriginalImageWidth"
+                           Content="0"/>
+                    <Label Content=" x 縦"/>
+                    <Label x:Name="OriginalImageHeight"
+                           Content="0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
