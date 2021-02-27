@@ -22,6 +22,17 @@ namespace MyTrimmingNew2
             InitializeComponent();
         }
 
+        private void MainWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            Init();
+        }
+
+        private void Init()
+        {
+            ImageAreaWidth.Content = ((int)ImageArea.ActualWidth).ToString();
+            ImageAreaHeight.Content = ((int)ImageArea.ActualHeight).ToString();
+        }
+
         private void MenuOpenFileClick(object sender, RoutedEventArgs e)
         {
             string filePath = DialogOpenImageFile.Show();
@@ -33,10 +44,24 @@ namespace MyTrimmingNew2
 
         private void OpenImage(string imagePath)
         {
+            SetOriginalImageSize(imagePath);
+
             BitmapSource bs = MyImage.GetShowImage(imagePath);
             ShowingImage.Source = bs;
-            OriginalImageWidth.Content = bs.PixelWidth.ToString();
-            OriginalImageHeight.Content = bs.PixelHeight.ToString();
+            ShowingImageWidth.Content = bs.PixelWidth.ToString();
+            ShowingImageHeight.Content = bs.PixelHeight.ToString();
+        }
+
+        private void SetOriginalImageSize(string imagePath)
+        {
+            // 画像を開く際に検証処理しないことで高速に読み込む
+            using (System.IO.FileStream fs = System.IO.File.OpenRead(imagePath)) {
+                using (System.Drawing.Image image = System.Drawing.Image.FromStream(fs, false, false))
+                {
+                    OriginalImageWidth.Content = image.Width.ToString();
+                    OriginalImageHeight.Content = image.Height.ToString();
+                }
+            }
         }
     }
 }

@@ -13,6 +13,9 @@ namespace TestMyTrimmingNew2
         private IWPFDependencyObjectCollection<System.Windows.DependencyObject> Tree { get; set; }
         private LabelAdapter OriginalImageWidth { get; }
         private LabelAdapter OriginalImageHeight { get; }
+        private LabelAdapter ImageAreaWidth { get; }
+        private LabelAdapter ShowingImageWidth { get; }
+        private LabelAdapter ShowingImageHeight { get; }
 
         public MainWindowDriver(dynamic mainWindow)
         {
@@ -20,6 +23,9 @@ namespace TestMyTrimmingNew2
             Tree = new WindowControl(mainWindow).LogicalTree();
             OriginalImageWidth = new LabelAdapter("OriginalImageWidth");
             OriginalImageHeight = new LabelAdapter("OriginalImageHeight");
+            ImageAreaWidth = new LabelAdapter("ImageAreaWidth");
+            ShowingImageWidth = new LabelAdapter("ShowingImageWidth");
+            ShowingImageHeight = new LabelAdapter("ShowingImageHeight");
         }
 
         internal void EmurateOpenImage(string imagePath)
@@ -29,13 +35,37 @@ namespace TestMyTrimmingNew2
 
         internal int GetOriginalImageWidth()
         {
-            Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
+            UpdateNowMainWindowStatus();
             return OriginalImageWidth.ContentNum(Tree);
         }
 
         internal int GetOriginalImageHeight()
         {
+            UpdateNowMainWindowStatus();
             return OriginalImageHeight.ContentNum(Tree);
+        }
+
+        internal int GetImageAreaWidth()
+        {
+            UpdateNowMainWindowStatus();
+            return ImageAreaWidth.ContentNum(Tree);
+        }
+
+        internal int GetShowingImageWidth()
+        {
+            UpdateNowMainWindowStatus();
+            return ShowingImageWidth.ContentNum(Tree);
+        }
+
+        internal int GetShowingImageHeight()
+        {
+            UpdateNowMainWindowStatus();
+            return ShowingImageHeight.ContentNum(Tree);
+        }
+
+        private void UpdateNowMainWindowStatus()
+        {
+            Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
         }
     }
 }

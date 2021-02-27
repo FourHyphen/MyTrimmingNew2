@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyTrimmingNew2"
         mc:Ignorable="d"
+        Loaded="MainWindowLoaded"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <DockPanel>
@@ -21,7 +22,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!--image-->
-                <Grid Column="0">
+                <Grid x:Name="ImageArea" Column="0">
                     <Image Name="ShowingImage"
                            HorizontalAlignment="Left"
                            Panel.ZIndex="0"
@@ -39,6 +40,26 @@
                                    Content="0"/>
                             <Label Content=" x 縦"/>
                             <Label x:Name="OriginalImageHeight"
+                                   Content="0"/>
+                        </StackPanel>
+
+                        <Label Content="画像見た目(pixel)"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="横"/>
+                            <Label x:Name="ShowingImageWidth"
+                                   Content="0"/>
+                            <Label Content=" x 縦"/>
+                            <Label x:Name="ShowingImageHeight"
+                                   Content="0"/>
+                        </StackPanel>
+
+                        <Label Content="画像領域(pixel)"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="横"/>
+                            <Label x:Name="ImageAreaWidth"
+                                   Content="0"/>
+                            <Label Content=" x 縦"/>
+                            <Label x:Name="ImageAreaHeight"
                                    Content="0"/>
                         </StackPanel>
                     </StackPanel>

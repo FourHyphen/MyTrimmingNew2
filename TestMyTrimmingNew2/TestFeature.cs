@@ -57,6 +57,10 @@ namespace TestMyTrimmingNew2
             Driver.EmurateOpenImage(imagePath);
             Assert.AreEqual(expected: 3840, actual: Driver.GetOriginalImageWidth());
             Assert.AreEqual(expected: 2560, actual: Driver.GetOriginalImageHeight());
+
+            int imageAreaWidth = Driver.GetImageAreaWidth();
+            Assert.AreEqual(expected: imageAreaWidth, actual: Driver.GetShowingImageWidth());
+            Assert.AreEqual(expected: 0000, actual: Driver.GetShowingImageHeight());
         }
     }
 }
