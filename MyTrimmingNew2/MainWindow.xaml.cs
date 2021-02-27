@@ -44,13 +44,14 @@ namespace MyTrimmingNew2
 
         private void OpenImage(string imagePath)
         {
-            ShowingImage _ShowingImage = new ShowingImage(imagePath, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
-            OriginalImageWidth.Content = _ShowingImage.OriginalImageWidth.ToString();
-            OriginalImageHeight.Content = _ShowingImage.OriginalImageHeight.ToString();
+            OriginalImage originalImage = new OriginalImage(imagePath);
+            OriginalImageWidth.Content = originalImage.Width.ToString();
+            OriginalImageHeight.Content = originalImage.Height.ToString();
 
-            ShowingImage.Source = _ShowingImage.Source;
-            ShowingImageWidth.Content = _ShowingImage.Width.ToString();
-            ShowingImageHeight.Content = _ShowingImage.Height.ToString();
+            ShowingImage showingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
+            ShowingImage.Source = showingImage.Source;
+            ShowingImageWidth.Content = showingImage.Width.ToString();
+            ShowingImageHeight.Content = showingImage.Height.ToString();
         }
     }
 }

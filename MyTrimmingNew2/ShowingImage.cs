@@ -9,13 +9,8 @@ namespace MyTrimmingNew2
 {
     public class ShowingImage
     {
-        private string ImagePath { get; }
         private int ImageAreaWidth { get; }
         private int ImageAreaHeight { get; }
-
-        public int OriginalImageWidth { get; private set; }
-
-        public int OriginalImageHeight { get; private set; }
 
         public BitmapSource Source { get; set; }
 
@@ -35,42 +30,30 @@ namespace MyTrimmingNew2
             }
         }
 
-        public ShowingImage(string imagePath, int imageAreaWidth, int imageAreaHeight)
+        public ShowingImage(OriginalImage image, int imageAreaWidth, int imageAreaHeight)
         {
-            ImagePath = imagePath;
             ImageAreaWidth = imageAreaWidth;
             ImageAreaHeight = imageAreaHeight;
-
-            Init();
+            Init(image);
         }
 
-        private void Init()
+        private void Init(OriginalImage image)
         {
-            // 画像を開く際に検証処理しないことで高速に読み込む
-            using (System.IO.FileStream fs = System.IO.File.OpenRead(ImagePath))
-            {
-                using (System.Drawing.Image image = System.Drawing.Image.FromStream(fs, false, false))
-                {
-                    OriginalImageWidth = image.Width;
-                    OriginalImageHeight = image.Height;
-                }
-            }
-
-            CreateShowingImageSourceFitImageArea();
+            CreateShowingImageSourceFitImageArea(image);
         }
 
-        private void CreateShowingImageSourceFitImageArea()
+        private void CreateShowingImageSourceFitImageArea(OriginalImage image)
         {
-            double ratio = CalcRatioOfFittingImageAreaKeepingImageRatio();
-            double fitWidth = (double)OriginalImageWidth * ratio;
-            double fitHeight = (double)OriginalImageHeight * ratio;
-            Source = ImageProcess.GetShowImage(ImagePath, (int)fitWidth, (int)fitHeight);
+            double ratio = CalcRatioOfFittingImageAreaKeepingImageRatio(image.Width, image.Height);
+            double fitWidth = (double)image.Width * ratio;
+            double fitHeight = (double)image.Height * ratio;
+            Source = ImageProcess.GetShowImage(image.Path, (int)fitWidth, (int)fitHeight);
         }
 
-        private double CalcRatioOfFittingImageAreaKeepingImageRatio()
+        private double CalcRatioOfFittingImageAreaKeepingImageRatio(int imageWidth, int imageHeight)
         {
-            double ratioBaseWidth = (double)ImageAreaWidth / OriginalImageWidth;
-            double ratioBaseHeight = (double)ImageAreaHeight / OriginalImageHeight;
+            double ratioBaseWidth = (double)ImageAreaWidth / imageWidth;
+            double ratioBaseHeight = (double)ImageAreaHeight / imageHeight;
 
             // 倍率が大きいと ImageArea から縦(横)だけがはみ出る
             if (ratioBaseWidth < ratioBaseHeight)

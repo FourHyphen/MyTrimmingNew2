@@ -8,7 +8,7 @@ namespace MyTrimmingNew2
 {
     public class OriginalImage
     {
-        private string ImagePath { get; }
+        public string Path { get; private set; }
 
         public int Width { get; private set; }
 
@@ -16,14 +16,14 @@ namespace MyTrimmingNew2
 
         public OriginalImage(string imagePath)
         {
-            ImagePath = imagePath;
+            Path = imagePath;
             Init();
         }
 
         private void Init()
         {
             // 画像を開く際に検証処理しないことで高速に読み込む
-            using (System.IO.FileStream fs = System.IO.File.OpenRead(ImagePath))
+            using (System.IO.FileStream fs = System.IO.File.OpenRead(Path))
             {
                 using (System.Drawing.Image image = System.Drawing.Image.FromStream(fs, false, false))
                 {
