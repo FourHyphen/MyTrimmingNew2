@@ -42,9 +42,14 @@
                 <!--parameter-->
                 <Grid Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="3*"/>
                         <RowDefinition Height="1*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
+
+                    <!--画像-->
                     <Grid Grid.Row="0">
                         <StackPanel>
                             <Label Content="画像実寸(pixel)"/>
@@ -66,7 +71,12 @@
                                 <Label x:Name="ShowingImageHeight"
                                    Content="0"/>
                             </StackPanel>
+                        </StackPanel>
+                    </Grid>
 
+                    <!--切り抜き線-->
+                    <Grid Grid.Row="2">
+                        <StackPanel>
                             <Label Content="切り抜き線(pixel)"/>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="横"/>
@@ -76,10 +86,51 @@
                                 <Label x:Name="CutLineHeight"
                                    Content="0"/>
                             </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="左上 ("/>
+                                <Label x:Name="CutLineLeftTopX"
+                                   Content="0"/>
+                                <Label Content=", "/>
+                                <Label x:Name="CutLineLeftTopY"
+                                   Content="0"/>
+                                <Label Content=")"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="右上 ("/>
+                                <Label x:Name="CutLineRightTopX"
+                                   Content="0"/>
+                                <Label Content=", "/>
+                                <Label x:Name="CutLineRightTopY"
+                                   Content="0"/>
+                                <Label Content=")"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="左下 ("/>
+                                <Label x:Name="CutLineLeftBottomX"
+                                   Content="0"/>
+                                <Label Content=", "/>
+                                <Label x:Name="CutLineLeftBottomY"
+                                   Content="0"/>
+                                <Label Content=")"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="右下 ("/>
+                                <Label x:Name="CutLineRightBottomX"
+                                   Content="0"/>
+                                <Label Content=", "/>
+                                <Label x:Name="CutLineRightBottomY"
+                                   Content="0"/>
+                                <Label Content=")"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Row="1">
+                    <!--テスト用：画像領域-->
+                    <Grid Grid.Row="4">
                         <StackPanel>
                             <Label Content="画像領域(pixel)"/>
                             <StackPanel Orientation="Horizontal">

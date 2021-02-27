@@ -71,12 +71,27 @@ namespace MyTrimmingNew2
 
         private void DisplayCutLineCore(CutLine cutLine)
         {
-            System.Windows.Point origin = new System.Windows.Point(cutLine.Left, cutLine.Top);
-            CutLine.Points[0] = origin;
-            CutLine.Points[1] = new System.Windows.Point(cutLine.Width, cutLine.Top);
-            CutLine.Points[2] = new System.Windows.Point(cutLine.Width, cutLine.Height);
-            CutLine.Points[3] = new System.Windows.Point(cutLine.Left, cutLine.Height);
-            CutLine.Points[4] = origin;  // 長方形として閉じる
+            System.Windows.Point leftTop = new System.Windows.Point(cutLine.Left, cutLine.Top);
+            System.Windows.Point rightTop = new System.Windows.Point(cutLine.Width, cutLine.Top);
+            System.Windows.Point rightBottom = new System.Windows.Point(cutLine.Width, cutLine.Height);
+            System.Windows.Point leftBottom = new System.Windows.Point(cutLine.Left, cutLine.Height);
+
+            CutLine.Points[0] = leftTop;
+            CutLine.Points[1] = rightTop;
+            CutLine.Points[2] = rightBottom;
+            CutLine.Points[3] = leftBottom;
+            CutLine.Points[4] = leftTop;  // 長方形として閉じる
+
+            SetLabelCoordinate(leftTop, CutLineLeftTopX, CutLineLeftTopY);
+            SetLabelCoordinate(rightTop, CutLineRightTopX, CutLineRightTopY);
+            SetLabelCoordinate(rightBottom, CutLineRightBottomX, CutLineRightBottomY);
+            SetLabelCoordinate(leftBottom, CutLineLeftBottomX, CutLineLeftBottomY);
+        }
+
+        private void SetLabelCoordinate(System.Windows.Point p, Label labelX, Label labelY)
+        {
+            labelX.Content = p.X.ToString();
+            labelY.Content = p.Y.ToString();
         }
     }
 }
