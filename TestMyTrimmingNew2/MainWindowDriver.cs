@@ -3,6 +3,7 @@ using RM.Friendly.WPFStandardControls;
 using System.Windows.Documents;
 using Codeer.Friendly.Dynamic;
 using System;
+using System.Windows.Input;
 
 namespace TestMyTrimmingNew2
 {
@@ -14,10 +15,15 @@ namespace TestMyTrimmingNew2
         private LabelAdapter OriginalImageWidth { get; }
         private LabelAdapter OriginalImageHeight { get; }
         private LabelAdapter ImageAreaWidth { get; }
+        private LabelAdapter ImageAreaHeight { get; }
         private LabelAdapter ShowingImageWidth { get; }
         private LabelAdapter ShowingImageHeight { get; }
         private LabelAdapter CutLineWidth { get; }
         private LabelAdapter CutLineHeight { get; }
+        private LabelAdapter CutLineLeftTopX { get; }
+        private LabelAdapter CutLineLeftTopY { get; }
+        private LabelAdapter CutLineLeftBottomY { get; }
+        private LabelAdapter CutLineRightBottomY { get; }
 
         public MainWindowDriver(dynamic mainWindow)
         {
@@ -30,6 +36,10 @@ namespace TestMyTrimmingNew2
             ShowingImageHeight = new LabelAdapter("ShowingImageHeight");
             CutLineWidth = new LabelAdapter("CutLineWidth");
             CutLineHeight = new LabelAdapter("CutLineHeight");
+            CutLineLeftTopX = new LabelAdapter("CutLineLeftTopX");
+            CutLineLeftTopY = new LabelAdapter("CutLineLeftTopY");
+            CutLineLeftBottomY = new LabelAdapter("CutLineLeftBottomY");
+            CutLineRightBottomY = new LabelAdapter("CutLineRightBottomY");
         }
 
         internal void EmurateOpenImage(string imagePath)
@@ -53,6 +63,12 @@ namespace TestMyTrimmingNew2
         {
             UpdateNowMainWindowStatus();
             return ImageAreaWidth.ContentNum(Tree);
+        }
+
+        internal object GetImageAreaHeight()
+        {
+            UpdateNowMainWindowStatus();
+            return ImageAreaHeight.ContentNum(Tree);
         }
 
         internal int GetShowingImageWidth()
@@ -79,9 +95,41 @@ namespace TestMyTrimmingNew2
             return CutLineHeight.ContentNum(Tree);
         }
 
+        internal int GetCutLineLeftTopX()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineLeftTopX.ContentNum(Tree);
+        }
+
+        internal int GetCutLineLeftTopY()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineLeftTopY.ContentNum(Tree);
+        }
+
+        internal int GetCutLineLeftBottomY()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineLeftBottomY.ContentNum(Tree);
+        }
+
+        internal int GetCutLineRightBottomY()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineRightBottomY.ContentNum(Tree);
+        }
+
         private void UpdateNowMainWindowStatus()
         {
             Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
+        }
+
+        internal void EmurateInputKey(Key key, int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                MainWindow.InputKey(key);
+            }
         }
     }
 }

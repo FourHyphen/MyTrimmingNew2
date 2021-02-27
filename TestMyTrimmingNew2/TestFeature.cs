@@ -90,5 +90,27 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 362, actual: cutLineWidth);
             Assert.AreEqual(expected: 203, actual: cutLineHeight);
         }
+
+        [TestMethod]
+        public void TestMoveCutLineWhenInputCursolKeyUpAndDown()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Up, 1);
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1);
+            Assert.AreEqual(expected: 1, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1);
+            Assert.AreEqual(expected: 2, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1000);
+            Assert.AreEqual(expected: Driver.GetImageAreaHeight(), actual: Driver.GetCutLineLeftBottomY());
+            Assert.AreEqual(expected: Driver.GetImageAreaHeight(), actual: Driver.GetCutLineRightBottomY());
+        }
     }
 }

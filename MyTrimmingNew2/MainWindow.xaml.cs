@@ -93,5 +93,12 @@ namespace MyTrimmingNew2
             labelX.Content = p.X.ToString();
             labelY.Content = p.Y.ToString();
         }
+
+
+
+        private void InputKey(System.Windows.Input.Key key)
+        {
+
+        }
     }
 }
