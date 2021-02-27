@@ -92,6 +92,7 @@
     <Compile Include="DisplayControl.cs" />
     <Compile Include="LabelAdapter.cs" />
     <Compile Include="MainWindowDriver.cs" />
+    <Compile Include="TestCutLine.cs" />
     <Compile Include="TestFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestImageProcess.cs" />

@@ -25,7 +25,6 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestSuccessOfCreateInstance()
         {
-            // メッセージ：テストはOK、実装したらShowingImageクラスからOriginalImageを分離する
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             OriginalImage originalImage = new OriginalImage(imagePath);
             Assert.AreEqual(expected: 3840, actual: originalImage.Width);
