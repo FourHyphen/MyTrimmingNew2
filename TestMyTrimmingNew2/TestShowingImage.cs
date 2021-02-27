@@ -26,9 +26,10 @@ namespace TestMyTrimmingNew2
         public void TestSuccessOfCreateShowingImage()
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            OriginalImage image = new OriginalImage(imagePath);
             int imageAreaWidth = 800;
             int imageAreaHeight = 600;
-            ShowingImage showingImage = new ShowingImage(imagePath, imageAreaWidth, imageAreaHeight);
+            ShowingImage showingImage = new ShowingImage(image, imageAreaWidth, imageAreaHeight);
             Assert.AreEqual(expected: imageAreaWidth, actual: showingImage.Width);
             Assert.AreEqual(expected: 533, actual: showingImage.Height);
         }

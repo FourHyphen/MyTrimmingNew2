@@ -30,7 +30,7 @@ namespace TestMyTrimmingNew2
 
         internal void EmurateOpenImage(string imagePath)
         {
-            MainWindow.OpenImage(imagePath);
+            MainWindow.DisplayImage(imagePath);
         }
 
         internal int GetOriginalImageWidth()

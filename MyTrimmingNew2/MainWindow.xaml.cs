@@ -38,17 +38,22 @@ namespace MyTrimmingNew2
             string filePath = DialogOpenImageFile.Show();
             if (filePath != "")
             {
-                OpenImage(filePath);
+                DisplayImage(filePath);
             }
         }
 
-        private void OpenImage(string imagePath)
+        private void DisplayImage(string imagePath)
         {
             OriginalImage originalImage = new OriginalImage(imagePath);
+            ShowingImage showingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
+            DisplayImageCore(originalImage, showingImage);
+        }
+
+        private void DisplayImageCore(OriginalImage originalImage, ShowingImage showingImage)
+        {
             OriginalImageWidth.Content = originalImage.Width.ToString();
             OriginalImageHeight.Content = originalImage.Height.ToString();
 
-            ShowingImage showingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
             ShowingImage.Source = showingImage.Source;
             ShowingImageWidth.Content = showingImage.Width.ToString();
             ShowingImageHeight.Content = showingImage.Height.ToString();
