@@ -47,6 +47,7 @@ namespace MyTrimmingNew2
             OriginalImage originalImage = new OriginalImage(imagePath);
             ShowingImage showingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
             DisplayImageCore(originalImage, showingImage);
+            DisplayCutLine(showingImage);
         }
 
         private void DisplayImageCore(OriginalImage originalImage, ShowingImage showingImage)
@@ -57,6 +58,28 @@ namespace MyTrimmingNew2
             ShowingImage.Source = showingImage.Source;
             ShowingImageWidth.Content = showingImage.Width.ToString();
             ShowingImageHeight.Content = showingImage.Height.ToString();
+        }
+
+        private void DisplayCutLine(ShowingImage image)
+        {
+            double width = image.Width;
+            double height = width * 9.0 / 16.0;
+            if (height > image.Height)
+            {
+                height = image.Height;
+                width = height * 16.0 / 9.0;
+            }
+
+            int cutLineWidth = (int)width;
+            int cutLineHeight = (int)height;
+            CutLine.Points[0] = new System.Windows.Point(0, 0);
+            CutLine.Points[1] = new System.Windows.Point(cutLineWidth, 0);
+            CutLine.Points[2] = new System.Windows.Point(cutLineWidth, cutLineHeight);
+            CutLine.Points[3] = new System.Windows.Point(0, cutLineHeight);
+            CutLine.Points[4] = new System.Windows.Point(0, 0);  // 長方形として閉じる
+
+            CutLineWidth.Content = cutLineWidth.ToString();
+            CutLineHeight.Content = cutLineHeight.ToString();
         }
     }
 }

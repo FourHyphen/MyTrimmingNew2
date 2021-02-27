@@ -65,17 +65,30 @@ namespace TestMyTrimmingNew2
         }
 
         [TestMethod]
-        public void TestDisplayCutLine()
+        public void TestDisplayCutLineOfImageWidthLongerThanHeight()
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
 
-            // 縦:横 = 16:9
             int cutLineWidth = Driver.GetCutLineWidth();
             int cutLineHeight = Driver.GetCutLineHeight();
             Assert.AreEqual(expected: Driver.GetShowingImageWidth(), actual: cutLineWidth);
+            // 367[pixel] = 横654[pixel]に対して 縦:横 = 16:9 を適用した結果
             Assert.AreEqual(expected: 367, actual: cutLineHeight);
-            Assert.AreEqual(expected: 16.0 / 9.0, actual: (double)cutLineWidth / (double)cutLineHeight);
+        }
+
+        [TestMethod]
+        public void TestDisplayCutLineOfImageHeightLongerThanWidth()
+        {
+            string imagePath2 = Common.GetFilePathOfDependentEnvironment("/Resource/test002.jpg");
+            Driver.EmurateOpenImage(imagePath2);
+
+            int cutLineWidth = Driver.GetCutLineWidth();
+            int cutLineHeight = Driver.GetCutLineHeight();
+            // (362, 203) = 縦長画像を 横654 x 縦544 で表示したところ 横362 x 縦544 で表示された
+            //              これに対して 縦:横 = 16:9 を適用した結果
+            Assert.AreEqual(expected: 362, actual: cutLineWidth);
+            Assert.AreEqual(expected: 203, actual: cutLineHeight);
         }
     }
 }
