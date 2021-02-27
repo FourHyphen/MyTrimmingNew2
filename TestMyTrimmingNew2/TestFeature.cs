@@ -60,7 +60,8 @@ namespace TestMyTrimmingNew2
 
             int imageAreaWidth = Driver.GetImageAreaWidth();
             Assert.AreEqual(expected: imageAreaWidth, actual: Driver.GetShowingImageWidth());
-            Assert.AreEqual(expected: 0000, actual: Driver.GetShowingImageHeight());
+            // 436[pixel] = 横654[pixel]に縦横比率を維持したまま縮小した結果
+            Assert.AreEqual(expected: 436, actual: Driver.GetShowingImageHeight());
         }
     }
 }
