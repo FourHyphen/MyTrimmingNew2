@@ -96,6 +96,9 @@ namespace TestMyTrimmingNew2
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
+            int maxBottom = Driver.GetShowingImageHeight();
+            int maxTop = maxBottom - Driver.GetCutLineHeight();
+
             Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
             Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
 
@@ -105,12 +108,15 @@ namespace TestMyTrimmingNew2
             Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1);
             Assert.AreEqual(expected: 1, actual: Driver.GetCutLineLeftTopY());
 
-            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1);
-            Assert.AreEqual(expected: 2, actual: Driver.GetCutLineLeftTopY());
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 300);
+            Assert.AreEqual(expected: maxTop, actual: Driver.GetCutLineLeftTopY());
+            Assert.AreEqual(expected: maxTop, actual: Driver.GetCutLineRightTopY());
+            Assert.AreEqual(expected: maxBottom, actual: Driver.GetCutLineLeftBottomY());
+            Assert.AreEqual(expected: maxBottom, actual: Driver.GetCutLineRightBottomY());
 
-            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1000);
-            Assert.AreEqual(expected: Driver.GetImageAreaHeight(), actual: Driver.GetCutLineLeftBottomY());
-            Assert.AreEqual(expected: Driver.GetImageAreaHeight(), actual: Driver.GetCutLineRightBottomY());
+            Driver.EmurateInputKey(System.Windows.Input.Key.Up, 1);
+            Assert.AreEqual(expected: maxTop - 1, actual: Driver.GetCutLineLeftTopY());
+            Assert.AreEqual(expected: maxBottom - 1, actual: Driver.GetCutLineLeftBottomY());
         }
     }
 }

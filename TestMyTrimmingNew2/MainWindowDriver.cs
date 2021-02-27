@@ -23,6 +23,7 @@ namespace TestMyTrimmingNew2
         private LabelAdapter CutLineLeftTopX { get; }
         private LabelAdapter CutLineLeftTopY { get; }
         private LabelAdapter CutLineLeftBottomY { get; }
+        private LabelAdapter CutLineRightTopY { get; }
         private LabelAdapter CutLineRightBottomY { get; }
 
         public MainWindowDriver(dynamic mainWindow)
@@ -32,6 +33,7 @@ namespace TestMyTrimmingNew2
             OriginalImageWidth = new LabelAdapter("OriginalImageWidth");
             OriginalImageHeight = new LabelAdapter("OriginalImageHeight");
             ImageAreaWidth = new LabelAdapter("ImageAreaWidth");
+            ImageAreaHeight = new LabelAdapter("ImageAreaHeight");
             ShowingImageWidth = new LabelAdapter("ShowingImageWidth");
             ShowingImageHeight = new LabelAdapter("ShowingImageHeight");
             CutLineWidth = new LabelAdapter("CutLineWidth");
@@ -39,6 +41,7 @@ namespace TestMyTrimmingNew2
             CutLineLeftTopX = new LabelAdapter("CutLineLeftTopX");
             CutLineLeftTopY = new LabelAdapter("CutLineLeftTopY");
             CutLineLeftBottomY = new LabelAdapter("CutLineLeftBottomY");
+            CutLineRightTopY = new LabelAdapter("CutLineRightTopY");
             CutLineRightBottomY = new LabelAdapter("CutLineRightBottomY");
         }
 
@@ -111,6 +114,12 @@ namespace TestMyTrimmingNew2
         {
             UpdateNowMainWindowStatus();
             return CutLineLeftBottomY.ContentNum(Tree);
+        }
+
+        internal int GetCutLineRightTopY()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineRightTopY.ContentNum(Tree);
         }
 
         internal int GetCutLineRightBottomY()

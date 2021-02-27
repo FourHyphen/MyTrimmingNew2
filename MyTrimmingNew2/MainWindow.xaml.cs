@@ -17,6 +17,8 @@ namespace MyTrimmingNew2
 {
     public partial class MainWindow : Window
     {
+        private CutLine _CutLine { get; set; } = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -62,19 +64,16 @@ namespace MyTrimmingNew2
 
         private void DisplayCutLine(ShowingImage image)
         {
-            CutLine cl = new CutLine(image);
-
-            DisplayCutLineCore(cl);
-            CutLineWidth.Content = cl.Width.ToString();
-            CutLineHeight.Content = cl.Height.ToString();
+            _CutLine = new CutLine(image);
+            DisplayCutLineCore(_CutLine);
         }
 
         private void DisplayCutLineCore(CutLine cutLine)
         {
             System.Windows.Point leftTop = new System.Windows.Point(cutLine.Left, cutLine.Top);
-            System.Windows.Point rightTop = new System.Windows.Point(cutLine.Width, cutLine.Top);
-            System.Windows.Point rightBottom = new System.Windows.Point(cutLine.Width, cutLine.Height);
-            System.Windows.Point leftBottom = new System.Windows.Point(cutLine.Left, cutLine.Height);
+            System.Windows.Point rightTop = new System.Windows.Point(cutLine.Right, cutLine.Top);
+            System.Windows.Point rightBottom = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
+            System.Windows.Point leftBottom = new System.Windows.Point(cutLine.Left, cutLine.Bottom);
 
             CutLine.Points[0] = leftTop;
             CutLine.Points[1] = rightTop;
@@ -86,6 +85,9 @@ namespace MyTrimmingNew2
             SetLabelCoordinate(rightTop, CutLineRightTopX, CutLineRightTopY);
             SetLabelCoordinate(rightBottom, CutLineRightBottomX, CutLineRightBottomY);
             SetLabelCoordinate(leftBottom, CutLineLeftBottomX, CutLineLeftBottomY);
+
+            CutLineWidth.Content = cutLine.Width.ToString();
+            CutLineHeight.Content = cutLine.Height.ToString();
         }
 
         private void SetLabelCoordinate(System.Windows.Point p, Label labelX, Label labelY)
@@ -94,11 +96,29 @@ namespace MyTrimmingNew2
             labelY.Content = p.Y.ToString();
         }
 
-
+        private void MainWindowKeyDown(object sender, KeyEventArgs e)
+        {
+            System.Windows.Input.Key key = e.Key;
+            InputKey(key);
+        }
 
         private void InputKey(System.Windows.Input.Key key)
         {
+            if (_CutLine == null)
+            {
+                return;
+            }
 
+            if (key == Key.Up)
+            {
+                _CutLine.MoveY(-1);
+            }
+            else if (key == Key.Down)
+            {
+                _CutLine.MoveY(1);
+            }
+
+            DisplayCutLineCore(_CutLine);
         }
     }
 }

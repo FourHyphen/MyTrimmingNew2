@@ -45,5 +45,27 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 0, actual: cl.Left);
             Assert.AreEqual(expected: 0, actual: cl.Top);
         }
+
+        [TestMethod]
+        public void TestUpAndDownCutLine()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            OriginalImage oi = new OriginalImage(imagePath);
+            ShowingImage si = new ShowingImage(oi, 800, 600);
+            CutLine cl = new CutLine(si);
+            int maxTop = si.Height - cl.Height;
+
+            Assert.AreEqual(expected: 0, actual: cl.Top);
+            cl.MoveY(-1);
+            Assert.AreEqual(expected: 0, actual: cl.Top);
+            cl.MoveY(1);
+            Assert.AreEqual(expected: 1, actual: cl.Top);
+            cl.MoveY(50);
+            Assert.AreEqual(expected: 51, actual: cl.Top);
+            cl.MoveY(1000);
+            Assert.AreEqual(expected: maxTop, actual: cl.Top);
+            cl.MoveY(-1);
+            Assert.AreEqual(expected: maxTop - 1, actual: cl.Top);
+        }
     }
 }

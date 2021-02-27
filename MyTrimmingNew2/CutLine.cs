@@ -8,6 +8,8 @@ namespace MyTrimmingNew2
 {
     public class CutLine
     {
+        private ShowingImage _ShowingImage { get; set; }
+
         public int Width { get; private set; }
 
         public int Height { get; private set; }
@@ -16,15 +18,32 @@ namespace MyTrimmingNew2
 
         public int Top { get; private set; }
 
-        public CutLine(ShowingImage showingImage)
+        public int Right
         {
-            Init(showingImage);
+            get
+            {
+                return Left + Width;
+            }
         }
 
-        private void Init(ShowingImage showingImage)
+        public int Bottom
+        {
+            get
+            {
+                return Top + Height;
+            }
+        }
+
+        public CutLine(ShowingImage showingImage)
+        {
+            _ShowingImage = showingImage;
+            Init();
+        }
+
+        private void Init()
         {
             InitOrigin();
-            InitSize(showingImage);
+            InitSize();
         }
 
         private void InitOrigin()
@@ -33,18 +52,62 @@ namespace MyTrimmingNew2
             Top = 0;
         }
 
-        private void InitSize(ShowingImage showingImage)
+        private void InitSize()
         {
-            double width = showingImage.Width;
+            double width = _ShowingImage.Width;
             double height = width * 9.0 / 16.0;
-            if (height > showingImage.Height)
+            if (height > _ShowingImage.Height)
             {
-                height = showingImage.Height;
+                height = _ShowingImage.Height;
                 width = height * 16.0 / 9.0;
             }
 
             Width = (int)width;
             Height = (int)height;
+        }
+
+        public void MoveY(int yDirection)
+        {
+            int newTop = Top + yDirection;
+            int newBottom = Top + Height + yDirection;
+            bool doStickOutTop = DoTopStickOutOfImage(newTop);
+            bool doStickOutBottom = DoBottomStickOutOfImage(newBottom);
+
+            if (IsCutLineInsideImage(doStickOutTop, doStickOutBottom))
+            {
+                Top = newTop;
+            }
+            else
+            {
+                AdjustTop(doStickOutTop, doStickOutBottom);
+            }
+        }
+
+        private bool DoTopStickOutOfImage(int top)
+        {
+            return (top < 0);
+        }
+
+        private bool DoBottomStickOutOfImage(int bottom)
+        {
+            return (bottom > _ShowingImage.Height);
+        }
+
+        private bool IsCutLineInsideImage(bool doStickOutTop, bool doStickOutBottom)
+        {
+            return (!doStickOutTop && !doStickOutBottom);
+        }
+
+        private void AdjustTop(bool doStickOutTop, bool doStickOutBottom)
+        {
+            if (doStickOutTop)
+            {
+                Top = 0;
+            }
+            else if (doStickOutBottom)
+            {
+                Top = _ShowingImage.Height - Height;
+            }
         }
     }
 }
