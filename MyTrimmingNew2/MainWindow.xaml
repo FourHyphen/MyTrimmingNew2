@@ -41,47 +41,57 @@
 
                 <!--parameter-->
                 <Grid Column="1">
-                    <StackPanel>
-                        <Label Content="画像実寸(pixel)"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="横"/>
-                            <Label x:Name="OriginalImageWidth"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <StackPanel>
+                            <Label Content="画像実寸(pixel)"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="横"/>
+                                <Label x:Name="OriginalImageWidth"
                                    Content="0"/>
-                            <Label Content=" x 縦"/>
-                            <Label x:Name="OriginalImageHeight"
+                                <Label Content=" x 縦"/>
+                                <Label x:Name="OriginalImageHeight"
                                    Content="0"/>
-                        </StackPanel>
+                            </StackPanel>
 
-                        <Label Content="画像見た目(pixel)"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="横"/>
-                            <Label x:Name="ShowingImageWidth"
+                            <Label Content="画像見た目(pixel)"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="横"/>
+                                <Label x:Name="ShowingImageWidth"
                                    Content="0"/>
-                            <Label Content=" x 縦"/>
-                            <Label x:Name="ShowingImageHeight"
+                                <Label Content=" x 縦"/>
+                                <Label x:Name="ShowingImageHeight"
                                    Content="0"/>
-                        </StackPanel>
+                            </StackPanel>
 
-                        <Label Content="切り抜き線(pixel)"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="横"/>
-                            <Label x:Name="CutLineWidth"
+                            <Label Content="切り抜き線(pixel)"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="横"/>
+                                <Label x:Name="CutLineWidth"
                                    Content="0"/>
-                            <Label Content=" x 縦"/>
-                            <Label x:Name="CutLineHeight"
+                                <Label Content=" x 縦"/>
+                                <Label x:Name="CutLineHeight"
                                    Content="0"/>
+                            </StackPanel>
                         </StackPanel>
+                    </Grid>
 
-                        <Label Content="画像領域(pixel)"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="横"/>
-                            <Label x:Name="ImageAreaWidth"
+                    <Grid Grid.Row="1">
+                        <StackPanel>
+                            <Label Content="画像領域(pixel)"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="横"/>
+                                <Label x:Name="ImageAreaWidth"
                                    Content="0"/>
-                            <Label Content=" x 縦"/>
-                            <Label x:Name="ImageAreaHeight"
+                                <Label Content=" x 縦"/>
+                                <Label x:Name="ImageAreaHeight"
                                    Content="0"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Grid>
         </DockPanel>
