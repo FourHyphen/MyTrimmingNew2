@@ -95,6 +95,7 @@
     <Compile Include="TestFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestImageProcess.cs" />
+    <Compile Include="TestShowingImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
