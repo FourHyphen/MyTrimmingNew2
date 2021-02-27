@@ -64,15 +64,19 @@ namespace MyTrimmingNew2
         {
             CutLine cl = new CutLine(image);
 
-            System.Windows.Point origin = new System.Windows.Point(cl.Left, cl.Top);
-            CutLine.Points[0] = origin;
-            CutLine.Points[1] = new System.Windows.Point(cl.Width, cl.Top);
-            CutLine.Points[2] = new System.Windows.Point(cl.Width, cl.Height);
-            CutLine.Points[3] = new System.Windows.Point(cl.Left, cl.Height);
-            CutLine.Points[4] = origin;  // 長方形として閉じる
-
+            DisplayCutLineCore(cl);
             CutLineWidth.Content = cl.Width.ToString();
             CutLineHeight.Content = cl.Height.ToString();
+        }
+
+        private void DisplayCutLineCore(CutLine cutLine)
+        {
+            System.Windows.Point origin = new System.Windows.Point(cutLine.Left, cutLine.Top);
+            CutLine.Points[0] = origin;
+            CutLine.Points[1] = new System.Windows.Point(cutLine.Width, cutLine.Top);
+            CutLine.Points[2] = new System.Windows.Point(cutLine.Width, cutLine.Height);
+            CutLine.Points[3] = new System.Windows.Point(cutLine.Left, cutLine.Height);
+            CutLine.Points[4] = origin;  // 長方形として閉じる
         }
     }
 }
