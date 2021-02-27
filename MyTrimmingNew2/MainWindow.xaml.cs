@@ -70,7 +70,7 @@ namespace MyTrimmingNew2
             double ratio = CalcRatioOfFittingImageAreaKeepingImageRatio(imageWidth, imageHeight);
             double fitWidth = (double)imageWidth * ratio;
             double fitHeight = (double)imageHeight * ratio;
-            return MyImage.GetShowImage(imagePath, (int)fitWidth, (int)fitHeight);
+            return ImageProcess.GetShowImage(imagePath, (int)fitWidth, (int)fitHeight);
         }
 
         private double CalcRatioOfFittingImageAreaKeepingImageRatio(int imageWidth, int imageHeight)

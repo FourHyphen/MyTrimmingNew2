@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace MyTrimmingNew2
 {
-    public class MyImage
+    public class ImageProcess
     {
         /// <summary>
         /// 表示用画像
