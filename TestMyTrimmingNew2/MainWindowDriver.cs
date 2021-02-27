@@ -16,6 +16,8 @@ namespace TestMyTrimmingNew2
         private LabelAdapter ImageAreaWidth { get; }
         private LabelAdapter ShowingImageWidth { get; }
         private LabelAdapter ShowingImageHeight { get; }
+        private LabelAdapter CutLineWidth { get; }
+        private LabelAdapter CutLineHeight { get; }
 
         public MainWindowDriver(dynamic mainWindow)
         {
@@ -26,6 +28,8 @@ namespace TestMyTrimmingNew2
             ImageAreaWidth = new LabelAdapter("ImageAreaWidth");
             ShowingImageWidth = new LabelAdapter("ShowingImageWidth");
             ShowingImageHeight = new LabelAdapter("ShowingImageHeight");
+            CutLineWidth = new LabelAdapter("CutLineWidth");
+            CutLineHeight = new LabelAdapter("CutLineHeight");
         }
 
         internal void EmurateOpenImage(string imagePath)
@@ -61,6 +65,18 @@ namespace TestMyTrimmingNew2
         {
             UpdateNowMainWindowStatus();
             return ShowingImageHeight.ContentNum(Tree);
+        }
+
+        internal int GetCutLineWidth()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineWidth.ContentNum(Tree);
+        }
+
+        internal int GetCutLineHeight()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineHeight.ContentNum(Tree);
         }
 
         private void UpdateNowMainWindowStatus()

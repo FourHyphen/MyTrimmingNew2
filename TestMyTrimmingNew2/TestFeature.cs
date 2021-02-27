@@ -63,5 +63,15 @@ namespace TestMyTrimmingNew2
             // 436[pixel] = 横654[pixel]に縦横比率を維持したまま縮小した結果
             Assert.AreEqual(expected: 436, actual: Driver.GetShowingImageHeight());
         }
+
+        [TestMethod]
+        public void TestDisplayCutLine()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            Assert.AreEqual(expected: 50, actual: Driver.GetCutLineWidth());
+            Assert.AreEqual(expected: 50, actual: Driver.GetCutLineHeight());
+        }
     }
 }

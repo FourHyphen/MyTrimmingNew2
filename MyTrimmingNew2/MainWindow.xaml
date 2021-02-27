@@ -28,6 +28,15 @@
                            Panel.ZIndex="0"
                            Stretch="None"
                            VerticalAlignment="Top"/>
+
+                    <Canvas>
+                        <Polyline Name="CutLine"
+                                  Cursor="SizeAll"
+                                  Panel.ZIndex="1"
+                                  Points="0,0 0,0 0,0 0,0 0,0"
+                                  Stroke="Red"
+                                  StrokeThickness="1"/>
+                    </Canvas>
                 </Grid>
 
                 <!--parameter-->
@@ -50,6 +59,16 @@
                                    Content="0"/>
                             <Label Content=" x 縦"/>
                             <Label x:Name="ShowingImageHeight"
+                                   Content="0"/>
+                        </StackPanel>
+
+                        <Label Content="切り抜き線(pixel)"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="横"/>
+                            <Label x:Name="CutLineWidth"
+                                   Content="0"/>
+                            <Label Content=" x 縦"/>
+                            <Label x:Name="CutLineHeight"
                                    Content="0"/>
                         </StackPanel>
 
