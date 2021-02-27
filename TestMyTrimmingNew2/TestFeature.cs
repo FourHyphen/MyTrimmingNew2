@@ -70,8 +70,12 @@ namespace TestMyTrimmingNew2
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
 
-            Assert.AreEqual(expected: 50, actual: Driver.GetCutLineWidth());
-            Assert.AreEqual(expected: 50, actual: Driver.GetCutLineHeight());
+            // 縦:横 = 16:9
+            int cutLineWidth = Driver.GetCutLineWidth();
+            int cutLineHeight = Driver.GetCutLineHeight();
+            Assert.AreEqual(expected: Driver.GetShowingImageWidth(), actual: cutLineWidth);
+            Assert.AreEqual(expected: 367, actual: cutLineHeight);
+            Assert.AreEqual(expected: 16.0 / 9.0, actual: (double)cutLineWidth / (double)cutLineHeight);
         }
     }
 }
