@@ -158,10 +158,10 @@ namespace TestMyTrimmingNew2
             }
         }
 
-        internal void EmurateMouseDragAndDrop(Point drag, Point drop)
+        internal void EmurateShowingImageMouseDragAndDrop(Point drag, Point drop)
         {
-            //MainWindow.MouseDown(drag);
-            //MainWindow.MouseUp(drop);
+            MainWindow.ShowingImageMouseDown(drag);
+            MainWindow.ShowingImageMouseUp(drop);
         }
     }
 }

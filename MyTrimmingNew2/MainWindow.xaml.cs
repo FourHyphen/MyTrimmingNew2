@@ -92,5 +92,25 @@ namespace MyTrimmingNew2
 
             CutLineDisplay.Update(this, _CutLine);
         }
+
+        private void ShowingImageMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowingImageMouseDown(e.GetPosition(CutLine));
+        }
+
+        private void ShowingImageMouseDown(System.Windows.Point relativeCoordinateToCutLine)
+        {
+            return;
+        }
+
+        private void ShowingImageMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ShowingImageMouseUp(e.GetPosition(CutLine));
+        }
+
+        private void ShowingImageMouseUp(System.Windows.Point relativeCoordinateToCutLine)
+        {
+            return;
+        }
     }
 }

@@ -133,7 +133,7 @@ namespace TestMyTrimmingNew2
             System.Windows.Point drag = new System.Windows.Point(dragStartX, Driver.GetCutLineRightBottomY());
             System.Windows.Point drop = new System.Windows.Point(dropX, Driver.GetCutLineRightBottomY());
 
-            Driver.EmurateMouseDragAndDrop(drag, drop);
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             int afterCutLineWidth = beforeCutLineWidth - moveX;
             int afterCutLineHeight = (int)((double)beforeCutLineHeight - ((double)moveX * 9.0 / 16.0));
 

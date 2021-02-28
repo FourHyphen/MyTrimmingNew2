@@ -25,6 +25,8 @@
                 <!--image-->
                 <Grid x:Name="ImageArea" Column="0">
                     <Image Name="ShowingImage"
+                           MouseDown="ShowingImageMouseDown"
+                           MouseUp="ShowingImageMouseUp"
                            HorizontalAlignment="Left"
                            Panel.ZIndex="0"
                            Stretch="None"
