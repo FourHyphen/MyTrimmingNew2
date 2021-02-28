@@ -67,5 +67,82 @@ namespace TestMyTrimmingNew2
             cl.MoveY(-1);
             Assert.AreEqual(expected: maxTop - 1, actual: cl.Top);
         }
+
+        [TestMethod]
+        public void TestChangeSizeBaseRightBottom()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            OriginalImage oi = new OriginalImage(imagePath);
+            ShowingImage si = new ShowingImage(oi, 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 縮小: 横幅の変化量が大きい場合
+            int changeSizeX = -50;
+            int changeSizeY = -10;
+            int afterWidth = cl.Width + changeSizeX;
+            int afterHeight = cl.Height - 28;    // 50 * 9 / 16 = 28.125
+            ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+
+            // 縮小: 縦幅の変化量が大きい場合
+            changeSizeX = -10;
+            changeSizeY = -50;
+            afterWidth = cl.Width - 88;    // 50 * 16 / 9 = 88.888...
+            afterHeight = cl.Height + changeSizeY;
+            ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+
+            // 拡大: 横幅の変化量が大きい場合
+            changeSizeX = 30;
+            changeSizeY = -10;
+            afterWidth = cl.Width + changeSizeX;
+            afterHeight = cl.Height + 16;    // 30 * 9 / 16 = 16.875
+            ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+
+            // 拡大: 縦幅の変化量が大きい場合
+            changeSizeX = -10;
+            changeSizeY = 20;
+            afterWidth = cl.Width + 35;    // 20 * 16 / 9 = 35.555...
+            afterHeight = cl.Height + changeSizeY;
+            ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+        }
+
+        [TestMethod]
+        public void TestChangeSizeDoNotStickOutOfImageBaseRightBottom()
+        {
+            // 拡大幅が大きすぎて画像をはみ出るような場合は画像いっぱいまでに制限する
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            OriginalImage oi = new OriginalImage(imagePath);
+            ShowingImage si = new ShowingImage(oi, 800, 600);
+            CutLine cl = new CutLine(si);
+            int afterWidth = cl.Width;
+            int afterHeight = cl.Height;
+
+            // 横幅の変化量が大きい場合
+            ChangeSizeBaseRightBottom(cl, -50, -50);    // まず適当に小さくする
+
+            int changeSizeX = 1000;
+            int changeSizeY = 0;
+            ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+
+            // 縦幅の変化量が大きい場合
+            ChangeSizeBaseRightBottom(cl, -50, -50);    // まず適当に小さくする
+
+            changeSizeX = 0;
+            changeSizeY = 1000;
+            ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+        }
+
+        private void ChangeSizeBaseRightBottomWithCheck(CutLine cutLine, int changeSizeX, int changeSizeY, int expectedWidth, int expectedHeight)
+        {
+            ChangeSizeBaseRightBottom(cutLine, changeSizeX, changeSizeY);
+            Assert.AreEqual(expected: expectedWidth, actual: cutLine.Width);
+            Assert.AreEqual(expected: expectedHeight, actual: cutLine.Height);
+        }
+
+        private void ChangeSizeBaseRightBottom(CutLine cutLine, int changeSizeX, int changeSizeY)
+        {
+            System.Windows.Point dragStart = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
+            System.Windows.Point drop = new System.Windows.Point(cutLine.Right + changeSizeX, cutLine.Bottom + changeSizeY);
+            cutLine.ChangeSizeBaseRightBottom(dragStart, drop);
+        }
     }
 }

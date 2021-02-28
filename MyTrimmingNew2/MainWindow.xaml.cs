@@ -98,9 +98,32 @@ namespace MyTrimmingNew2
             ShowingImageMouseDown(e.GetPosition(CutLine));
         }
 
+        private System.Windows.Point DragStart { get; set; }
+        private bool NowDraging { get; set; } = false;
+
         private void ShowingImageMouseDown(System.Windows.Point relativeCoordinateToCutLine)
         {
-            return;
+            if (IsPointNearCutLineRightBottom(relativeCoordinateToCutLine))
+            {
+                DragStart = relativeCoordinateToCutLine;
+                NowDraging = true;
+            }
+        }
+
+        private bool IsPointNearCutLineRightBottom(Point p)
+        {
+            int range = 20;
+            return (IsPointNearCutLineRightBottomX((int)p.X, range)) && (IsPointNearCutLineRightBottomY((int)p.Y, range));
+        }
+
+        private bool IsPointNearCutLineRightBottomX(int x, int range)
+        {
+            return ((x - range) <= _CutLine.Right) && (_CutLine.Right <= (x + range));
+        }
+
+        private bool IsPointNearCutLineRightBottomY(int y, int range)
+        {
+            return ((y - range) <= _CutLine.Bottom) && (_CutLine.Bottom <= (y + range));
         }
 
         private void ShowingImageMouseUp(object sender, MouseButtonEventArgs e)
@@ -110,7 +133,12 @@ namespace MyTrimmingNew2
 
         private void ShowingImageMouseUp(System.Windows.Point relativeCoordinateToCutLine)
         {
-            return;
+            if (NowDraging)
+            {
+                _CutLine.ChangeSizeBaseRightBottom(DragStart, relativeCoordinateToCutLine);
+                CutLineDisplay.Update(this, _CutLine);
+                NowDraging = false;
+            }
         }
     }
 }

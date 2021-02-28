@@ -135,7 +135,7 @@ namespace TestMyTrimmingNew2
 
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             int afterCutLineWidth = beforeCutLineWidth - moveX;
-            int afterCutLineHeight = (int)((double)beforeCutLineHeight - ((double)moveX * 9.0 / 16.0));
+            int afterCutLineHeight = beforeCutLineHeight - (int)((double)moveX * 9.0 / 16.0);
 
             Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
             Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());

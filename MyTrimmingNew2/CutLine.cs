@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyTrimmingNew2
 {
@@ -107,6 +108,23 @@ namespace MyTrimmingNew2
             else if (doStickOutBottom)
             {
                 Top = _ShowingImage.Height - Height;
+            }
+        }
+
+        public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
+        {
+            double distanceX = dropPoint.X - dragStart.X;
+            double distanceY = dropPoint.Y - dragStart.Y;
+            double changeSizeY = distanceX * 9.0 / 16.0;
+            if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
+            {
+                Width += (int)distanceX;
+                Height += (int)changeSizeY;
+            }
+            else
+            {
+                Width += (int)(distanceY * 16.0 / 9.0);
+                Height += (int)distanceY;
             }
         }
     }
