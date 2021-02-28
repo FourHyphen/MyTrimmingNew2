@@ -126,6 +126,19 @@ namespace MyTrimmingNew2
                 Width += (int)(distanceY * 16.0 / 9.0);
                 Height += (int)distanceY;
             }
+
+            // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
+            if (Right > _ShowingImage.Width)
+            {
+                Width = _ShowingImage.Width - Left;
+                Height = (int)((double)Width * 9.0 / 16.0);
+            }
+
+            if (Bottom > _ShowingImage.Height)
+            {
+                Height = _ShowingImage.Height - Top;
+                Width = (int)((double)Height * 16.0 / 9.0);
+            }
         }
     }
 }

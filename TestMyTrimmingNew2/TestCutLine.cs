@@ -108,14 +108,12 @@ namespace TestMyTrimmingNew2
 
             // 横幅の変化量が大きい場合
             ChangeSizeBaseRightBottom(cl, -50, -50);    // まず適当に小さくする
-
             int changeSizeX = 1000;
             int changeSizeY = 0;
             ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
 
             // 縦幅の変化量が大きい場合
             ChangeSizeBaseRightBottom(cl, -50, -50);    // まず適当に小さくする
-
             changeSizeX = 0;
             changeSizeY = 1000;
             ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
