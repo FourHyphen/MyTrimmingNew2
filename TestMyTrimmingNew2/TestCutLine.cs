@@ -98,6 +98,23 @@ namespace TestMyTrimmingNew2
         }
 
         [TestMethod]
+        public void TestIsPointNearRightBottom()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            System.Windows.Point near = new System.Windows.Point(cl.Right - 10, cl.Bottom - 10);
+            System.Windows.Point far = new System.Windows.Point(cl.Right - 21, cl.Bottom - 21);
+            Assert.IsTrue(cl.IsPointNearRightBottom(near));
+            Assert.IsFalse(cl.IsPointNearRightBottom(far));
+
+            near = new System.Windows.Point(cl.Right + 10, cl.Bottom + 10);
+            far = new System.Windows.Point(cl.Right + 21, cl.Bottom + 21);
+            Assert.IsTrue(cl.IsPointNearRightBottom(near));
+            Assert.IsFalse(cl.IsPointNearRightBottom(far));
+        }
+
+        [TestMethod]
         public void TestChangeSizeDoNotStickOutOfImageBaseRightBottom()
         {
             // 拡大幅が大きすぎて画像をはみ出るような場合は画像いっぱいまでに制限する

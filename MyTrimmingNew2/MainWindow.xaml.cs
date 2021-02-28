@@ -103,27 +103,11 @@ namespace MyTrimmingNew2
 
         private void ShowingImageMouseDown(System.Windows.Point relativeCoordinateToCutLine)
         {
-            if (IsPointNearCutLineRightBottom(relativeCoordinateToCutLine))
+            if (_CutLine.IsPointNearRightBottom(relativeCoordinateToCutLine))
             {
                 DragStart = relativeCoordinateToCutLine;
                 NowDraging = true;
             }
-        }
-
-        private bool IsPointNearCutLineRightBottom(Point p)
-        {
-            int range = 20;
-            return (IsPointNearCutLineRightBottomX((int)p.X, range)) && (IsPointNearCutLineRightBottomY((int)p.Y, range));
-        }
-
-        private bool IsPointNearCutLineRightBottomX(int x, int range)
-        {
-            return ((x - range) <= _CutLine.Right) && (_CutLine.Right <= (x + range));
-        }
-
-        private bool IsPointNearCutLineRightBottomY(int y, int range)
-        {
-            return ((y - range) <= _CutLine.Bottom) && (_CutLine.Bottom <= (y + range));
         }
 
         private void ShowingImageMouseUp(object sender, MouseButtonEventArgs e)

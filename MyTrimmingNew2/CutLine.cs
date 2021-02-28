@@ -15,6 +15,8 @@ namespace MyTrimmingNew2
 
         private static double RatioHeight = 9.0;
 
+        private static int NearRange = 20;
+
         public int Width { get; private set; }
 
         public int Height { get; private set; }
@@ -123,6 +125,21 @@ namespace MyTrimmingNew2
             {
                 Top = _ShowingImage.Height - Height;
             }
+        }
+
+        public bool IsPointNearRightBottom(Point p)
+        {
+            return (IsPointNearRightBottomX((int)p.X, NearRange)) && (IsPointNearRightBottomY((int)p.Y, NearRange));
+        }
+
+        private bool IsPointNearRightBottomX(int x, int range)
+        {
+            return ((x - range) <= Right) && (Right <= (x + range));
+        }
+
+        private bool IsPointNearRightBottomY(int y, int range)
+        {
+            return ((y - range) <= Bottom) && (Bottom <= (y + range));
         }
 
         public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
