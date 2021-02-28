@@ -4,6 +4,7 @@ using System.Windows.Documents;
 using Codeer.Friendly.Dynamic;
 using System;
 using System.Windows.Input;
+using System.Windows;
 
 namespace TestMyTrimmingNew2
 {
@@ -23,7 +24,9 @@ namespace TestMyTrimmingNew2
         private LabelAdapter CutLineLeftTopX { get; }
         private LabelAdapter CutLineLeftTopY { get; }
         private LabelAdapter CutLineLeftBottomY { get; }
+        private LabelAdapter CutLineRightTopX { get; }
         private LabelAdapter CutLineRightTopY { get; }
+        private LabelAdapter CutLineRightBottomX { get; }
         private LabelAdapter CutLineRightBottomY { get; }
 
         public MainWindowDriver(dynamic mainWindow)
@@ -41,7 +44,9 @@ namespace TestMyTrimmingNew2
             CutLineLeftTopX = new LabelAdapter("CutLineLeftTopX");
             CutLineLeftTopY = new LabelAdapter("CutLineLeftTopY");
             CutLineLeftBottomY = new LabelAdapter("CutLineLeftBottomY");
+            CutLineRightTopX = new LabelAdapter("CutLineRightTopX");
             CutLineRightTopY = new LabelAdapter("CutLineRightTopY");
+            CutLineRightBottomX = new LabelAdapter("CutLineRightBottomX");
             CutLineRightBottomY = new LabelAdapter("CutLineRightBottomY");
         }
 
@@ -116,10 +121,22 @@ namespace TestMyTrimmingNew2
             return CutLineLeftBottomY.ContentNum(Tree);
         }
 
+        internal int GetCutLineRightTopX()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineRightTopX.ContentNum(Tree);
+        }
+
         internal int GetCutLineRightTopY()
         {
             UpdateNowMainWindowStatus();
             return CutLineRightTopY.ContentNum(Tree);
+        }
+
+        internal int GetCutLineRightBottomX()
+        {
+            UpdateNowMainWindowStatus();
+            return CutLineRightBottomX.ContentNum(Tree);
         }
 
         internal int GetCutLineRightBottomY()
@@ -139,6 +156,12 @@ namespace TestMyTrimmingNew2
             {
                 MainWindow.InputKey(key);
             }
+        }
+
+        internal void EmurateMouseDragAndDrop(Point drag, Point drop)
+        {
+            //MainWindow.MouseDown(drag);
+            //MainWindow.MouseUp(drop);
         }
     }
 }

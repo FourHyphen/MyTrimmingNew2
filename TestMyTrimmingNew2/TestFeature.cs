@@ -118,5 +118,32 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: maxTop - 1, actual: Driver.GetCutLineLeftTopY());
             Assert.AreEqual(expected: maxBottom - 1, actual: Driver.GetCutLineLeftBottomY());
         }
+
+        [TestMethod]
+        public void TestChangeOfCutLineSizeWhenMouseDragAndDropRightBottom()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            int beforeCutLineWidth = Driver.GetCutLineWidth();
+            int beforeCutLineHeight = Driver.GetCutLineHeight();
+
+            int moveX = 50;    // 根拠なし、適当
+            int dragStartX = Driver.GetCutLineRightBottomX();
+            int dropX = dragStartX - moveX;
+            System.Windows.Point drag = new System.Windows.Point(dragStartX, Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(dropX, Driver.GetCutLineRightBottomY());
+
+            Driver.EmurateMouseDragAndDrop(drag, drop);
+            int afterCutLineWidth = beforeCutLineWidth - moveX;
+            int afterCutLineHeight = (int)((double)beforeCutLineHeight - ((double)moveX * 9.0 / 16.0));
+
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
+            Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
+            Assert.AreEqual(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight());
+            Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineRightTopX());
+            Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineRightBottomX());
+            Assert.AreEqual(expected: afterCutLineHeight, actual: Driver.GetCutLineRightBottomY());
+        }
     }
 }
