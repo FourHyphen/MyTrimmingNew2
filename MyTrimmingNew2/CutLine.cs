@@ -60,15 +60,25 @@ namespace MyTrimmingNew2
         private void InitSize()
         {
             double width = _ShowingImage.Width;
-            double height = width * RatioHeight / RatioWidth;
+            double height = CalcHeightBaseWidth(width);
             if (height > _ShowingImage.Height)
             {
                 height = _ShowingImage.Height;
-                width = height * RatioWidth / RatioHeight;
+                width = CalcWidthBaseHeight(height);
             }
 
             Width = (int)width;
             Height = (int)height;
+        }
+
+        private double CalcHeightBaseWidth(double width)
+        {
+            return width * RatioHeight / RatioWidth;
+        }
+
+        private double CalcWidthBaseHeight(double height)
+        {
+            return height * RatioWidth / RatioHeight;
         }
 
         public void MoveY(int yDirection)
@@ -119,7 +129,7 @@ namespace MyTrimmingNew2
         {
             double distanceX = dropPoint.X - dragStart.X;
             double distanceY = dropPoint.Y - dragStart.Y;
-            double changeSizeY = distanceX * RatioHeight / RatioWidth;
+            double changeSizeY = CalcHeightBaseWidth(distanceX);
             if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
             {
                 Width += (int)distanceX;
@@ -127,7 +137,7 @@ namespace MyTrimmingNew2
             }
             else
             {
-                Width += (int)(distanceY * RatioWidth / RatioHeight);
+                Width += (int)CalcWidthBaseHeight(distanceY);
                 Height += (int)distanceY;
             }
 
@@ -135,13 +145,13 @@ namespace MyTrimmingNew2
             if (Right > _ShowingImage.Width)
             {
                 Width = _ShowingImage.Width - Left;
-                Height = (int)((double)Width * RatioHeight / RatioWidth);
+                Height = (int)CalcHeightBaseWidth((double)Width);
             }
 
             if (Bottom > _ShowingImage.Height)
             {
                 Height = _ShowingImage.Height - Top;
-                Width = (int)((double)Height * RatioWidth / RatioHeight);
+                Width = (int)CalcWidthBaseHeight((double)Height);
             }
         }
     }
