@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CutLine.cs" />
+    <Compile Include="CutLineDisplay.cs" />
     <Compile Include="OriginalImage.cs" />
     <Compile Include="ShowingImage.cs" />
     <Page Include="MainWindow.xaml">

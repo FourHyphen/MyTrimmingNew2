@@ -65,35 +65,7 @@ namespace MyTrimmingNew2
         private void DisplayCutLine(ShowingImage image)
         {
             _CutLine = new CutLine(image);
-            DisplayCutLineCore(_CutLine);
-        }
-
-        private void DisplayCutLineCore(CutLine cutLine)
-        {
-            System.Windows.Point leftTop = new System.Windows.Point(cutLine.Left, cutLine.Top);
-            System.Windows.Point rightTop = new System.Windows.Point(cutLine.Right, cutLine.Top);
-            System.Windows.Point rightBottom = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
-            System.Windows.Point leftBottom = new System.Windows.Point(cutLine.Left, cutLine.Bottom);
-
-            CutLine.Points[0] = leftTop;
-            CutLine.Points[1] = rightTop;
-            CutLine.Points[2] = rightBottom;
-            CutLine.Points[3] = leftBottom;
-            CutLine.Points[4] = leftTop;  // 長方形として閉じる
-
-            SetLabelCoordinate(leftTop, CutLineLeftTopX, CutLineLeftTopY);
-            SetLabelCoordinate(rightTop, CutLineRightTopX, CutLineRightTopY);
-            SetLabelCoordinate(rightBottom, CutLineRightBottomX, CutLineRightBottomY);
-            SetLabelCoordinate(leftBottom, CutLineLeftBottomX, CutLineLeftBottomY);
-
-            CutLineWidth.Content = cutLine.Width.ToString();
-            CutLineHeight.Content = cutLine.Height.ToString();
-        }
-
-        private void SetLabelCoordinate(System.Windows.Point p, Label labelX, Label labelY)
-        {
-            labelX.Content = p.X.ToString();
-            labelY.Content = p.Y.ToString();
+            CutLineDisplay.Update(this, _CutLine);
         }
 
         private void MainWindowKeyDown(object sender, KeyEventArgs e)
@@ -118,7 +90,7 @@ namespace MyTrimmingNew2
                 _CutLine.MoveY(1);
             }
 
-            DisplayCutLineCore(_CutLine);
+            CutLineDisplay.Update(this, _CutLine);
         }
     }
 }
