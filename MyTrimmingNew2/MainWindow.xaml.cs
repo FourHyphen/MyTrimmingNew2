@@ -81,15 +81,7 @@ namespace MyTrimmingNew2
                 return;
             }
 
-            if (key == Key.Up)
-            {
-                _CutLine.MoveY(-1);
-            }
-            else if (key == Key.Down)
-            {
-                _CutLine.MoveY(1);
-            }
-
+            _CutLine.Move(key);
             CutLineDisplay.Update(this, _CutLine);
         }
 

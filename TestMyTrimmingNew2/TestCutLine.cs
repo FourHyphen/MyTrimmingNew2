@@ -50,15 +50,15 @@ namespace TestMyTrimmingNew2
             int maxTop = si.Height - cl.Height;
 
             Assert.AreEqual(expected: 0, actual: cl.Top);
-            cl.MoveY(-1);
+            cl.Move(System.Windows.Input.Key.Up, 1);
             Assert.AreEqual(expected: 0, actual: cl.Top);
-            cl.MoveY(1);
+            cl.Move(System.Windows.Input.Key.Down, 1);
             Assert.AreEqual(expected: 1, actual: cl.Top);
-            cl.MoveY(50);
+            cl.Move(System.Windows.Input.Key.Down, 50);
             Assert.AreEqual(expected: 51, actual: cl.Top);
-            cl.MoveY(1000);
+            cl.Move(System.Windows.Input.Key.Down, 1000);
             Assert.AreEqual(expected: maxTop, actual: cl.Top);
-            cl.MoveY(-1);
+            cl.Move(System.Windows.Input.Key.Up, 1);
             Assert.AreEqual(expected: maxTop - 1, actual: cl.Top);
         }
 

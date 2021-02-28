@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace MyTrimmingNew2
 {
@@ -83,7 +84,19 @@ namespace MyTrimmingNew2
             return height * RatioWidth / RatioHeight;
         }
 
-        public void MoveY(int yDirection)
+        public void Move(Key key, int num = 1)
+        {
+            if (key == Key.Up)
+            {
+                MoveY(-1 * num);
+            }
+            else if (key == Key.Down)
+            {
+                MoveY(1 * num);
+            }
+        }
+
+        private void MoveY(int yDirection)
         {
             int newTop = Top + yDirection;
             int newBottom = Top + Height + yDirection;
