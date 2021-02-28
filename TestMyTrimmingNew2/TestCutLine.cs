@@ -25,9 +25,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestSuccessOfCreateInstance()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            OriginalImage oi = new OriginalImage(imagePath);
-            ShowingImage si = new ShowingImage(oi, 800, 600);
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
 
             Assert.AreEqual(expected: si.Width, actual: cl.Width);
@@ -35,9 +33,7 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 0, actual: cl.Left);
             Assert.AreEqual(expected: 0, actual: cl.Top);
 
-            imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test002.jpg");
-            oi = new OriginalImage(imagePath);
-            si = new ShowingImage(oi, 800, 600);
+            si = CreateShowingImage("/Resource/test002.jpg", 800, 600);
             cl = new CutLine(si);
 
             Assert.AreEqual(expected: si.Width, actual: cl.Width);
@@ -49,9 +45,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestUpAndDownCutLine()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            OriginalImage oi = new OriginalImage(imagePath);
-            ShowingImage si = new ShowingImage(oi, 800, 600);
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
             int maxTop = si.Height - cl.Height;
 
@@ -71,9 +65,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestChangeSizeBaseRightBottom()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            OriginalImage oi = new OriginalImage(imagePath);
-            ShowingImage si = new ShowingImage(oi, 800, 600);
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
 
             // 縮小: 横幅の変化量が大きい場合
@@ -109,9 +101,7 @@ namespace TestMyTrimmingNew2
         public void TestChangeSizeDoNotStickOutOfImageBaseRightBottom()
         {
             // 拡大幅が大きすぎて画像をはみ出るような場合は画像いっぱいまでに制限する
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            OriginalImage oi = new OriginalImage(imagePath);
-            ShowingImage si = new ShowingImage(oi, 800, 600);
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
             int afterWidth = cl.Width;
             int afterHeight = cl.Height;
@@ -129,6 +119,13 @@ namespace TestMyTrimmingNew2
             changeSizeX = 0;
             changeSizeY = 1000;
             ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
+        }
+
+        private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
+            OriginalImage oi = new OriginalImage(imagePath);
+            return new ShowingImage(oi, imageAreaWidth, imageAreaHeight);
         }
 
         private void ChangeSizeBaseRightBottomWithCheck(CutLine cutLine, int changeSizeX, int changeSizeY, int expectedWidth, int expectedHeight)
