@@ -11,6 +11,10 @@ namespace MyTrimmingNew2
     {
         private ShowingImage _ShowingImage { get; set; }
 
+        private static double RatioWidth = 16.0;
+
+        private static double RatioHeight = 9.0;
+
         public int Width { get; private set; }
 
         public int Height { get; private set; }
@@ -56,11 +60,11 @@ namespace MyTrimmingNew2
         private void InitSize()
         {
             double width = _ShowingImage.Width;
-            double height = width * 9.0 / 16.0;
+            double height = width * RatioHeight / RatioWidth;
             if (height > _ShowingImage.Height)
             {
                 height = _ShowingImage.Height;
-                width = height * 16.0 / 9.0;
+                width = height * RatioWidth / RatioHeight;
             }
 
             Width = (int)width;
@@ -115,7 +119,7 @@ namespace MyTrimmingNew2
         {
             double distanceX = dropPoint.X - dragStart.X;
             double distanceY = dropPoint.Y - dragStart.Y;
-            double changeSizeY = distanceX * 9.0 / 16.0;
+            double changeSizeY = distanceX * RatioHeight / RatioWidth;
             if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
             {
                 Width += (int)distanceX;
@@ -123,7 +127,7 @@ namespace MyTrimmingNew2
             }
             else
             {
-                Width += (int)(distanceY * 16.0 / 9.0);
+                Width += (int)(distanceY * RatioWidth / RatioHeight);
                 Height += (int)distanceY;
             }
 
@@ -131,13 +135,13 @@ namespace MyTrimmingNew2
             if (Right > _ShowingImage.Width)
             {
                 Width = _ShowingImage.Width - Left;
-                Height = (int)((double)Width * 9.0 / 16.0);
+                Height = (int)((double)Width * RatioHeight / RatioWidth);
             }
 
             if (Bottom > _ShowingImage.Height)
             {
                 Height = _ShowingImage.Height - Top;
-                Width = (int)((double)Height * 16.0 / 9.0);
+                Width = (int)((double)Height * RatioWidth / RatioHeight);
             }
         }
     }
