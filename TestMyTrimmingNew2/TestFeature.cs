@@ -145,5 +145,37 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineRightBottomX());
             Assert.AreEqual(expected: afterCutLineHeight, actual: Driver.GetCutLineRightBottomY());
         }
+
+        [TestMethod]
+        public void TestMoveCutLineWhenInputCursolKeyLeftAnRight()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            int moveX = 50;
+            int minLeft = 0;
+            int maxLeft = Driver.GetShowingImageWidth() - moveX;
+            int maxRight = Driver.GetShowingImageWidth();
+
+            // まず切り抜き線を適当に小さくし、左右に動けるスペースを作る
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+
+            Assert.AreEqual(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Left, 1);
+            Assert.AreEqual(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 2);
+            Assert.AreEqual(expected: 2, actual: Driver.GetCutLineLeftTopX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, moveX * 2);    // 2倍もあれば画像をはみ出ようとするのに十分
+            Assert.AreEqual(expected: maxLeft, actual: Driver.GetCutLineLeftTopX());
+            Assert.AreEqual(expected: maxRight, actual: Driver.GetCutLineRightBottomX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Left, 1);
+            Assert.AreEqual(expected: maxLeft - 1, actual: Driver.GetCutLineLeftTopX());
+            Assert.AreEqual(expected: maxRight - 1, actual: Driver.GetCutLineRightBottomX());
+        }
     }
 }
