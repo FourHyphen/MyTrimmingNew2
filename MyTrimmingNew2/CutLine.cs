@@ -86,13 +86,65 @@ namespace MyTrimmingNew2
 
         public void Move(Key key, int num = 1)
         {
-            if (key == Key.Up)
+            if (key == Key.Left)
+            {
+                MoveX(-1 * num);
+            }
+            else if (key == Key.Right)
+            {
+                MoveX(1 * num);
+            }
+            else if (key == Key.Up)
             {
                 MoveY(-1 * num);
             }
             else if (key == Key.Down)
             {
                 MoveY(1 * num);
+            }
+        }
+
+        private void MoveX(int xDirection)
+        {
+            int newLeft = Left + xDirection;
+            int newRight = Right + xDirection;
+            bool doStickOutLeft = DoLeftStickOutOfImage(newLeft);
+            bool doStickOutRight = DoRightStickOutOfImage(newRight);
+
+            if (IsCutLineInsideImageHorizontal(doStickOutLeft, doStickOutRight))
+            {
+                Left = newLeft;
+            }
+            else
+            {
+                AdjustLeft(doStickOutLeft, doStickOutRight);
+            }
+        }
+
+        private bool DoLeftStickOutOfImage(int left)
+        {
+            return (left < 0);
+        }
+
+        private bool DoRightStickOutOfImage(int right)
+        {
+            return (right > _ShowingImage.Width);
+        }
+
+        private bool IsCutLineInsideImageHorizontal(bool doStickOutLeft, bool doStickOutRight)
+        {
+            return (!doStickOutLeft && !doStickOutRight);
+        }
+
+        private void AdjustLeft(bool doStickOutLeft, bool doStickOutRight)
+        {
+            if (doStickOutLeft)
+            {
+                Left = 0;
+            }
+            else if (doStickOutRight)
+            {
+                Left = _ShowingImage.Width - Width;
             }
         }
 
@@ -103,7 +155,7 @@ namespace MyTrimmingNew2
             bool doStickOutTop = DoTopStickOutOfImage(newTop);
             bool doStickOutBottom = DoBottomStickOutOfImage(newBottom);
 
-            if (IsCutLineInsideImage(doStickOutTop, doStickOutBottom))
+            if (IsCutLineInsideImageVertical(doStickOutTop, doStickOutBottom))
             {
                 Top = newTop;
             }
@@ -123,7 +175,7 @@ namespace MyTrimmingNew2
             return (bottom > _ShowingImage.Height);
         }
 
-        private bool IsCutLineInsideImage(bool doStickOutTop, bool doStickOutBottom)
+        private bool IsCutLineInsideImageVertical(bool doStickOutTop, bool doStickOutBottom)
         {
             return (!doStickOutTop && !doStickOutBottom);
         }

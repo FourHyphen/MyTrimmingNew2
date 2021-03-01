@@ -153,7 +153,7 @@ namespace TestMyTrimmingNew2
             Driver.EmurateOpenImage(imagePath);
             int moveX = 50;
             int minLeft = 0;
-            int maxLeft = Driver.GetShowingImageWidth() - moveX;
+            int maxLeft = moveX;
             int maxRight = Driver.GetShowingImageWidth();
 
             // まず切り抜き線を適当に小さくし、左右に動けるスペースを作る

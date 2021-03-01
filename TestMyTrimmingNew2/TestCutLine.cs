@@ -136,6 +136,25 @@ namespace TestMyTrimmingNew2
             ChangeSizeBaseRightBottomWithCheck(cl, changeSizeX, changeSizeY, afterWidth, afterHeight);
         }
 
+        [TestMethod]
+        public void TestMoveLeftAndRightCutLine()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+            ChangeSizeBaseRightBottom(cl, -50, 0);    // まず適当に小さくする
+            int maxLeft = si.Width - cl.Width;
+
+            Assert.AreEqual(expected: 0, actual: cl.Left);
+            cl.Move(System.Windows.Input.Key.Left, 1);
+            Assert.AreEqual(expected: 0, actual: cl.Left);
+            cl.Move(System.Windows.Input.Key.Right, 1);
+            Assert.AreEqual(expected: 1, actual: cl.Left);
+            cl.Move(System.Windows.Input.Key.Right, 1000);
+            Assert.AreEqual(expected: maxLeft, actual: cl.Left);
+            cl.Move(System.Windows.Input.Key.Left, 1);
+            Assert.AreEqual(expected: maxLeft - 1, actual: cl.Left);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
