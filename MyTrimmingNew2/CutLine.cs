@@ -67,12 +67,18 @@ namespace MyTrimmingNew2
         {
             int newLeft = Parameter.Left + xDirection;
             int newRight = Parameter.Right + xDirection;
-            bool doStickOutLeft = DoLeftStickOutOfImage(newLeft);
-            bool doStickOutRight = DoRightStickOutOfImage(newRight);
+            return AdjustLeft(newLeft, newRight);
+        }
 
-            if (!IsCutLineInsideImageHorizontal(doStickOutLeft, doStickOutRight))
+        private int AdjustLeft(int newLeft, int newRight)
+        {
+            if (DoLeftStickOutOfImage(newLeft))
             {
-                newLeft = AdjustLeft(doStickOutLeft, doStickOutRight);
+                return 0;
+            }
+            else if (DoRightStickOutOfImage(newRight))
+            {
+                return _ShowingImage.Width - Parameter.Width;
             }
 
             return newLeft;
@@ -88,35 +94,22 @@ namespace MyTrimmingNew2
             return (right > _ShowingImage.Width);
         }
 
-        private bool IsCutLineInsideImageHorizontal(bool doStickOutLeft, bool doStickOutRight)
-        {
-            return (!doStickOutLeft && !doStickOutRight);
-        }
-
-        private int AdjustLeft(bool doStickOutLeft, bool doStickOutRight)
-        {
-            if (doStickOutLeft)
-            {
-                return 0;
-            }
-            else if (doStickOutRight)
-            {
-                return _ShowingImage.Width - Parameter.Width;
-            }
-
-            return Parameter.Left;
-        }
-
         private int MoveY(int yDirection)
         {
             int newTop = Parameter.Top + yDirection;
             int newBottom = Parameter.Top + Parameter.Height + yDirection;
-            bool doStickOutTop = DoTopStickOutOfImage(newTop);
-            bool doStickOutBottom = DoBottomStickOutOfImage(newBottom);
+            return AdjustTop(newTop, newBottom);
+        }
 
-            if (!IsCutLineInsideImageVertical(doStickOutTop, doStickOutBottom))
+        private int AdjustTop(int newTop, int newBottom)
+        {
+            if (DoTopStickOutOfImage(newTop))
             {
-                newTop = AdjustTop(doStickOutTop, doStickOutBottom);
+                return 0;
+            }
+            else if (DoBottomStickOutOfImage(newBottom))
+            {
+                return _ShowingImage.Height - Parameter.Height;
             }
 
             return newTop;
@@ -130,25 +123,6 @@ namespace MyTrimmingNew2
         private bool DoBottomStickOutOfImage(int bottom)
         {
             return (bottom > _ShowingImage.Height);
-        }
-
-        private bool IsCutLineInsideImageVertical(bool doStickOutTop, bool doStickOutBottom)
-        {
-            return (!doStickOutTop && !doStickOutBottom);
-        }
-
-        private int AdjustTop(bool doStickOutTop, bool doStickOutBottom)
-        {
-            if (doStickOutTop)
-            {
-                return 0;
-            }
-            else if (doStickOutBottom)
-            {
-                return _ShowingImage.Height - Parameter.Height;
-            }
-
-            return Parameter.Top;
         }
 
         public bool IsPointNearRightBottom(Point p)
