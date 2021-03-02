@@ -12,35 +12,21 @@ namespace MyTrimmingNew2
     {
         private ShowingImage _ShowingImage { get; set; }
 
-        private static double RatioWidth = 16.0;
-
-        private static double RatioHeight = 9.0;
+        private CutLineParameter Parameter { get; set; }
 
         private static int NearRange = 20;
 
-        public int Width { get; private set; }
+        public int Left { get { return Parameter.Left; } }
 
-        public int Height { get; private set; }
+        public int Right { get { return Parameter.Right; } }
 
-        public int Left { get; private set; }
+        public int Top { get { return Parameter.Top; } }
 
-        public int Top { get; private set; }
+        public int Bottom { get { return Parameter.Bottom; } }
 
-        public int Right
-        {
-            get
-            {
-                return Left + Width;
-            }
-        }
+        public int Width { get { return Parameter.Width; } }
 
-        public int Bottom
-        {
-            get
-            {
-                return Top + Height;
-            }
-        }
+        public int Height { get { return Parameter.Height; } }
 
         public CutLine(ShowingImage showingImage)
         {
@@ -50,75 +36,46 @@ namespace MyTrimmingNew2
 
         private void Init()
         {
-            InitOrigin();
-            InitSize();
-        }
-
-        private void InitOrigin()
-        {
-            Left = 0;
-            Top = 0;
-        }
-
-        private void InitSize()
-        {
-            double width = _ShowingImage.Width;
-            double height = CalcHeightBaseWidth(width);
-            if (height > _ShowingImage.Height)
-            {
-                height = _ShowingImage.Height;
-                width = CalcWidthBaseHeight(height);
-            }
-
-            Width = (int)width;
-            Height = (int)height;
-        }
-
-        private double CalcHeightBaseWidth(double width)
-        {
-            return width * RatioHeight / RatioWidth;
-        }
-
-        private double CalcWidthBaseHeight(double height)
-        {
-            return height * RatioWidth / RatioHeight;
+            Parameter = new CutLineParameter(_ShowingImage);
         }
 
         public void Move(Key key, int num = 1)
         {
+            int newLeft = Parameter.Left;
+            int newTop = Parameter.Top;
             if (key == Key.Left)
             {
-                MoveX(-1 * num);
+                newLeft = MoveX(-1 * num);
             }
             else if (key == Key.Right)
             {
-                MoveX(1 * num);
+                newLeft = MoveX(1 * num);
             }
             else if (key == Key.Up)
             {
-                MoveY(-1 * num);
+                newTop = MoveY(-1 * num);
             }
             else if (key == Key.Down)
             {
-                MoveY(1 * num);
+                newTop = MoveY(1 * num);
             }
+
+            Parameter = new CutLineParameter(newLeft, newTop, Parameter.Width, Parameter.Height);
         }
 
-        private void MoveX(int xDirection)
+        private int MoveX(int xDirection)
         {
-            int newLeft = Left + xDirection;
-            int newRight = Right + xDirection;
+            int newLeft = Parameter.Left + xDirection;
+            int newRight = Parameter.Right + xDirection;
             bool doStickOutLeft = DoLeftStickOutOfImage(newLeft);
             bool doStickOutRight = DoRightStickOutOfImage(newRight);
 
-            if (IsCutLineInsideImageHorizontal(doStickOutLeft, doStickOutRight))
+            if (!IsCutLineInsideImageHorizontal(doStickOutLeft, doStickOutRight))
             {
-                Left = newLeft;
+                newLeft = AdjustLeft(doStickOutLeft, doStickOutRight);
             }
-            else
-            {
-                AdjustLeft(doStickOutLeft, doStickOutRight);
-            }
+
+            return newLeft;
         }
 
         private bool DoLeftStickOutOfImage(int left)
@@ -136,33 +93,33 @@ namespace MyTrimmingNew2
             return (!doStickOutLeft && !doStickOutRight);
         }
 
-        private void AdjustLeft(bool doStickOutLeft, bool doStickOutRight)
+        private int AdjustLeft(bool doStickOutLeft, bool doStickOutRight)
         {
             if (doStickOutLeft)
             {
-                Left = 0;
+                return 0;
             }
             else if (doStickOutRight)
             {
-                Left = _ShowingImage.Width - Width;
+                return _ShowingImage.Width - Parameter.Width;
             }
+
+            return Parameter.Left;
         }
 
-        private void MoveY(int yDirection)
+        private int MoveY(int yDirection)
         {
-            int newTop = Top + yDirection;
-            int newBottom = Top + Height + yDirection;
+            int newTop = Parameter.Top + yDirection;
+            int newBottom = Parameter.Top + Parameter.Height + yDirection;
             bool doStickOutTop = DoTopStickOutOfImage(newTop);
             bool doStickOutBottom = DoBottomStickOutOfImage(newBottom);
 
-            if (IsCutLineInsideImageVertical(doStickOutTop, doStickOutBottom))
+            if (!IsCutLineInsideImageVertical(doStickOutTop, doStickOutBottom))
             {
-                Top = newTop;
+                newTop = AdjustTop(doStickOutTop, doStickOutBottom);
             }
-            else
-            {
-                AdjustTop(doStickOutTop, doStickOutBottom);
-            }
+
+            return newTop;
         }
 
         private bool DoTopStickOutOfImage(int top)
@@ -180,16 +137,18 @@ namespace MyTrimmingNew2
             return (!doStickOutTop && !doStickOutBottom);
         }
 
-        private void AdjustTop(bool doStickOutTop, bool doStickOutBottom)
+        private int AdjustTop(bool doStickOutTop, bool doStickOutBottom)
         {
             if (doStickOutTop)
             {
-                Top = 0;
+                return 0;
             }
             else if (doStickOutBottom)
             {
-                Top = _ShowingImage.Height - Height;
+                return _ShowingImage.Height - Parameter.Height;
             }
+
+            return Parameter.Top;
         }
 
         public bool IsPointNearRightBottom(Point p)
@@ -199,42 +158,48 @@ namespace MyTrimmingNew2
 
         private bool IsPointNearRightBottomX(int x, int range)
         {
-            return ((x - range) <= Right) && (Right <= (x + range));
+            return ((x - range) <= Parameter.Right) && (Parameter.Right <= (x + range));
         }
 
         private bool IsPointNearRightBottomY(int y, int range)
         {
-            return ((y - range) <= Bottom) && (Bottom <= (y + range));
+            return ((y - range) <= Parameter.Bottom) && (Parameter.Bottom <= (y + range));
         }
 
         public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
         {
+            double newWidth = Parameter.Width;
+            double newHeight = Parameter.Height;
             double distanceX = dropPoint.X - dragStart.X;
             double distanceY = dropPoint.Y - dragStart.Y;
-            double changeSizeY = CalcHeightBaseWidth(distanceX);
+            double changeSizeY = Parameter.CalcHeightBaseWidth(distanceX);
             if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
             {
-                Width += (int)distanceX;
-                Height += (int)changeSizeY;
+                newWidth += (int)distanceX;
+                newHeight += (int)changeSizeY;
             }
             else
             {
-                Width += (int)CalcWidthBaseHeight(distanceY);
-                Height += (int)distanceY;
+                newWidth += (int)Parameter.CalcWidthBaseHeight(distanceY);
+                newHeight += (int)distanceY;
             }
 
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
-            if (Right > _ShowingImage.Width)
+            int newRight = Parameter.Left + (int)newWidth;
+            if (newRight > _ShowingImage.Width)
             {
-                Width = _ShowingImage.Width - Left;
-                Height = (int)CalcHeightBaseWidth((double)Width);
+                newWidth = _ShowingImage.Width - Parameter.Left;
+                newHeight = (int)Parameter.CalcHeightBaseWidth((double)newWidth);
             }
 
-            if (Bottom > _ShowingImage.Height)
+            int newBottom = Parameter.Top + (int)newHeight;
+            if (newBottom > _ShowingImage.Height)
             {
-                Height = _ShowingImage.Height - Top;
-                Width = (int)CalcWidthBaseHeight((double)Height);
+                newHeight = _ShowingImage.Height - Parameter.Top;
+                newWidth = (int)Parameter.CalcWidthBaseHeight((double)Parameter.Height);
             }
+
+            Parameter = new CutLineParameter(Parameter.Left, Parameter.Top, (int)newWidth, (int)newHeight);
         }
     }
 }
