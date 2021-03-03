@@ -43,86 +43,26 @@ namespace MyTrimmingNew2
         {
             double newLeft = Parameter.Left;
             double newTop = Parameter.Top;
+            double xDirection = 0.0;
+            double yDirection = 0.0;
             if (key == Key.Left)
             {
-                newLeft = MoveX(-1 * num);
+                xDirection = -1 * num;
             }
             else if (key == Key.Right)
             {
-                newLeft = MoveX(1 * num);
+                xDirection = 1 * num;
             }
             else if (key == Key.Up)
             {
-                newTop = MoveY(-1 * num);
+                yDirection = -1 * num;
             }
             else if (key == Key.Down)
             {
-                newTop = MoveY(1 * num);
+                yDirection = 1 * num;
             }
 
-            Parameter = new CutLineParameter(newLeft, newTop, Parameter.Width, Parameter.Height);
-        }
-
-        private double MoveX(double xDirection)
-        {
-            double newLeft = Parameter.Left + xDirection;
-            double newRight = Parameter.Right + xDirection;
-            return AdjustLeft(newLeft, newRight);
-        }
-
-        private double AdjustLeft(double newLeft, double newRight)
-        {
-            if (DoLeftStickOutOfImage(newLeft))
-            {
-                return 0.0;
-            }
-            else if (DoRightStickOutOfImage(newRight))
-            {
-                return _ShowingImage.Width - Parameter.Width;
-            }
-
-            return newLeft;
-        }
-
-        private bool DoLeftStickOutOfImage(double left)
-        {
-            return (left < 0);
-        }
-
-        private bool DoRightStickOutOfImage(double right)
-        {
-            return (right > _ShowingImage.Width);
-        }
-
-        private double MoveY(double yDirection)
-        {
-            double newTop = Parameter.Top + yDirection;
-            double newBottom = Parameter.Top + Parameter.Height + yDirection;
-            return AdjustTop(newTop, newBottom);
-        }
-
-        private double AdjustTop(double newTop, double newBottom)
-        {
-            if (DoTopStickOutOfImage(newTop))
-            {
-                return 0;
-            }
-            else if (DoBottomStickOutOfImage(newBottom))
-            {
-                return _ShowingImage.Height - Parameter.Height;
-            }
-
-            return newTop;
-        }
-
-        private bool DoTopStickOutOfImage(double top)
-        {
-            return (top < 0);
-        }
-
-        private bool DoBottomStickOutOfImage(double bottom)
-        {
-            return (bottom > _ShowingImage.Height);
+            Parameter = new CutLineMove(this, _ShowingImage).CalcNewParameter(xDirection, yDirection);
         }
 
         public bool IsPointNearRightBottom(Point p)

@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="CutLine.cs" />
     <Compile Include="CutLineDisplay.cs" />
+    <Compile Include="CutLineMove.cs" />
     <Compile Include="CutLineParameter.cs" />
     <Compile Include="OriginalImage.cs" />
     <Compile Include="ShowingImage.cs" />
