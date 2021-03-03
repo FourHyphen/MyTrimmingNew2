@@ -14,19 +14,19 @@ namespace MyTrimmingNew2
 
         private CutLineParameter Parameter { get; set; }
 
-        private static int NearRange = 20;
+        private static double NearRange = 20.0;
 
-        public int Left { get { return Parameter.Left; } }
+        public double Left { get { return Parameter.Left; } }
 
-        public int Right { get { return Parameter.Right; } }
+        public double Right { get { return Parameter.Right; } }
 
-        public int Top { get { return Parameter.Top; } }
+        public double Top { get { return Parameter.Top; } }
 
-        public int Bottom { get { return Parameter.Bottom; } }
+        public double Bottom { get { return Parameter.Bottom; } }
 
-        public int Width { get { return Parameter.Width; } }
+        public double Width { get { return Parameter.Width; } }
 
-        public int Height { get { return Parameter.Height; } }
+        public double Height { get { return Parameter.Height; } }
 
         public CutLine(ShowingImage showingImage)
         {
@@ -41,8 +41,8 @@ namespace MyTrimmingNew2
 
         public void Move(Key key, int num = 1)
         {
-            int newLeft = Parameter.Left;
-            int newTop = Parameter.Top;
+            double newLeft = Parameter.Left;
+            double newTop = Parameter.Top;
             if (key == Key.Left)
             {
                 newLeft = MoveX(-1 * num);
@@ -63,18 +63,18 @@ namespace MyTrimmingNew2
             Parameter = new CutLineParameter(newLeft, newTop, Parameter.Width, Parameter.Height);
         }
 
-        private int MoveX(int xDirection)
+        private double MoveX(double xDirection)
         {
-            int newLeft = Parameter.Left + xDirection;
-            int newRight = Parameter.Right + xDirection;
+            double newLeft = Parameter.Left + xDirection;
+            double newRight = Parameter.Right + xDirection;
             return AdjustLeft(newLeft, newRight);
         }
 
-        private int AdjustLeft(int newLeft, int newRight)
+        private double AdjustLeft(double newLeft, double newRight)
         {
             if (DoLeftStickOutOfImage(newLeft))
             {
-                return 0;
+                return 0.0;
             }
             else if (DoRightStickOutOfImage(newRight))
             {
@@ -84,24 +84,24 @@ namespace MyTrimmingNew2
             return newLeft;
         }
 
-        private bool DoLeftStickOutOfImage(int left)
+        private bool DoLeftStickOutOfImage(double left)
         {
             return (left < 0);
         }
 
-        private bool DoRightStickOutOfImage(int right)
+        private bool DoRightStickOutOfImage(double right)
         {
             return (right > _ShowingImage.Width);
         }
 
-        private int MoveY(int yDirection)
+        private double MoveY(double yDirection)
         {
-            int newTop = Parameter.Top + yDirection;
-            int newBottom = Parameter.Top + Parameter.Height + yDirection;
+            double newTop = Parameter.Top + yDirection;
+            double newBottom = Parameter.Top + Parameter.Height + yDirection;
             return AdjustTop(newTop, newBottom);
         }
 
-        private int AdjustTop(int newTop, int newBottom)
+        private double AdjustTop(double newTop, double newBottom)
         {
             if (DoTopStickOutOfImage(newTop))
             {
@@ -115,27 +115,27 @@ namespace MyTrimmingNew2
             return newTop;
         }
 
-        private bool DoTopStickOutOfImage(int top)
+        private bool DoTopStickOutOfImage(double top)
         {
             return (top < 0);
         }
 
-        private bool DoBottomStickOutOfImage(int bottom)
+        private bool DoBottomStickOutOfImage(double bottom)
         {
             return (bottom > _ShowingImage.Height);
         }
 
         public bool IsPointNearRightBottom(Point p)
         {
-            return (IsPointNearRightBottomX((int)p.X, NearRange)) && (IsPointNearRightBottomY((int)p.Y, NearRange));
+            return (IsPointNearRightBottomX(p.X, NearRange)) && (IsPointNearRightBottomY(p.Y, NearRange));
         }
 
-        private bool IsPointNearRightBottomX(int x, int range)
+        private bool IsPointNearRightBottomX(double x, double range)
         {
             return ((x - range) <= Parameter.Right) && (Parameter.Right <= (x + range));
         }
 
-        private bool IsPointNearRightBottomY(int y, int range)
+        private bool IsPointNearRightBottomY(double y, double range)
         {
             return ((y - range) <= Parameter.Bottom) && (Parameter.Bottom <= (y + range));
         }
@@ -149,31 +149,31 @@ namespace MyTrimmingNew2
             double changeSizeY = Parameter.CalcHeightBaseWidth(distanceX);
             if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
             {
-                newWidth += (int)distanceX;
-                newHeight += (int)changeSizeY;
+                newWidth += distanceX;
+                newHeight += changeSizeY;
             }
             else
             {
-                newWidth += (int)Parameter.CalcWidthBaseHeight(distanceY);
-                newHeight += (int)distanceY;
+                newWidth += Parameter.CalcWidthBaseHeight(distanceY);
+                newHeight += distanceY;
             }
 
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
-            int newRight = Parameter.Left + (int)newWidth;
+            double newRight = Parameter.Left + newWidth;
             if (newRight > _ShowingImage.Width)
             {
                 newWidth = _ShowingImage.Width - Parameter.Left;
-                newHeight = (int)Parameter.CalcHeightBaseWidth((double)newWidth);
+                newHeight = Parameter.CalcHeightBaseWidth(newWidth);
             }
 
-            int newBottom = Parameter.Top + (int)newHeight;
+            double newBottom = Parameter.Top + newHeight;
             if (newBottom > _ShowingImage.Height)
             {
                 newHeight = _ShowingImage.Height - Parameter.Top;
-                newWidth = (int)Parameter.CalcWidthBaseHeight((double)Parameter.Height);
+                newWidth = Parameter.CalcWidthBaseHeight(Parameter.Height);
             }
 
-            Parameter = new CutLineParameter(Parameter.Left, Parameter.Top, (int)newWidth, (int)newHeight);
+            Parameter = new CutLineParameter(Parameter.Left, Parameter.Top, newWidth, newHeight);
         }
     }
 }

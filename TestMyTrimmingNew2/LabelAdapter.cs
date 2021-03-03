@@ -26,11 +26,11 @@ namespace TestMyTrimmingNew2
             return str;
         }
 
-        public int ContentNum(IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
+        public double ContentNum(IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
         {
             string str = Content(logicalTree);
             str = str.Trim();
-            return int.Parse(str);
+            return double.Parse(str);
         }
     }
 }

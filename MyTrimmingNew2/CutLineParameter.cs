@@ -9,15 +9,15 @@ namespace MyTrimmingNew2
         private static double RatioHeight = 9.0;
 
 
-        public int Width { get; private set; }
+        public double Width { get; private set; }
 
-        public int Height { get; private set; }
+        public double Height { get; private set; }
 
-        public int Left { get; private set; }
+        public double Left { get; private set; }
 
-        public int Top { get; private set; }
+        public double Top { get; private set; }
 
-        public int Right
+        public double Right
         {
             get
             {
@@ -25,7 +25,7 @@ namespace MyTrimmingNew2
             }
         }
 
-        public int Bottom
+        public double Bottom
         {
             get
             {
@@ -64,7 +64,7 @@ namespace MyTrimmingNew2
             Height = (int)height;
         }
 
-        public CutLineParameter(int left, int top, int width, int height)
+        public CutLineParameter(double left, double top, double width, double height)
         {
             Left = left;
             Top = top;

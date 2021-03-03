@@ -55,19 +55,19 @@ namespace TestMyTrimmingNew2
             MainWindow.DisplayImage(imagePath);
         }
 
-        internal int GetOriginalImageWidth()
+        internal double GetOriginalImageWidth()
         {
             UpdateNowMainWindowStatus();
             return OriginalImageWidth.ContentNum(Tree);
         }
 
-        internal int GetOriginalImageHeight()
+        internal double GetOriginalImageHeight()
         {
             UpdateNowMainWindowStatus();
             return OriginalImageHeight.ContentNum(Tree);
         }
 
-        internal int GetImageAreaWidth()
+        internal double GetImageAreaWidth()
         {
             UpdateNowMainWindowStatus();
             return ImageAreaWidth.ContentNum(Tree);
@@ -79,67 +79,67 @@ namespace TestMyTrimmingNew2
             return ImageAreaHeight.ContentNum(Tree);
         }
 
-        internal int GetShowingImageWidth()
+        internal double GetShowingImageWidth()
         {
             UpdateNowMainWindowStatus();
             return ShowingImageWidth.ContentNum(Tree);
         }
 
-        internal int GetShowingImageHeight()
+        internal double GetShowingImageHeight()
         {
             UpdateNowMainWindowStatus();
             return ShowingImageHeight.ContentNum(Tree);
         }
 
-        internal int GetCutLineWidth()
+        internal double GetCutLineWidth()
         {
             UpdateNowMainWindowStatus();
             return CutLineWidth.ContentNum(Tree);
         }
 
-        internal int GetCutLineHeight()
+        internal double GetCutLineHeight()
         {
             UpdateNowMainWindowStatus();
             return CutLineHeight.ContentNum(Tree);
         }
 
-        internal int GetCutLineLeftTopX()
+        internal double GetCutLineLeftTopX()
         {
             UpdateNowMainWindowStatus();
             return CutLineLeftTopX.ContentNum(Tree);
         }
 
-        internal int GetCutLineLeftTopY()
+        internal double GetCutLineLeftTopY()
         {
             UpdateNowMainWindowStatus();
             return CutLineLeftTopY.ContentNum(Tree);
         }
 
-        internal int GetCutLineLeftBottomY()
+        internal double GetCutLineLeftBottomY()
         {
             UpdateNowMainWindowStatus();
             return CutLineLeftBottomY.ContentNum(Tree);
         }
 
-        internal int GetCutLineRightTopX()
+        internal double GetCutLineRightTopX()
         {
             UpdateNowMainWindowStatus();
             return CutLineRightTopX.ContentNum(Tree);
         }
 
-        internal int GetCutLineRightTopY()
+        internal double GetCutLineRightTopY()
         {
             UpdateNowMainWindowStatus();
             return CutLineRightTopY.ContentNum(Tree);
         }
 
-        internal int GetCutLineRightBottomX()
+        internal double GetCutLineRightBottomX()
         {
             UpdateNowMainWindowStatus();
             return CutLineRightBottomX.ContentNum(Tree);
         }
 
-        internal int GetCutLineRightBottomY()
+        internal double GetCutLineRightBottomY()
         {
             UpdateNowMainWindowStatus();
             return CutLineRightBottomY.ContentNum(Tree);

@@ -58,7 +58,7 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 3840, actual: Driver.GetOriginalImageWidth());
             Assert.AreEqual(expected: 2560, actual: Driver.GetOriginalImageHeight());
 
-            int imageAreaWidth = Driver.GetImageAreaWidth();
+            double imageAreaWidth = Driver.GetImageAreaWidth();
             Assert.AreEqual(expected: imageAreaWidth, actual: Driver.GetShowingImageWidth());
             // 436[pixel] = 横654[pixel]に縦横比率を維持したまま縮小した結果
             Assert.AreEqual(expected: 436, actual: Driver.GetShowingImageHeight());
@@ -70,11 +70,11 @@ namespace TestMyTrimmingNew2
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
 
-            int cutLineWidth = Driver.GetCutLineWidth();
-            int cutLineHeight = Driver.GetCutLineHeight();
-            Assert.AreEqual(expected: Driver.GetShowingImageWidth(), actual: cutLineWidth);
+            double cutLineWidth = Driver.GetCutLineWidth();
+            double cutLineHeight = Driver.GetCutLineHeight();
+            AreEqualCutLineParameter(expected: Driver.GetShowingImageWidth(), actual: cutLineWidth);
             // 367[pixel] = 横654[pixel]に対して 縦:横 = 16:9 を適用した結果
-            Assert.AreEqual(expected: 367, actual: cutLineHeight);
+            AreEqualCutLineParameter(expected: 367, actual: cutLineHeight);
         }
 
         [TestMethod]
@@ -83,12 +83,12 @@ namespace TestMyTrimmingNew2
             string imagePath2 = Common.GetFilePathOfDependentEnvironment("/Resource/test002.jpg");
             Driver.EmurateOpenImage(imagePath2);
 
-            int cutLineWidth = Driver.GetCutLineWidth();
-            int cutLineHeight = Driver.GetCutLineHeight();
+            double cutLineWidth = Driver.GetCutLineWidth();
+            double cutLineHeight = Driver.GetCutLineHeight();
             // (362, 203) = 縦長画像を 横654 x 縦544 で表示したところ 横362 x 縦544 で表示された
             //              これに対して 縦:横 = 16:9 を適用した結果
-            Assert.AreEqual(expected: 362, actual: cutLineWidth);
-            Assert.AreEqual(expected: 203, actual: cutLineHeight);
+            AreEqualCutLineParameter(expected: 362, actual: cutLineWidth);
+            AreEqualCutLineParameter(expected: 203, actual: cutLineHeight);
         }
 
         [TestMethod]
@@ -96,27 +96,27 @@ namespace TestMyTrimmingNew2
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
-            int maxBottom = Driver.GetShowingImageHeight();
-            int maxTop = maxBottom - Driver.GetCutLineHeight();
+            double maxBottom = Driver.GetShowingImageHeight();
+            double maxTop = maxBottom - Driver.GetCutLineHeight();
 
-            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
-            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopY());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Up, 1);
-            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopY());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1);
-            Assert.AreEqual(expected: 1, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: 1, actual: Driver.GetCutLineLeftTopY());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Down, 300);
-            Assert.AreEqual(expected: maxTop, actual: Driver.GetCutLineLeftTopY());
-            Assert.AreEqual(expected: maxTop, actual: Driver.GetCutLineRightTopY());
-            Assert.AreEqual(expected: maxBottom, actual: Driver.GetCutLineLeftBottomY());
-            Assert.AreEqual(expected: maxBottom, actual: Driver.GetCutLineRightBottomY());
+            AreEqualCutLineParameter(expected: maxTop, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: maxTop, actual: Driver.GetCutLineRightTopY());
+            AreEqualCutLineParameter(expected: maxBottom, actual: Driver.GetCutLineLeftBottomY());
+            AreEqualCutLineParameter(expected: maxBottom, actual: Driver.GetCutLineRightBottomY());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Up, 1);
-            Assert.AreEqual(expected: maxTop - 1, actual: Driver.GetCutLineLeftTopY());
-            Assert.AreEqual(expected: maxBottom - 1, actual: Driver.GetCutLineLeftBottomY());
+            AreEqualCutLineParameter(expected: maxTop - 1, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: maxBottom - 1, actual: Driver.GetCutLineLeftBottomY());
         }
 
         [TestMethod]
@@ -124,26 +124,26 @@ namespace TestMyTrimmingNew2
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
-            int beforeCutLineWidth = Driver.GetCutLineWidth();
-            int beforeCutLineHeight = Driver.GetCutLineHeight();
+            double beforeCutLineWidth = Driver.GetCutLineWidth();
+            double beforeCutLineHeight = Driver.GetCutLineHeight();
 
-            int moveX = 50;    // 根拠なし、適当
-            int dragStartX = Driver.GetCutLineRightBottomX();
-            int dropX = dragStartX - moveX;
+            double moveX = 50;    // 根拠なし、適当
+            double dragStartX = Driver.GetCutLineRightBottomX();
+            double dropX = dragStartX - moveX;
             System.Windows.Point drag = new System.Windows.Point(dragStartX, Driver.GetCutLineRightBottomY());
             System.Windows.Point drop = new System.Windows.Point(dropX, Driver.GetCutLineRightBottomY());
 
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
-            int afterCutLineWidth = beforeCutLineWidth - moveX;
-            int afterCutLineHeight = beforeCutLineHeight - (int)((double)moveX * 9.0 / 16.0);
+            double afterCutLineWidth = beforeCutLineWidth - moveX;
+            double afterCutLineHeight = Math.Round(beforeCutLineHeight - (moveX * 9.0 / 16.0), 2);
 
-            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
-            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
-            Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
-            Assert.AreEqual(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight());
-            Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineRightTopX());
-            Assert.AreEqual(expected: afterCutLineWidth, actual: Driver.GetCutLineRightBottomX());
-            Assert.AreEqual(expected: afterCutLineHeight, actual: Driver.GetCutLineRightBottomY());
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
+            AreEqualCutLineParameter(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight());
+            AreEqualCutLineParameter(expected: afterCutLineWidth, actual: Driver.GetCutLineRightTopX());
+            AreEqualCutLineParameter(expected: afterCutLineWidth, actual: Driver.GetCutLineRightBottomX());
+            AreEqualCutLineParameter(expected: afterCutLineHeight, actual: Driver.GetCutLineRightBottomY());
         }
 
         [TestMethod]
@@ -151,31 +151,37 @@ namespace TestMyTrimmingNew2
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
             Driver.EmurateOpenImage(imagePath);
-            int moveX = 50;
-            int minLeft = 0;
-            int maxLeft = moveX;
-            int maxRight = Driver.GetShowingImageWidth();
+            double moveX = 50;
+            double minLeft = 0;
+            double maxLeft = moveX;
+            double maxRight = Driver.GetShowingImageWidth();
 
             // まず切り抜き線を適当に小さくし、左右に動けるスペースを作る
             System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
             System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
 
-            Assert.AreEqual(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Left, 1);
-            Assert.AreEqual(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Right, 2);
-            Assert.AreEqual(expected: 2, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: 2, actual: Driver.GetCutLineLeftTopX());
 
-            Driver.EmurateInputKey(System.Windows.Input.Key.Right, moveX * 2);    // 2倍もあれば画像をはみ出ようとするのに十分
-            Assert.AreEqual(expected: maxLeft, actual: Driver.GetCutLineLeftTopX());
-            Assert.AreEqual(expected: maxRight, actual: Driver.GetCutLineRightBottomX());
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, (int)moveX * 2);    // 2倍もあれば画像をはみ出ようとするのに十分
+            AreEqualCutLineParameter(expected: maxLeft, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: maxRight, actual: Driver.GetCutLineRightBottomX());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.Left, 1);
-            Assert.AreEqual(expected: maxLeft - 1, actual: Driver.GetCutLineLeftTopX());
-            Assert.AreEqual(expected: maxRight - 1, actual: Driver.GetCutLineRightBottomX());
+            AreEqualCutLineParameter(expected: maxLeft - 1, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: maxRight - 1, actual: Driver.GetCutLineRightBottomX());
+        }
+
+        private void AreEqualCutLineParameter(double expected, double actual)
+        {
+            double toCompare = Math.Round(expected, 2);
+            Assert.AreEqual(toCompare, actual);
         }
     }
 }

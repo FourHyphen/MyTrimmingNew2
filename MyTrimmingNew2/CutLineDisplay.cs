@@ -27,14 +27,19 @@ namespace MyTrimmingNew2
             SetLabelCoordinate(rightBottom, main.CutLineRightBottomX, main.CutLineRightBottomY);
             SetLabelCoordinate(leftBottom, main.CutLineLeftBottomX, main.CutLineLeftBottomY);
 
-            main.CutLineWidth.Content = cutLine.Width.ToString();
-            main.CutLineHeight.Content = cutLine.Height.ToString();
+            main.CutLineWidth.Content = ToDisplayString(cutLine.Width);
+            main.CutLineHeight.Content = ToDisplayString(cutLine.Height);
         }
 
         private static void SetLabelCoordinate(System.Windows.Point p, Label labelX, Label labelY)
         {
-            labelX.Content = p.X.ToString();
-            labelY.Content = p.Y.ToString();
+            labelX.Content = ToDisplayString(p.X);
+            labelY.Content = ToDisplayString(p.Y);
+        }
+
+        private static string ToDisplayString(double d)
+        {
+            return Math.Round(d, 2).ToString();
         }
     }
 }
