@@ -178,6 +178,53 @@ namespace TestMyTrimmingNew2
             AreEqualCutLineParameter(expected: maxRight - 1, actual: Driver.GetCutLineRightBottomX());
         }
 
+        [TestMethod]
+        public void TestMoveCutLineByMouseDragAndDrop()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            double moveX = 50;
+            double minLeft = 0;
+            double maxRight = Driver.GetShowingImageWidth();
+            double minTop = 0;
+            double maxBottom = Driver.GetShowingImageHeight();
+            double centerX = Driver.GetCutLineWidth() / 2.0;
+            double centerY = Driver.GetCutLineHeight() / 2.0;
+
+            // まず切り抜き線を適当に小さくし、左右に動けるスペースを作る
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+
+            // 移動：右下方向
+            drag = new System.Windows.Point(centerX, centerY);
+            drop = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            AreEqualCutLineParameter(expected: maxRight, actual: Driver.GetCutLineRightBottomX());
+            AreEqualCutLineParameter(expected: maxBottom, actual: Driver.GetCutLineRightBottomY());
+
+            // 移動：左下方向
+            drag = new System.Windows.Point(centerX, centerY);
+            drop = new System.Windows.Point(Driver.GetCutLineLeftBottomX(), Driver.GetCutLineLeftBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            AreEqualCutLineParameter(expected: minLeft, actual: Driver.GetCutLineLeftBottomX());
+            AreEqualCutLineParameter(expected: maxBottom, actual: Driver.GetCutLineLeftBottomY());
+
+            // 移動：左上方向
+            drag = new System.Windows.Point(centerX, centerY);
+            drop = new System.Windows.Point(Driver.GetCutLineLeftTopX(), Driver.GetCutLineLeftTopY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            AreEqualCutLineParameter(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: minTop, actual: Driver.GetCutLineLeftTopY());
+
+            // 移動：右上方向
+            drag = new System.Windows.Point(centerX, centerY);
+            drop = new System.Windows.Point(Driver.GetCutLineRightTopX(), Driver.GetCutLineRightTopY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            AreEqualCutLineParameter(expected: maxRight, actual: Driver.GetCutLineRightTopX());
+            AreEqualCutLineParameter(expected: minTop, actual: Driver.GetCutLineRightTopY());
+        }
+
         private void AreEqualCutLineParameter(double expected, double actual)
         {
             double toCompare = Math.Round(expected, 2);
