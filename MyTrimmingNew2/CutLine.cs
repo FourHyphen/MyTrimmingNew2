@@ -41,8 +41,6 @@ namespace MyTrimmingNew2
 
         public void Move(Key key, int num = 1)
         {
-            double newLeft = Parameter.Left;
-            double newTop = Parameter.Top;
             double xDirection = 0.0;
             double yDirection = 0.0;
             if (key == Key.Left)
