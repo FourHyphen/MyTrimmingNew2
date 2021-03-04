@@ -82,38 +82,7 @@ namespace MyTrimmingNew2
 
         public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
         {
-            double newWidth = Parameter.Width;
-            double newHeight = Parameter.Height;
-            double distanceX = dropPoint.X - dragStart.X;
-            double distanceY = dropPoint.Y - dragStart.Y;
-            double changeSizeY = Parameter.CalcHeightBaseWidth(distanceX);
-            if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
-            {
-                newWidth += distanceX;
-                newHeight += changeSizeY;
-            }
-            else
-            {
-                newWidth += Parameter.CalcWidthBaseHeight(distanceY);
-                newHeight += distanceY;
-            }
-
-            // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
-            double newRight = Parameter.Left + newWidth;
-            if (newRight > _ShowingImage.Width)
-            {
-                newWidth = _ShowingImage.Width - Parameter.Left;
-                newHeight = Parameter.CalcHeightBaseWidth(newWidth);
-            }
-
-            double newBottom = Parameter.Top + newHeight;
-            if (newBottom > _ShowingImage.Height)
-            {
-                newHeight = _ShowingImage.Height - Parameter.Top;
-                newWidth = Parameter.CalcWidthBaseHeight(Parameter.Height);
-            }
-
-            Parameter = new CutLineParameter(Parameter.Left, Parameter.Top, newWidth, newHeight);
+            Parameter = new CutLineChangeSize(this, _ShowingImage).CalcNewParameter(dragStart, dropPoint);
         }
     }
 }
