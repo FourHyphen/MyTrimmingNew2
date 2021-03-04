@@ -82,7 +82,7 @@ namespace MyTrimmingNew2
 
         public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
         {
-            Parameter = new CutLineChangeSize(this, _ShowingImage).CalcNewParameter(dragStart, dropPoint);
+            Parameter = new CutLineChangeSize(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
         }
     }
 }
