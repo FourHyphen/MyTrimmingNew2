@@ -50,15 +50,15 @@ namespace TestMyTrimmingNew2
             double maxTop = si.Height - cl.Height;
 
             Assert.AreEqual(expected: 0, actual: cl.Top);
-            cl.Move(System.Windows.Input.Key.Up, 1);
+            Move(cl, System.Windows.Input.Key.Up, 1);
             Assert.AreEqual(expected: 0, actual: cl.Top);
-            cl.Move(System.Windows.Input.Key.Down, 1);
+            Move(cl, System.Windows.Input.Key.Down, 1);
             Assert.AreEqual(expected: 1, actual: cl.Top);
-            cl.Move(System.Windows.Input.Key.Down, 50);
+            Move(cl, System.Windows.Input.Key.Down, 50);
             Assert.AreEqual(expected: 51, actual: cl.Top);
-            cl.Move(System.Windows.Input.Key.Down, 1000);
+            Move(cl, System.Windows.Input.Key.Down, 1000);
             Assert.AreEqual(expected: maxTop, actual: cl.Top);
-            cl.Move(System.Windows.Input.Key.Up, 1);
+            Move(cl, System.Windows.Input.Key.Up, 1);
             Assert.AreEqual(expected: maxTop - 1, actual: cl.Top);
         }
 
@@ -145,13 +145,13 @@ namespace TestMyTrimmingNew2
             double maxLeft = si.Width - cl.Width;
 
             Assert.AreEqual(expected: 0, actual: cl.Left);
-            cl.Move(System.Windows.Input.Key.Left, 1);
+            Move(cl, System.Windows.Input.Key.Left, 1);
             Assert.AreEqual(expected: 0, actual: cl.Left);
-            cl.Move(System.Windows.Input.Key.Right, 1);
+            Move(cl, System.Windows.Input.Key.Right, 1);
             Assert.AreEqual(expected: 1, actual: cl.Left);
-            cl.Move(System.Windows.Input.Key.Right, 1000);
+            Move(cl, System.Windows.Input.Key.Right, 1000);
             Assert.AreEqual(expected: maxLeft, actual: cl.Left);
-            cl.Move(System.Windows.Input.Key.Left, 1);
+            Move(cl, System.Windows.Input.Key.Left, 1);
             Assert.AreEqual(expected: maxLeft - 1, actual: cl.Left);
         }
 
@@ -160,6 +160,12 @@ namespace TestMyTrimmingNew2
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
             OriginalImage oi = new OriginalImage(imagePath);
             return new ShowingImage(oi, imageAreaWidth, imageAreaHeight);
+        }
+
+        private void Move(CutLine cl, System.Windows.Input.Key key, int num)
+        {
+            cl.SetCommand(key, num);
+            cl.ExecuteCommand();
         }
 
         private void ChangeSizeBaseRightBottomWithCheck(CutLine cutLine, double changeSizeX, double changeSizeY, double expectedWidth, double expectedHeight)
@@ -173,7 +179,8 @@ namespace TestMyTrimmingNew2
         {
             System.Windows.Point dragStart = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
             System.Windows.Point drop = new System.Windows.Point(cutLine.Right + changeSizeX, cutLine.Bottom + changeSizeY);
-            cutLine.ChangeSizeBaseRightBottom(dragStart, drop);
+            cutLine.SetCommand(dragStart);
+            cutLine.ExecuteCommand(drop);
         }
     }
 }

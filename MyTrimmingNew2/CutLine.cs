@@ -39,28 +39,48 @@ namespace MyTrimmingNew2
             Parameter = new CutLineParameter(_ShowingImage);
         }
 
-        public void Move(Key key, int num = 1)
+        private double XDirection { get; set; }
+
+        private double YDirection { get; set; }
+
+        public void SetCommand(Key key, int num = 1)
         {
-            double xDirection = 0.0;
-            double yDirection = 0.0;
+            XDirection = 0.0;
+            YDirection = 0.0;
             if (key == Key.Left)
             {
-                xDirection = -1 * num;
+                XDirection = -1 * num;
             }
             else if (key == Key.Right)
             {
-                xDirection = 1 * num;
+                XDirection = 1 * num;
             }
             else if (key == Key.Up)
             {
-                yDirection = -1 * num;
+                YDirection = -1 * num;
             }
             else if (key == Key.Down)
             {
-                yDirection = 1 * num;
+                YDirection = 1 * num;
             }
+        }
 
-            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, xDirection, yDirection).CalcNewParameter();
+        public void ExecuteCommand()
+        {
+            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, XDirection, YDirection).CalcNewParameter();
+        }
+
+        private System.Windows.Point DragStart { get; set; }
+
+        private bool NowDraging { get; set; } = false;
+
+        public void SetCommand(Point p)
+        {
+            if (IsPointNearRightBottom(p))
+            {
+                DragStart = p;
+                NowDraging = true;
+            }
         }
 
         public bool IsPointNearRightBottom(Point p)
@@ -78,7 +98,16 @@ namespace MyTrimmingNew2
             return ((y - range) <= Parameter.Bottom) && (Parameter.Bottom <= (y + range));
         }
 
-        public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
+        public void ExecuteCommand(System.Windows.Point p)
+        {
+            if (NowDraging)
+            {
+                ChangeSizeBaseRightBottom(DragStart, p);
+                NowDraging = false;
+            }
+        }
+
+        private void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
         {
             Parameter = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
         }
