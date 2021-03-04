@@ -62,7 +62,7 @@ namespace MyTrimmingNew2
                 yDirection = 1 * num;
             }
 
-            Parameter = new CutLineMove(this, _ShowingImage).CalcNewParameter(xDirection, yDirection);
+            Parameter = new CutLineMove(this, _ShowingImage, xDirection, yDirection).CalcNewParameter();
         }
 
         public bool IsPointNearRightBottom(Point p)

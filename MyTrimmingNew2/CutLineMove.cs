@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew2
 {
-    public class CutLineMove
+    public class CutLineMove : CutLineCommand
     {
         private double MaxRight { get; }
 
         private double MaxBottom { get; }
 
-        public CutLineParameter Before { get; private set; }
+        private double XDirection { get; }
 
-        public CutLineParameter After { get; private set; }
+        private double YDirection { get; }
 
-        public CutLineMove(CutLine cutLine, ShowingImage image)
+        public CutLineMove(CutLine cutLine, ShowingImage image, double xDirection, double yDirection) : base (cutLine)
         {
-            Before = new CutLineParameter(cutLine.Left, cutLine.Top, cutLine.Width, cutLine.Height);
             MaxRight = image.Width;
             MaxBottom = image.Height;
+            XDirection = xDirection;
+            YDirection = yDirection;
         }
 
-        public CutLineParameter CalcNewParameter(double xDirection, double yDirection)
+        protected override CutLineParameter CalcNewParameterCore()
         {
-            double newLeft = MoveX(xDirection);
-            double newTop = MoveY(yDirection);
-            After =  new CutLineParameter(newLeft, newTop, Before.Width, Before.Height);
-            return After;
+            double newLeft = MoveX(XDirection);
+            double newTop = MoveY(YDirection);
+            return new CutLineParameter(newLeft, newTop, Before.Width, Before.Height);
         }
 
         private double MoveX(double xDirection)

@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="CutLine.cs" />
     <Compile Include="CutLineChangeSize.cs" />
+    <Compile Include="CutLineCommand.cs" />
     <Compile Include="CutLineDisplay.cs" />
     <Compile Include="CutLineMove.cs" />
     <Compile Include="CutLineParameter.cs" />
