@@ -62,7 +62,7 @@ namespace MyTrimmingNew2
                 yDirection = 1 * num;
             }
 
-            Parameter = new CutLineMove(this, _ShowingImage, xDirection, yDirection).CalcNewParameter();
+            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, xDirection, yDirection).CalcNewParameter();
         }
 
         public bool IsPointNearRightBottom(Point p)
@@ -82,7 +82,7 @@ namespace MyTrimmingNew2
 
         public void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
         {
-            Parameter = new CutLineChangeSize(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
+            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
         }
     }
 }
