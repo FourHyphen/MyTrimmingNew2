@@ -213,6 +213,54 @@ namespace TestMyTrimmingNew2
             Assert.IsTrue(cl.IsPointInside(new Point(cl.Right - 1, cl.Bottom - 1)));
         }
 
+        [TestMethod]
+        public void TestChangeSizeBaseRightBottomIfOriginChanging()
+        {
+            // 右下点を思いきり左上に引っ張って、原点の位置が変わる場合のテスト
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 右下点を思いきり左上に引っ張って、原点の位置を旧右下点にできるだけのスペースを作る
+            // 左上に引っ張る際、高さ方向に大きく引っ張ることでサイズ変化後の左上点のx座標が < 0 にならないことを確認する
+            int moveX = 10;    // 移動するy距離に比べて十分に小さくする
+            ChangeSizeBaseRightBottom(cl, -100, 0);
+            Move(cl, System.Windows.Input.Key.Right, moveX);
+            Move(cl, System.Windows.Input.Key.Down, 500);
+
+            double beforeLeft = cl.Left;
+            double beforeTop = cl.Top;
+
+            // 右下点を思いきり左上に引っ張る
+            ChangeSizeBaseRightBottom(cl, -1000, -2000);
+
+            Assert.AreEqual(expected: 0, actual: cl.Left);
+            Assert.AreEqual(expected: beforeLeft, actual: cl.Right);
+            Assert.AreEqual(expected: beforeTop, actual: cl.Bottom);
+            Assert.AreEqual(expected: moveX, actual: cl.Width);
+            Assert.AreEqual(expected: moveX * 9.0 / 16.0, actual: cl.Height);
+
+            si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            cl = new CutLine(si);
+
+            // 左上に引っ張る際、横方向に大きく引っ張ることでサイズ変化後の左上点のy座標が < 0 にならないことを確認する
+            int moveY = 10;    // 移動するx距離に比べて十分に小さくする
+            ChangeSizeBaseRightBottom(cl, -100, 0);
+            Move(cl, System.Windows.Input.Key.Right, 500);
+            Move(cl, System.Windows.Input.Key.Down, moveY);
+
+            beforeLeft = cl.Left;
+            beforeTop = cl.Top;
+
+            // 右下点を思いきり左上に引っ張る
+            ChangeSizeBaseRightBottom(cl, -3000, -1000);
+
+            Assert.AreEqual(expected: 0, actual: cl.Top);
+            Assert.AreEqual(expected: beforeLeft, actual: cl.Right);
+            Assert.AreEqual(expected: beforeTop, actual: cl.Bottom);
+            Assert.AreEqual(expected: moveY * 16.0 / 9.0, actual: cl.Width);
+            Assert.AreEqual(expected: moveY, actual: cl.Height);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
