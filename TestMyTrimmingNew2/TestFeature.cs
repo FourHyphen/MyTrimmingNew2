@@ -198,28 +198,28 @@ namespace TestMyTrimmingNew2
 
             // 移動：右下方向
             drag = new System.Windows.Point(centerX, centerY);
-            drop = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            drop = new System.Windows.Point(maxRight, maxBottom);
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             AreEqualCutLineParameter(expected: maxRight, actual: Driver.GetCutLineRightBottomX());
             AreEqualCutLineParameter(expected: maxBottom, actual: Driver.GetCutLineRightBottomY());
 
             // 移動：左下方向
             drag = new System.Windows.Point(centerX, centerY);
-            drop = new System.Windows.Point(Driver.GetCutLineLeftBottomX(), Driver.GetCutLineLeftBottomY());
+            drop = new System.Windows.Point(minLeft, maxBottom);
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             AreEqualCutLineParameter(expected: minLeft, actual: Driver.GetCutLineLeftBottomX());
             AreEqualCutLineParameter(expected: maxBottom, actual: Driver.GetCutLineLeftBottomY());
 
             // 移動：左上方向
             drag = new System.Windows.Point(centerX, centerY);
-            drop = new System.Windows.Point(Driver.GetCutLineLeftTopX(), Driver.GetCutLineLeftTopY());
+            drop = new System.Windows.Point(minLeft, minTop);
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             AreEqualCutLineParameter(expected: minLeft, actual: Driver.GetCutLineLeftTopX());
             AreEqualCutLineParameter(expected: minTop, actual: Driver.GetCutLineLeftTopY());
 
             // 移動：右上方向
             drag = new System.Windows.Point(centerX, centerY);
-            drop = new System.Windows.Point(Driver.GetCutLineRightTopX(), Driver.GetCutLineRightTopY());
+            drop = new System.Windows.Point(maxRight, minTop);
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             AreEqualCutLineParameter(expected: maxRight, actual: Driver.GetCutLineRightTopX());
             AreEqualCutLineParameter(expected: minTop, actual: Driver.GetCutLineRightTopY());

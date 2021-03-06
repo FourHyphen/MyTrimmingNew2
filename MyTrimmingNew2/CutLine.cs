@@ -73,5 +73,19 @@ namespace MyTrimmingNew2
         {
             return ((y - range) <= Parameter.Bottom) && (Parameter.Bottom <= (y + range));
         }
+
+        public bool IsPointInside(Point p)
+        {
+            if (p.X < Left || p.X > Right)
+            {
+                return false;
+            }
+            if (p.Y < Top || p.Y > Bottom)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

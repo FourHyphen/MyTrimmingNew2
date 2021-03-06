@@ -194,6 +194,25 @@ namespace TestMyTrimmingNew2
             ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
         }
 
+        [TestMethod]
+        public void TestIsPointInside()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 切り抜き線の外ならfalse
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.Left - 1, cl.Top - 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.Right + 1, cl.Top - 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.Left - 1, cl.Bottom + 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.Right + 1, cl.Bottom + 1)));
+
+            // 切り抜き線の中ならtrue
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.Left + 1, cl.Top + 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.Right - 1, cl.Top + 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.Left + 1, cl.Bottom - 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.Right - 1, cl.Bottom - 1)));
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);

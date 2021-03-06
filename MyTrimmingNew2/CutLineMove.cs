@@ -24,6 +24,13 @@ namespace MyTrimmingNew2
             CalcMoveDistance(key, keyInputNum);
         }
 
+        public CutLineMove(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point drop) : base(cutLine)
+        {
+            MaxRight = image.Width;
+            MaxBottom = image.Height;
+            CalcMoveDistance(dragStart, drop);
+        }
+
         private void CalcMoveDistance(Key key, int num)
         {
             XDirection = 0.0;
@@ -44,6 +51,12 @@ namespace MyTrimmingNew2
             {
                 YDirection = 1 * num;
             }
+        }
+
+        private void CalcMoveDistance(System.Windows.Point dragStart, System.Windows.Point drop)
+        {
+            XDirection = drop.X - dragStart.X;
+            YDirection = drop.Y - dragStart.Y;
         }
 
         protected override CutLineParameter CalcNewParameterCore()
