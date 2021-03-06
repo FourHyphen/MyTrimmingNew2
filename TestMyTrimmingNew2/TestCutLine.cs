@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyTrimmingNew2;
 
@@ -155,6 +156,44 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: maxLeft - 1, actual: cl.Left);
         }
 
+        [TestMethod]
+        public void TestDoNotChangeSizeIfDragPointIsNotCorner()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 上下左右に動かせるスペースを作る(スペースを作れればスペースの広さは適当でOK)
+            ChangeSizeBaseRightBottom(cl, -100, 0);
+            Move(cl, System.Windows.Input.Key.Right, 50);
+            Move(cl, System.Windows.Input.Key.Down, 30);
+
+            // 正解は切り抜き線の縦横幅が変化しないこと
+            double ansWidth = cl.Width;
+            double ansHeight = cl.Height;
+
+            double enoughLeave = 50;
+
+            // 右下点付近だがコーナーではない
+            System.Windows.Point dragStart = new System.Windows.Point(cl.Right - enoughLeave, cl.Bottom - enoughLeave);
+            System.Windows.Point drop = new System.Windows.Point(cl.Right, cl.Bottom);
+            ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
+
+            // 左下点付近だがコーナーではない
+            dragStart = new System.Windows.Point(cl.Left + enoughLeave, cl.Bottom - enoughLeave);
+            drop = new System.Windows.Point(cl.Left, cl.Bottom);
+            ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
+
+            // 左上点付近だがコーナーではない
+            dragStart = new System.Windows.Point(cl.Left + enoughLeave, cl.Top + enoughLeave);
+            drop = new System.Windows.Point(cl.Left, cl.Top);
+            ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
+
+            // 右上点付近だがコーナーではない
+            dragStart = new System.Windows.Point(cl.Right - enoughLeave, cl.Top + enoughLeave);
+            drop = new System.Windows.Point(cl.Right, cl.Top);
+            ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
@@ -179,6 +218,13 @@ namespace TestMyTrimmingNew2
             System.Windows.Point dragStart = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
             System.Windows.Point drop = new System.Windows.Point(cutLine.Right + changeSizeX, cutLine.Bottom + changeSizeY);
             cutLine.ExecuteCommand(dragStart, drop);
+        }
+
+        private void ChangeSizeAndCheckWidthAndHeight(CutLine cl, Point dragStart, Point drop, double ansWidth, double ansHeight)
+        {
+            cl.ExecuteCommand(dragStart, drop);
+            Assert.AreEqual(expected: ansWidth, actual: cl.Width);
+            Assert.AreEqual(expected: ansHeight, actual: cl.Height);
         }
     }
 }

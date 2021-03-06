@@ -44,6 +44,11 @@ namespace MyTrimmingNew2
             Parameter = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum).CalcNewParameter();
         }
 
+        public void ExecuteCommand(Point dragStart, Point dropPoint)
+        {
+            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
+        }
+
         public bool IsPointNearRightBottom(Point p)
         {
             return (IsPointNearRightBottomX(p.X, NearRange)) && (IsPointNearRightBottomY(p.Y, NearRange));
@@ -57,11 +62,6 @@ namespace MyTrimmingNew2
         private bool IsPointNearRightBottomY(double y, double range)
         {
             return ((y - range) <= Parameter.Bottom) && (Parameter.Bottom <= (y + range));
-        }
-
-        public void ExecuteCommand(Point dragStart, Point dropPoint)
-        {
-            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
         }
     }
 }
