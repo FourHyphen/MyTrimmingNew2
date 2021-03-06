@@ -19,6 +19,8 @@ namespace MyTrimmingNew2
     {
         private CutLine _CutLine { get; set; } = null;
 
+        private System.Windows.Point MouseDownPoint { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +35,13 @@ namespace MyTrimmingNew2
         {
             ImageAreaWidth.Content = ((int)ImageArea.ActualWidth).ToString();
             ImageAreaHeight.Content = ((int)ImageArea.ActualHeight).ToString();
+            MouseDownPoint = GetMouseDownInitPoint();
+        }
+
+        private System.Windows.Point GetMouseDownInitPoint()
+        {
+            // 負の値なら値は適当でOK
+            return new Point(-1, -1);
         }
 
         private void MenuOpenFileClick(object sender, RoutedEventArgs e)
@@ -88,8 +97,6 @@ namespace MyTrimmingNew2
             ShowingImageMouseDown(e.GetPosition(CutLine));
         }
 
-        private System.Windows.Point MouseDownPoint { get; set; }
-
         private void ShowingImageMouseDown(System.Windows.Point relativeCoordinateToCutLine)
         {
             MouseDownPoint = relativeCoordinateToCutLine;
@@ -104,8 +111,12 @@ namespace MyTrimmingNew2
         {
             if (_CutLine != null)
             {
-                _CutLine.ExecuteCommand(mouseDown, mouseUp);
-                CutLineDisplay.Update(this, _CutLine);
+                // マウスクリックで画像を開いたときにもMouseUpイベントが発行されるのでガード
+                if (mouseDown != GetMouseDownInitPoint())
+                {
+                    _CutLine.ExecuteCommand(mouseDown, mouseUp);
+                    CutLineDisplay.Update(this, _CutLine);
+                }
             }
         }
     }
