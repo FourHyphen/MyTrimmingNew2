@@ -39,35 +39,16 @@ namespace MyTrimmingNew2
             Parameter = new CutLineParameter(_ShowingImage);
         }
 
-        private double XDirection { get; set; }
+        private CutLineCommand NextCommand { get; set; } = null;
 
-        private double YDirection { get; set; }
-
-        public void SetCommand(Key key, int num = 1)
+        public void SetCommand(Key key, int keyInputNum = 1)
         {
-            XDirection = 0.0;
-            YDirection = 0.0;
-            if (key == Key.Left)
-            {
-                XDirection = -1 * num;
-            }
-            else if (key == Key.Right)
-            {
-                XDirection = 1 * num;
-            }
-            else if (key == Key.Up)
-            {
-                YDirection = -1 * num;
-            }
-            else if (key == Key.Down)
-            {
-                YDirection = 1 * num;
-            }
+            NextCommand = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum);
         }
 
         public void ExecuteCommand()
         {
-            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, XDirection, YDirection).CalcNewParameter();
+            Parameter = NextCommand.CalcNewParameter();
         }
 
         private System.Windows.Point DragStart { get; set; }

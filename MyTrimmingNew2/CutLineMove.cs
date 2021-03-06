@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MyTrimmingNew2
 {
@@ -12,16 +13,37 @@ namespace MyTrimmingNew2
 
         private double MaxBottom { get; }
 
-        private double XDirection { get; }
+        private double XDirection { get; set; }
 
-        private double YDirection { get; }
+        private double YDirection { get; set; }
 
-        public CutLineMove(CutLine cutLine, ShowingImage image, double xDirection, double yDirection) : base (cutLine)
+        public CutLineMove(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base (cutLine)
         {
             MaxRight = image.Width;
             MaxBottom = image.Height;
-            XDirection = xDirection;
-            YDirection = yDirection;
+            CalcMoveDistance(key, keyInputNum);
+        }
+
+        private void CalcMoveDistance(Key key, int num)
+        {
+            XDirection = 0.0;
+            YDirection = 0.0;
+            if (key == Key.Left)
+            {
+                XDirection = -1 * num;
+            }
+            else if (key == Key.Right)
+            {
+                XDirection = 1 * num;
+            }
+            else if (key == Key.Up)
+            {
+                YDirection = -1 * num;
+            }
+            else if (key == Key.Down)
+            {
+                YDirection = 1 * num;
+            }
         }
 
         protected override CutLineParameter CalcNewParameterCore()
