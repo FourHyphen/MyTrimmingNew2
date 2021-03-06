@@ -17,7 +17,12 @@ namespace MyTrimmingNew2
 
         public static CutLineCommand Create(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint)
         {
-            return new CutLineChangeSize(cutLine, image, dragStart, dropPoint);
+            if (cutLine.IsPointNearRightBottom(dragStart))
+            {
+                return new CutLineChangeSize(cutLine, image, dragStart, dropPoint);
+            }
+
+            return null;
         }
     }
 }

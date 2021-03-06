@@ -41,12 +41,22 @@ namespace MyTrimmingNew2
 
         public void ExecuteCommand(Key key, int keyInputNum = 1)
         {
-            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum).CalcNewParameter();
+            CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum);
+            ExecuteCommandCore(command);
         }
 
         public void ExecuteCommand(Point dragStart, Point dropPoint)
         {
-            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
+            CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint);
+            ExecuteCommandCore(command);
+        }
+
+        private void ExecuteCommandCore(CutLineCommand command)
+        {
+            if (command != null)
+            {
+                Parameter = command.CalcNewParameter();
+            }
         }
 
         public bool IsPointNearRightBottom(Point p)
