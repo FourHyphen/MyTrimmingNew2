@@ -78,8 +78,7 @@ namespace MyTrimmingNew2
         {
             if (_CutLine != null)
             {
-                _CutLine.SetCommand(key);
-                _CutLine.ExecuteCommand();
+                _CutLine.ExecuteCommand(key, 1);
                 CutLineDisplay.Update(this, _CutLine);
             }
         }
@@ -89,24 +88,23 @@ namespace MyTrimmingNew2
             ShowingImageMouseDown(e.GetPosition(CutLine));
         }
 
+        private System.Windows.Point MouseDownPoint { get; set; }
+
         private void ShowingImageMouseDown(System.Windows.Point relativeCoordinateToCutLine)
         {
-            if (_CutLine != null)
-            {
-                _CutLine.SetCommand(relativeCoordinateToCutLine);
-            }
+            MouseDownPoint = relativeCoordinateToCutLine;
         }
 
         private void ShowingImageMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ShowingImageMouseUp(e.GetPosition(CutLine));
+            ShowingImageMouseUp(MouseDownPoint, e.GetPosition(CutLine));
         }
 
-        private void ShowingImageMouseUp(System.Windows.Point relativeCoordinateToCutLine)
+        private void ShowingImageMouseUp(System.Windows.Point mouseDown, System.Windows.Point mouseUp)
         {
             if (_CutLine != null)
             {
-                _CutLine.ExecuteCommand(relativeCoordinateToCutLine);
+                _CutLine.ExecuteCommand(mouseDown, mouseUp);
                 CutLineDisplay.Update(this, _CutLine);
             }
         }

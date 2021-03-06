@@ -39,29 +39,9 @@ namespace MyTrimmingNew2
             Parameter = new CutLineParameter(_ShowingImage);
         }
 
-        private CutLineCommand NextCommand { get; set; } = null;
-
-        public void SetCommand(Key key, int keyInputNum = 1)
+        public void ExecuteCommand(Key key, int keyInputNum = 1)
         {
-            NextCommand = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum);
-        }
-
-        public void ExecuteCommand()
-        {
-            Parameter = NextCommand.CalcNewParameter();
-        }
-
-        private System.Windows.Point DragStart { get; set; }
-
-        private bool NowDraging { get; set; } = false;
-
-        public void SetCommand(Point p)
-        {
-            if (IsPointNearRightBottom(p))
-            {
-                DragStart = p;
-                NowDraging = true;
-            }
+            Parameter = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum).CalcNewParameter();
         }
 
         public bool IsPointNearRightBottom(Point p)
@@ -79,16 +59,7 @@ namespace MyTrimmingNew2
             return ((y - range) <= Parameter.Bottom) && (Parameter.Bottom <= (y + range));
         }
 
-        public void ExecuteCommand(System.Windows.Point p)
-        {
-            if (NowDraging)
-            {
-                ChangeSizeBaseRightBottom(DragStart, p);
-                NowDraging = false;
-            }
-        }
-
-        private void ChangeSizeBaseRightBottom(Point dragStart, Point dropPoint)
+        public void ExecuteCommand(Point dragStart, Point dropPoint)
         {
             Parameter = CutLineCommandFactory.Create(this, _ShowingImage, dragStart, dropPoint).CalcNewParameter();
         }

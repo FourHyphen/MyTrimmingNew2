@@ -164,8 +164,7 @@ namespace TestMyTrimmingNew2
 
         private void Move(CutLine cl, System.Windows.Input.Key key, int num)
         {
-            cl.SetCommand(key, num);
-            cl.ExecuteCommand();
+            cl.ExecuteCommand(key, num);
         }
 
         private void ChangeSizeBaseRightBottomWithCheck(CutLine cutLine, double changeSizeX, double changeSizeY, double expectedWidth, double expectedHeight)
@@ -179,8 +178,7 @@ namespace TestMyTrimmingNew2
         {
             System.Windows.Point dragStart = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
             System.Windows.Point drop = new System.Windows.Point(cutLine.Right + changeSizeX, cutLine.Bottom + changeSizeY);
-            cutLine.SetCommand(dragStart);
-            cutLine.ExecuteCommand(drop);
+            cutLine.ExecuteCommand(dragStart, drop);
         }
     }
 }
