@@ -28,6 +28,21 @@ namespace MyTrimmingNew2
         {
             double newWidth = Before.Width;
             double newHeight = Before.Height;
+            CalcNewParameterWidthAndHeight(ref newWidth, ref newHeight);
+
+            if (newWidth >= 0.0 && newHeight >= 0.0)
+            {
+                return CreateNewParameterIfOverShowingImage(newWidth, newHeight);
+            }
+            else
+            {
+                // 縮小方向に行き過ぎると、右下点が左上点を超えて原点(左上)が変わる
+                return CreateNewParameterWhenExchangeOrigin(newWidth, newHeight);
+            }
+        }
+
+        private void CalcNewParameterWidthAndHeight(ref double newWidth, ref double newHeight)
+        {
             double distanceX = DropPoint.X - DragStart.X;
             double distanceY = DropPoint.Y - DragStart.Y;
             double changeSizeY = Before.CalcHeightBaseWidth(distanceX);
@@ -41,64 +56,53 @@ namespace MyTrimmingNew2
                 newWidth += Before.CalcWidthBaseHeight(distanceY);
                 newHeight += distanceY;
             }
+        }
+
+        private CutLineParameter CreateNewParameterWhenExchangeOrigin(double baseWidth, double baseHeight)
+        {
+            // 左上の座標が変わる場合
+            // (1) 旧左上点を新右下点とし、移動後の旧右下点を新左上点(仮)とする
+            // (2) 新左上点が画像をはみ出ている場合は調整する
+            double newWidth = -baseWidth;
+            double newHeight = -baseHeight;    // Before.Top - newBottom = Before.Top - (Before.Top + baseHeight)
+            if ((Before.Left - newWidth) < 0)
+            {
+                newWidth = Before.Left;
+                newHeight = Before.CalcHeightBaseWidth(newWidth);
+            }
+
+            if ((Before.Top - newHeight) < 0)
+            {
+                newHeight = Before.Top;
+                newWidth = Before.CalcWidthBaseHeight(newHeight);
+            }
+
+            double newLeft = Before.Left - newWidth;
+            double newTop = Before.Top - newHeight;
+            return new CutLineParameter(newLeft, newTop, newWidth, newHeight);
+        }
+
+        private CutLineParameter CreateNewParameterIfOverShowingImage(double willWidth, double willHeight)
+        {
+            // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
+            double newWidth = willWidth;
+            double newHeight = willHeight;
 
             double newRight = Before.Left + newWidth;
+            if (newRight > MaxRight)
+            {
+                newWidth = MaxRight - Before.Left;
+                newHeight = Before.CalcHeightBaseWidth(newWidth);
+            }
+
             double newBottom = Before.Top + newHeight;
-
-            // 縮小し過ぎると左上点を超えて、左上の座標が変わる
-            if (newRight < Before.Left || newBottom < Before.Top)
+            if (newBottom > MaxBottom)
             {
-                // 左上の座標が変わる場合は新右下点＝旧左上点とし、左上点を算出する
-                distanceX = Before.Left - newRight;
-                distanceY = Before.Top - newBottom;
-                changeSizeY = Before.CalcHeightBaseWidth(distanceX);
-                if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
-                {
-                    newWidth = distanceX;
-                    newHeight = changeSizeY;
-                }
-                else
-                {
-                    newWidth = Before.CalcWidthBaseHeight(distanceY);
-                    newHeight = distanceY;
-                }
-
-                double newLeft = Before.Left - newWidth;
-                if (newLeft < 0)
-                {
-                    newWidth = Before.Left;
-                    newHeight = Before.CalcHeightBaseWidth(newWidth);
-                }
-
-                double newTop = Before.Top - newHeight;
-                if (newTop < 0)
-                {
-                    newHeight = Before.Top;
-                    newWidth = Before.CalcWidthBaseHeight(newHeight);
-                }
-
-                newLeft = Before.Left - newWidth;
-                newTop = Before.Top - newHeight;
-                return new CutLineParameter(newLeft, newTop, newWidth, newHeight);
+                newHeight = MaxBottom - Before.Top;
+                newWidth = Before.CalcWidthBaseHeight(Before.Height);
             }
-            else
-            {
-                // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
-                if (newRight > MaxRight)
-                {
-                    newWidth = MaxRight - Before.Left;
-                    newHeight = Before.CalcHeightBaseWidth(newWidth);
-                }
 
-                newBottom = Before.Top + newHeight;
-                if (newBottom > MaxBottom)
-                {
-                    newHeight = MaxBottom - Before.Top;
-                    newWidth = Before.CalcWidthBaseHeight(Before.Height);
-                }
-
-                return new CutLineParameter(Before.Left, Before.Top, newWidth, newHeight);
-            }
+            return new CutLineParameter(Before.Left, Before.Top, newWidth, newHeight);
         }
     }
 }
