@@ -45,9 +45,9 @@
                 <!--parameter-->
                 <Grid Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="4*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
@@ -81,6 +81,7 @@
                     <Grid Grid.Row="2">
                         <StackPanel>
                             <Label Content="切り抜き線(pixel)"/>
+
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="横"/>
                                 <Label x:Name="CutLineWidth"
@@ -128,6 +129,12 @@
                                 <Label x:Name="CutLineRightBottomY"
                                    Content="0"/>
                                 <Label Content=")"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="回転角(度)"/>
+                                <Label x:Name="CutLineRotateDegree"
+                                       Content="0"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

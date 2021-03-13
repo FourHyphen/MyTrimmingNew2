@@ -225,6 +225,38 @@ namespace TestMyTrimmingNew2
             AreEqualCutLineParameter(expected: minTop, actual: Driver.GetCutLineRightTopY());
         }
 
+        [TestMethod]
+        public void TestRotateCutLine()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            // まず切り抜き線を適当に小さくして中央に寄せ、回転できるスペースを作る
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - 200, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 100);
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 100);
+
+            double beforeWidth = Driver.GetCutLineWidth();
+            double beforeHeight = Driver.GetCutLineHeight();
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineRotateDegree());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.OemMinus, 10);
+
+            AreEqualCutLineParameter(expected: 10, actual: Driver.GetCutLineRotateDegree());
+            AreEqualCutLineParameter(expected: beforeWidth, actual: Driver.GetCutLineWidth());
+            AreEqualCutLineParameter(expected: beforeHeight, actual: Driver.GetCutLineHeight());
+            AreEqualCutLineParameter(expected: 81.351909, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: 141.351350, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: 528.454629, actual: Driver.GetCutLineRightTopX());
+            AreEqualCutLineParameter(expected: 62.515077, actual: Driver.GetCutLineRightTopY());
+            AreEqualCutLineParameter(expected: 572.648091, actual: Driver.GetCutLineRightBottomX());
+            AreEqualCutLineParameter(expected: 313.148650, actual: Driver.GetCutLineRightBottomY());
+            AreEqualCutLineParameter(expected: 125.545371, actual: Driver.GetCutLineLeftBottomX());
+            AreEqualCutLineParameter(expected: 391.984923, actual: Driver.GetCutLineLeftBottomY());
+        }
+
         private void AreEqualCutLineParameter(double expected, double actual)
         {
             double toCompare = Math.Round(expected, 2);
