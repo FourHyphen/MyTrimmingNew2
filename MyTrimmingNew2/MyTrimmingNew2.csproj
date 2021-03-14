@@ -62,6 +62,7 @@
     <Compile Include="CutLineDisplay.cs" />
     <Compile Include="CutLineMove.cs" />
     <Compile Include="CutLineParameter.cs" />
+    <Compile Include="CutLineRotate.cs" />
     <Compile Include="OriginalImage.cs" />
     <Compile Include="ShowingImage.cs" />
     <Page Include="MainWindow.xaml">

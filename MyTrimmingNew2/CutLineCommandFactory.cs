@@ -12,7 +12,29 @@ namespace MyTrimmingNew2
 
         public static CutLineCommand Create(CutLine cutLine, ShowingImage image, System.Windows.Input.Key key, int keyInputNum)
         {
-            return new CutLineMove(cutLine, image, key, keyInputNum);
+            if (IsPurposeMove(key))
+            {
+                return new CutLineMove(cutLine, image, key, keyInputNum);
+            } else if (IsPurposeRotate(key))
+            {
+                return new CutLineRotate(cutLine, image, key, keyInputNum);
+            }
+
+            return null;
+        }
+
+        private static bool IsPurposeMove(System.Windows.Input.Key key)
+        {
+            return (key == System.Windows.Input.Key.Up ||
+                    key == System.Windows.Input.Key.Down ||
+                    key == System.Windows.Input.Key.Right ||
+                    key == System.Windows.Input.Key.Left);
+        }
+
+        private static bool IsPurposeRotate(System.Windows.Input.Key key)
+        {
+            return (key == System.Windows.Input.Key.OemPlus ||
+                    key == System.Windows.Input.Key.OemMinus);
         }
 
         public static CutLineCommand Create(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint)
