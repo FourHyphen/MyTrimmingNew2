@@ -8,7 +8,6 @@ namespace MyTrimmingNew2
 
         private static double RatioHeight = 9.0;
 
-
         public double Width { get; private set; }
 
         public double Height { get; private set; }
@@ -16,6 +15,8 @@ namespace MyTrimmingNew2
         public double Left { get; private set; }
 
         public double Top { get; private set; }
+
+        public double Degree { get; private set; }
 
         public double Right
         {
@@ -48,6 +49,7 @@ namespace MyTrimmingNew2
         {
             Left = 0;
             Top = 0;
+            Degree = 0;
         }
 
         private void InitSize(ShowingImage image)
@@ -64,12 +66,13 @@ namespace MyTrimmingNew2
             Height = (int)height;
         }
 
-        public CutLineParameter(double left, double top, double width, double height)
+        public CutLineParameter(double left, double top, double width, double height, double degree)
         {
             Left = left;
             Top = top;
             Width = width;
             Height = height;
+            Degree = degree;
         }
 
         public double CalcHeightBaseWidth(double width)

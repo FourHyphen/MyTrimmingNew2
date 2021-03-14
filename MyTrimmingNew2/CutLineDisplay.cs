@@ -29,6 +29,7 @@ namespace MyTrimmingNew2
 
             main.CutLineWidth.Content = ToDisplayString(cutLine.Width);
             main.CutLineHeight.Content = ToDisplayString(cutLine.Height);
+            main.CutLineRotateDegree.Content = ToDisplayString(cutLine.Degree);
         }
 
         private static void SetLabelCoordinate(System.Windows.Point p, Label labelX, Label labelY)

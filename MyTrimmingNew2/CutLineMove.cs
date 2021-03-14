@@ -63,7 +63,7 @@ namespace MyTrimmingNew2
         {
             double newLeft = MoveX(XDirection);
             double newTop = MoveY(YDirection);
-            return new CutLineParameter(newLeft, newTop, Before.Width, Before.Height);
+            return new CutLineParameter(newLeft, newTop, Before.Width, Before.Height, Before.Degree);
         }
 
         private double MoveX(double xDirection)

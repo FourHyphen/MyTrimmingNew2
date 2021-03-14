@@ -244,7 +244,7 @@ namespace TestMyTrimmingNew2
 
             Driver.EmurateInputKey(System.Windows.Input.Key.OemMinus, 10);
 
-            AreEqualCutLineParameter(expected: 10, actual: Driver.GetCutLineRotateDegree());
+            AreEqualCutLineParameter(expected: -10, actual: Driver.GetCutLineRotateDegree());
             AreEqualCutLineParameter(expected: beforeWidth, actual: Driver.GetCutLineWidth());
             AreEqualCutLineParameter(expected: beforeHeight, actual: Driver.GetCutLineHeight());
             AreEqualCutLineParameter(expected: 81.351909, actual: Driver.GetCutLineLeftTopX());

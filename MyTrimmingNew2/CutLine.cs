@@ -28,6 +28,8 @@ namespace MyTrimmingNew2
 
         public double Height { get { return Parameter.Height; } }
 
+        public double Degree { get { return Parameter.Degree; } }
+
         public CutLine(ShowingImage showingImage)
         {
             _ShowingImage = showingImage;

@@ -79,7 +79,7 @@ namespace MyTrimmingNew2
 
             double newLeft = Before.Left - newWidth;
             double newTop = Before.Top - newHeight;
-            return new CutLineParameter(newLeft, newTop, newWidth, newHeight);
+            return new CutLineParameter(newLeft, newTop, newWidth, newHeight, Before.Degree);
         }
 
         private CutLineParameter CreateNewParameterIfOverShowingImage(double willWidth, double willHeight)
@@ -102,7 +102,7 @@ namespace MyTrimmingNew2
                 newWidth = Before.CalcWidthBaseHeight(Before.Height);
             }
 
-            return new CutLineParameter(Before.Left, Before.Top, newWidth, newHeight);
+            return new CutLineParameter(Before.Left, Before.Top, newWidth, newHeight, Before.Degree);
         }
     }
 }
