@@ -77,9 +77,31 @@ namespace MyTrimmingNew2
                 newWidth = Before.CalcWidthBaseHeight(newHeight);
             }
 
-            double newLeft = Before.Left - newWidth;
-            double newTop = Before.Top - newHeight;
-            return new CutLineParameter(newLeft, newTop, newWidth, newHeight, Before.Degree);
+            System.Windows.Point newLeftTop = GetNewLeftTop(newWidth, newHeight);
+            System.Windows.Point newRightTop = GetNewRightTop(newLeftTop, newWidth);
+            System.Windows.Point newRightBottom = GetNewRightBottom();
+            System.Windows.Point newLeftBottom = GetNewLeftBottom(newLeftTop, newHeight);
+            return new CutLineParameter(newLeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
+        }
+
+        private System.Windows.Point GetNewLeftTop(double newWidth, double newHeight)
+        {
+            return new System.Windows.Point(Before.Left - newWidth, Before.Top - newHeight);
+        }
+
+        private System.Windows.Point GetNewRightTop(System.Windows.Point newLeftTop, double newWidth)
+        {
+            return new System.Windows.Point(newLeftTop.X + newWidth, newLeftTop.Y);
+        }
+
+        private System.Windows.Point GetNewRightBottom()
+        {
+            return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y);
+        }
+
+        private System.Windows.Point GetNewLeftBottom(System.Windows.Point newLeftTop, double newHeight)
+        {
+            return new System.Windows.Point(newLeftTop.X, newLeftTop.Y + newHeight);
         }
 
         private CutLineParameter CreateNewParameterIfOverShowingImage(double willWidth, double willHeight)
@@ -102,7 +124,25 @@ namespace MyTrimmingNew2
                 newWidth = Before.CalcWidthBaseHeight(Before.Height);
             }
 
-            return new CutLineParameter(Before.Left, Before.Top, newWidth, newHeight, Before.Degree);
+            System.Windows.Point newRightTop = GetNewRightTop(newWidth, newHeight);
+            System.Windows.Point newRightBottom = GetNewRightBottom(newWidth, newHeight);
+            System.Windows.Point newLeftBottom = GetNewLeftBottom(newWidth, newHeight);
+            return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
+        }
+
+        private System.Windows.Point GetNewRightTop(double newWidth, double newHeight)
+        {
+            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y);
+        }
+
+        private System.Windows.Point GetNewRightBottom(double newWidth, double newHeight)
+        {
+            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y + newHeight);
+        }
+
+        private System.Windows.Point GetNewLeftBottom(double newWidth, double newHeight)
+        {
+            return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
         }
     }
 }

@@ -61,30 +61,30 @@ namespace MyTrimmingNew2
 
         protected override CutLineParameter CalcNewParameterCore()
         {
-            double newLeft = MoveX(XDirection);
-            double newTop = MoveY(YDirection);
-            return new CutLineParameter(newLeft, newTop, Before.Width, Before.Height, Before.Degree);
+            double xDistance = CalcXDistance(XDirection);
+            double yDistance = CalcYDistance(YDirection);
+            System.Windows.Point newLeftTop = GetNewPoint(Before.LeftTop, xDistance, yDistance);
+            System.Windows.Point newRightTop = GetNewPoint(Before.RightTop, xDistance, yDistance);
+            System.Windows.Point newRightBottom = GetNewPoint(Before.RightBottom, xDistance, yDistance);
+            System.Windows.Point newLeftBottom = GetNewPoint(Before.LeftBottom, xDistance, yDistance);
+            return new CutLineParameter(newLeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
-        private double MoveX(double xDirection)
+        private double CalcXDistance(double xDirection)
         {
             double newLeft = Before.Left + xDirection;
-            double newRight = Before.Right + xDirection;
-            return AdjustLeft(newLeft, newRight);
-        }
+            double newRight = Before.RightEnd + xDirection;
 
-        private double AdjustLeft(double newLeft, double newRight)
-        {
             if (DoLeftStickOutOfImage(newLeft))
             {
-                return 0.0;
+                return -Before.Left;
             }
             else if (DoRightStickOutOfImage(newRight))
             {
-                return MaxRight - Before.Width;
+                return MaxRight - Before.RightEnd;
             }
 
-            return newLeft;
+            return xDirection;
         }
 
         private bool DoLeftStickOutOfImage(double left)
@@ -97,25 +97,21 @@ namespace MyTrimmingNew2
             return (right > MaxRight);
         }
 
-        private double MoveY(double yDirection)
+        private double CalcYDistance(double yDirection)
         {
             double newTop = Before.Top + yDirection;
             double newBottom = Before.Top + Before.Height + yDirection;
-            return AdjustTop(newTop, newBottom);
-        }
 
-        private double AdjustTop(double newTop, double newBottom)
-        {
             if (DoTopStickOutOfImage(newTop))
             {
-                return 0;
+                return -Before.Top;
             }
             else if (DoBottomStickOutOfImage(newBottom))
             {
-                return MaxBottom - Before.Height;
+                return MaxBottom - Before.BottomEnd;
             }
 
-            return newTop;
+            return yDirection;
         }
 
         private bool DoTopStickOutOfImage(double top)
@@ -126,6 +122,11 @@ namespace MyTrimmingNew2
         private bool DoBottomStickOutOfImage(double bottom)
         {
             return (bottom > MaxBottom);
+        }
+
+        private System.Windows.Point GetNewPoint(System.Windows.Point p, double xDistance, double yDistance)
+        {
+            return new System.Windows.Point(p.X + xDistance, p.Y + yDistance);
         }
     }
 }

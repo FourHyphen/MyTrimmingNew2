@@ -14,7 +14,7 @@ namespace MyTrimmingNew2
 
         public CutLineCommand(CutLine cutLine)
         {
-            Before = new CutLineParameter(cutLine.Left, cutLine.Top, cutLine.Width, cutLine.Height, cutLine.Degree);
+            Before = cutLine.CloneParameter();
         }
 
         public CutLineParameter CalcNewParameter()

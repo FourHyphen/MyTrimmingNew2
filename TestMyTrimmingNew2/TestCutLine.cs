@@ -31,16 +31,16 @@ namespace TestMyTrimmingNew2
 
             Assert.AreEqual(expected: si.Width, actual: cl.Width);
             Assert.AreEqual(expected: 450, actual: cl.Height);    // 450 = (int)(800.0 * 9.0 / 16.0)
-            Assert.AreEqual(expected: 0, actual: cl.Left);
-            Assert.AreEqual(expected: 0, actual: cl.Top);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.X);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
 
             si = CreateShowingImage("/Resource/test002.jpg", 800, 600);
             cl = new CutLine(si);
 
             Assert.AreEqual(expected: si.Width, actual: cl.Width);
             Assert.AreEqual(expected: 225, actual: cl.Height);    // 225 = (int)(450.0 * 9.0 / 16.0)
-            Assert.AreEqual(expected: 0, actual: cl.Left);
-            Assert.AreEqual(expected: 0, actual: cl.Top);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.X);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
         }
 
         [TestMethod]
@@ -50,17 +50,17 @@ namespace TestMyTrimmingNew2
             CutLine cl = new CutLine(si);
             double maxTop = si.Height - cl.Height;
 
-            Assert.AreEqual(expected: 0, actual: cl.Top);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
             Move(cl, System.Windows.Input.Key.Up, 1);
-            Assert.AreEqual(expected: 0, actual: cl.Top);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
             Move(cl, System.Windows.Input.Key.Down, 1);
-            Assert.AreEqual(expected: 1, actual: cl.Top);
+            Assert.AreEqual(expected: 1, actual: cl.LeftTop.Y);
             Move(cl, System.Windows.Input.Key.Down, 50);
-            Assert.AreEqual(expected: 51, actual: cl.Top);
+            Assert.AreEqual(expected: 51, actual: cl.LeftTop.Y);
             Move(cl, System.Windows.Input.Key.Down, 1000);
-            Assert.AreEqual(expected: maxTop, actual: cl.Top);
+            Assert.AreEqual(expected: maxTop, actual: cl.LeftTop.Y);
             Move(cl, System.Windows.Input.Key.Up, 1);
-            Assert.AreEqual(expected: maxTop - 1, actual: cl.Top);
+            Assert.AreEqual(expected: maxTop - 1, actual: cl.LeftTop.Y);
         }
 
         [TestMethod]
@@ -104,13 +104,13 @@ namespace TestMyTrimmingNew2
             ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
 
-            System.Windows.Point near = new System.Windows.Point(cl.Right - 10, cl.Bottom - 10);
-            System.Windows.Point far = new System.Windows.Point(cl.Right - 21, cl.Bottom - 21);
+            System.Windows.Point near = new System.Windows.Point(cl.RightBottom.X - 10, cl.RightBottom.Y - 10);
+            System.Windows.Point far = new System.Windows.Point(cl.RightBottom.X - 21, cl.RightBottom.Y - 21);
             Assert.IsTrue(cl.IsPointNearRightBottom(near));
             Assert.IsFalse(cl.IsPointNearRightBottom(far));
 
-            near = new System.Windows.Point(cl.Right + 10, cl.Bottom + 10);
-            far = new System.Windows.Point(cl.Right + 21, cl.Bottom + 21);
+            near = new System.Windows.Point(cl.RightBottom.X + 10, cl.RightBottom.Y + 10);
+            far = new System.Windows.Point(cl.RightBottom.X + 21, cl.RightBottom.Y + 21);
             Assert.IsTrue(cl.IsPointNearRightBottom(near));
             Assert.IsFalse(cl.IsPointNearRightBottom(far));
         }
@@ -145,15 +145,15 @@ namespace TestMyTrimmingNew2
             ChangeSizeBaseRightBottom(cl, -50, 0);    // まず適当に小さくする
             double maxLeft = si.Width - cl.Width;
 
-            Assert.AreEqual(expected: 0, actual: cl.Left);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.X);
             Move(cl, System.Windows.Input.Key.Left, 1);
-            Assert.AreEqual(expected: 0, actual: cl.Left);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.X);
             Move(cl, System.Windows.Input.Key.Right, 1);
-            Assert.AreEqual(expected: 1, actual: cl.Left);
+            Assert.AreEqual(expected: 1, actual: cl.LeftTop.X);
             Move(cl, System.Windows.Input.Key.Right, 1000);
-            Assert.AreEqual(expected: maxLeft, actual: cl.Left);
+            Assert.AreEqual(expected: maxLeft, actual: cl.LeftTop.X);
             Move(cl, System.Windows.Input.Key.Left, 1);
-            Assert.AreEqual(expected: maxLeft - 1, actual: cl.Left);
+            Assert.AreEqual(expected: maxLeft - 1, actual: cl.LeftTop.X);
         }
 
         [TestMethod]
@@ -174,23 +174,23 @@ namespace TestMyTrimmingNew2
             double enoughLeave = 50;
 
             // 右下点付近だがコーナーではない
-            System.Windows.Point dragStart = new System.Windows.Point(cl.Right - enoughLeave, cl.Bottom - enoughLeave);
-            System.Windows.Point drop = new System.Windows.Point(cl.Right, cl.Bottom);
+            System.Windows.Point dragStart = new System.Windows.Point(cl.RightBottom.X - enoughLeave, cl.RightBottom.Y - enoughLeave);
+            System.Windows.Point drop = cl.RightBottom;
             ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
 
             // 左下点付近だがコーナーではない
-            dragStart = new System.Windows.Point(cl.Left + enoughLeave, cl.Bottom - enoughLeave);
-            drop = new System.Windows.Point(cl.Left, cl.Bottom);
+            dragStart = new System.Windows.Point(cl.LeftBottom.X + enoughLeave, cl.LeftBottom.Y - enoughLeave);
+            drop = cl.LeftBottom;
             ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
 
             // 左上点付近だがコーナーではない
-            dragStart = new System.Windows.Point(cl.Left + enoughLeave, cl.Top + enoughLeave);
-            drop = new System.Windows.Point(cl.Left, cl.Top);
+            dragStart = new System.Windows.Point(cl.LeftTop.X + enoughLeave, cl.LeftTop.Y + enoughLeave);
+            drop = cl.LeftTop;
             ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
 
             // 右上点付近だがコーナーではない
-            dragStart = new System.Windows.Point(cl.Right - enoughLeave, cl.Top + enoughLeave);
-            drop = new System.Windows.Point(cl.Right, cl.Top);
+            dragStart = new System.Windows.Point(cl.RightTop.X - enoughLeave, cl.RightTop.Y + enoughLeave);
+            drop = cl.RightTop;
             ChangeSizeAndCheckWidthAndHeight(cl, dragStart, drop, ansWidth, ansHeight);
         }
 
@@ -201,16 +201,16 @@ namespace TestMyTrimmingNew2
             CutLine cl = new CutLine(si);
 
             // 切り抜き線の外ならfalse
-            Assert.IsFalse(cl.IsPointInside(new Point(cl.Left - 1, cl.Top - 1)));
-            Assert.IsFalse(cl.IsPointInside(new Point(cl.Right + 1, cl.Top - 1)));
-            Assert.IsFalse(cl.IsPointInside(new Point(cl.Left - 1, cl.Bottom + 1)));
-            Assert.IsFalse(cl.IsPointInside(new Point(cl.Right + 1, cl.Bottom + 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.LeftTop.X - 1, cl.LeftTop.Y - 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.RightTop.X + 1, cl.RightTop.Y - 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.LeftBottom.X - 1, cl.LeftBottom.Y + 1)));
+            Assert.IsFalse(cl.IsPointInside(new Point(cl.RightBottom.X + 1, cl.RightBottom.Y + 1)));
 
             // 切り抜き線の中ならtrue
-            Assert.IsTrue(cl.IsPointInside(new Point(cl.Left + 1, cl.Top + 1)));
-            Assert.IsTrue(cl.IsPointInside(new Point(cl.Right - 1, cl.Top + 1)));
-            Assert.IsTrue(cl.IsPointInside(new Point(cl.Left + 1, cl.Bottom - 1)));
-            Assert.IsTrue(cl.IsPointInside(new Point(cl.Right - 1, cl.Bottom - 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.LeftTop.X + 1, cl.LeftTop.Y + 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.RightTop.X - 1, cl.RightTop.Y + 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.LeftBottom.X + 1, cl.LeftBottom.Y - 1)));
+            Assert.IsTrue(cl.IsPointInside(new Point(cl.RightBottom.X - 1, cl.RightBottom.Y - 1)));
         }
 
         [TestMethod]
@@ -227,15 +227,15 @@ namespace TestMyTrimmingNew2
             Move(cl, System.Windows.Input.Key.Right, moveX);
             Move(cl, System.Windows.Input.Key.Down, 500);
 
-            double beforeLeft = cl.Left;
-            double beforeTop = cl.Top;
+            double beforeLeft = cl.LeftTop.X;
+            double beforeTop = cl.LeftTop.Y;
 
             // 右下点を思いきり左上に引っ張る
             ChangeSizeBaseRightBottom(cl, -1000, -2000);
 
-            Assert.AreEqual(expected: 0, actual: cl.Left);
-            Assert.AreEqual(expected: beforeLeft, actual: cl.Right);
-            Assert.AreEqual(expected: beforeTop, actual: cl.Bottom);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.X);
+            Assert.AreEqual(expected: beforeLeft, actual: cl.RightBottom.X);
+            Assert.AreEqual(expected: beforeTop, actual: cl.RightBottom.Y);
             Assert.AreEqual(expected: moveX, actual: cl.Width);
             Assert.AreEqual(expected: moveX * 9.0 / 16.0, actual: cl.Height);
 
@@ -248,16 +248,16 @@ namespace TestMyTrimmingNew2
             Move(cl, System.Windows.Input.Key.Right, 500);
             Move(cl, System.Windows.Input.Key.Down, moveY);
 
-            beforeLeft = cl.Left;
-            beforeTop = cl.Top;
+            beforeLeft = cl.LeftTop.X;
+            beforeTop = cl.LeftTop.Y;
 
             // 右下点を思いきり左上に引っ張る
             ChangeSizeBaseRightBottom(cl, -3000, -1000);
 
-            Assert.AreEqual(expected: 0, actual: cl.Top);
-            Assert.AreEqual(expected: beforeLeft, actual: cl.Right);
-            Assert.AreEqual(expected: beforeTop, actual: cl.Bottom);
-            Assert.AreEqual(expected: moveY * 16.0 / 9.0, actual: cl.Width);
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
+            Assert.AreEqual(expected: beforeLeft, actual: cl.RightBottom.X);
+            Assert.AreEqual(expected: beforeTop, actual: cl.RightBottom.Y);
+            Assert.AreEqual(expected: Math.Round(moveY * 16.0 / 9.0, 3), actual: Math.Round(cl.Width, 3));
             Assert.AreEqual(expected: moveY, actual: cl.Height);
         }
 
@@ -282,8 +282,8 @@ namespace TestMyTrimmingNew2
 
         private void ChangeSizeBaseRightBottom(CutLine cutLine, double changeSizeX, double changeSizeY)
         {
-            System.Windows.Point dragStart = new System.Windows.Point(cutLine.Right, cutLine.Bottom);
-            System.Windows.Point drop = new System.Windows.Point(cutLine.Right + changeSizeX, cutLine.Bottom + changeSizeY);
+            System.Windows.Point dragStart = cutLine.RightBottom;
+            System.Windows.Point drop = new System.Windows.Point(cutLine.RightBottom.X + changeSizeX, cutLine.RightBottom.Y + changeSizeY);
             cutLine.ExecuteCommand(dragStart, drop);
         }
 

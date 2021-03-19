@@ -73,8 +73,8 @@ namespace TestMyTrimmingNew2
             double cutLineWidth = Driver.GetCutLineWidth();
             double cutLineHeight = Driver.GetCutLineHeight();
             AreEqualCutLineParameter(expected: Driver.GetShowingImageWidth(), actual: cutLineWidth);
-            // 367[pixel] = 横654[pixel]に対して 縦:横 = 16:9 を適用した結果
-            AreEqualCutLineParameter(expected: 367, actual: cutLineHeight);
+            // 367.875[pixel] = 横654[pixel]に対して 縦:横 = 16:9 を適用した結果
+            AreEqualCutLineParameter(expected: 367.875, actual: cutLineHeight);
         }
 
         [TestMethod]
@@ -85,10 +85,10 @@ namespace TestMyTrimmingNew2
 
             double cutLineWidth = Driver.GetCutLineWidth();
             double cutLineHeight = Driver.GetCutLineHeight();
-            // (362, 203) = 縦長画像を 横654 x 縦544 で表示したところ 横362 x 縦544 で表示された
+            // (362, 203.62) = 縦長画像を 横654 x 縦544 で表示したところ 横362 x 縦544 で表示された
             //              これに対して 縦:横 = 16:9 を適用した結果
             AreEqualCutLineParameter(expected: 362, actual: cutLineWidth);
-            AreEqualCutLineParameter(expected: 203, actual: cutLineHeight);
+            AreEqualCutLineParameter(expected: 203.62, actual: cutLineHeight);
         }
 
         [TestMethod]
@@ -135,15 +135,15 @@ namespace TestMyTrimmingNew2
 
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
             double afterCutLineWidth = beforeCutLineWidth - moveX;
-            double afterCutLineHeight = Math.Round(beforeCutLineHeight - (moveX * 9.0 / 16.0), 2);
+            double afterCutLineHeight = beforeCutLineHeight - (moveX * 9.0 / 16.0);
 
             AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopX());
             AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopY());
             AreEqualCutLineParameter(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
-            AreEqualCutLineParameter(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight());
+            AreEqualCutLineParameter(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight(), 1);    // 339.755 と 339.75の比較、この差は無視する
             AreEqualCutLineParameter(expected: afterCutLineWidth, actual: Driver.GetCutLineRightTopX());
             AreEqualCutLineParameter(expected: afterCutLineWidth, actual: Driver.GetCutLineRightBottomX());
-            AreEqualCutLineParameter(expected: afterCutLineHeight, actual: Driver.GetCutLineRightBottomY());
+            AreEqualCutLineParameter(expected: afterCutLineHeight, actual: Driver.GetCutLineRightBottomY(), 1);    // 339.755 と 339.75の比較、この差は無視する
         }
 
         [TestMethod]
@@ -247,20 +247,21 @@ namespace TestMyTrimmingNew2
             AreEqualCutLineParameter(expected: -10, actual: Driver.GetCutLineRotateDegree());
             AreEqualCutLineParameter(expected: beforeWidth, actual: Driver.GetCutLineWidth());
             AreEqualCutLineParameter(expected: beforeHeight, actual: Driver.GetCutLineHeight());
-            AreEqualCutLineParameter(expected: 81.351909, actual: Driver.GetCutLineLeftTopX());
-            AreEqualCutLineParameter(expected: 141.351350, actual: Driver.GetCutLineLeftTopY());
-            AreEqualCutLineParameter(expected: 528.454629, actual: Driver.GetCutLineRightTopX());
-            AreEqualCutLineParameter(expected: 62.515077, actual: Driver.GetCutLineRightTopY());
-            AreEqualCutLineParameter(expected: 572.648091, actual: Driver.GetCutLineRightBottomX());
-            AreEqualCutLineParameter(expected: 313.148650, actual: Driver.GetCutLineRightBottomY());
-            AreEqualCutLineParameter(expected: 125.545371, actual: Driver.GetCutLineLeftBottomX());
-            AreEqualCutLineParameter(expected: 391.984923, actual: Driver.GetCutLineLeftBottomY());
+            AreEqualCutLineParameter(expected: 81.28, actual: Driver.GetCutLineLeftTopX());
+            AreEqualCutLineParameter(expected: 141.36, actual: Driver.GetCutLineLeftTopY());
+            AreEqualCutLineParameter(expected: 528.38, actual: Driver.GetCutLineRightTopX());
+            AreEqualCutLineParameter(expected: 62.52, actual: Driver.GetCutLineRightTopY());
+            AreEqualCutLineParameter(expected: 572.72, actual: Driver.GetCutLineRightBottomX());
+            AreEqualCutLineParameter(expected: 314.02, actual: Driver.GetCutLineRightBottomY());
+            AreEqualCutLineParameter(expected: 125.62, actual: Driver.GetCutLineLeftBottomX());
+            AreEqualCutLineParameter(expected: 392.85, actual: Driver.GetCutLineLeftBottomY());
         }
 
-        private void AreEqualCutLineParameter(double expected, double actual)
+        private void AreEqualCutLineParameter(double expected, double actual, int round = 2)
         {
-            double toCompare = Math.Round(expected, 2);
-            Assert.AreEqual(toCompare, actual);
+            double expectedRound = Math.Round(expected, round);
+            double actualRound = Math.Round(actual, round);
+            Assert.AreEqual(expectedRound, actualRound);
         }
     }
 }

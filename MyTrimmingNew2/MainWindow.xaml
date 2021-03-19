@@ -92,40 +92,40 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="左上 ("/>
+                                <Label Content="左上("/>
                                 <Label x:Name="CutLineLeftTopX"
                                    Content="0"/>
-                                <Label Content=", "/>
+                                <Label Content=","/>
                                 <Label x:Name="CutLineLeftTopY"
                                    Content="0"/>
                                 <Label Content=")"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="右上 ("/>
+                                <Label Content="右上("/>
                                 <Label x:Name="CutLineRightTopX"
                                    Content="0"/>
-                                <Label Content=", "/>
+                                <Label Content=","/>
                                 <Label x:Name="CutLineRightTopY"
                                    Content="0"/>
                                 <Label Content=")"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="左下 ("/>
+                                <Label Content="左下("/>
                                 <Label x:Name="CutLineLeftBottomX"
                                    Content="0"/>
-                                <Label Content=", "/>
+                                <Label Content=","/>
                                 <Label x:Name="CutLineLeftBottomY"
                                    Content="0"/>
                                 <Label Content=")"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="右下 ("/>
+                                <Label Content="右下("/>
                                 <Label x:Name="CutLineRightBottomX"
                                    Content="0"/>
-                                <Label Content=", "/>
+                                <Label Content=","/>
                                 <Label x:Name="CutLineRightBottomY"
                                    Content="0"/>
                                 <Label Content=")"/>

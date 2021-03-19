@@ -8,31 +8,51 @@ namespace MyTrimmingNew2
 
         private static double RatioHeight = 9.0;
 
-        public double Width { get; private set; }
+        public double Width
+        {
+            get
+            {
+                return Math.Sqrt(Math.Pow(RightTop.X - LeftTop.X, 2.0) + Math.Pow(RightTop.Y - LeftTop.Y, 2.0));
+            }
+        }
 
-        public double Height { get; private set; }
+        public double Height
+        {
+            get
+            {
+                return Math.Sqrt(Math.Pow(LeftBottom.X - LeftTop.X, 2.0) + Math.Pow(LeftBottom.Y - LeftTop.Y, 2.0));
+            }
+        }
 
-        public double Left { get; private set; }
+        public double Left { get { return LeftTop.X; } }
 
-        public double Top { get; private set; }
+        public double Top { get { return LeftTop.Y; } }
 
         public double Degree { get; private set; }
 
-        public double Right
+        public double RightEnd
         {
             get
             {
-                return Left + Width;
+                return Math.Max(RightTop.X, RightBottom.X);
             }
         }
 
-        public double Bottom
+        public double BottomEnd
         {
             get
             {
-                return Top + Height;
+                return Math.Max(RightBottom.Y, LeftBottom.Y);
             }
         }
+
+        public System.Windows.Point LeftTop { get; private set; }
+
+        public System.Windows.Point RightTop { get; private set; }
+
+        public System.Windows.Point RightBottom { get; private set; }
+
+        public System.Windows.Point LeftBottom { get; private set; }
 
         public CutLineParameter(ShowingImage image)
         {
@@ -40,19 +60,6 @@ namespace MyTrimmingNew2
         }
 
         private void Init(ShowingImage image)
-        {
-            InitOrigin();
-            InitSize(image);
-        }
-
-        private void InitOrigin()
-        {
-            Left = 0;
-            Top = 0;
-            Degree = 0;
-        }
-
-        private void InitSize(ShowingImage image)
         {
             double width = image.Width;
             double height = CalcHeightBaseWidth(width);
@@ -62,16 +69,28 @@ namespace MyTrimmingNew2
                 width = CalcWidthBaseHeight(height);
             }
 
-            Width = (int)width;
-            Height = (int)height;
+            InitPoint(width, height);
         }
 
-        public CutLineParameter(double left, double top, double width, double height, double degree)
+        private void InitPoint(double width, double height)
         {
-            Left = left;
-            Top = top;
-            Width = width;
-            Height = height;
+            LeftTop = new System.Windows.Point(0, 0);
+            RightTop = new System.Windows.Point(width, 0);
+            RightBottom = new System.Windows.Point(width, height);
+            LeftBottom = new System.Windows.Point(0, height);
+            Degree = 0;
+        }
+
+        public CutLineParameter(System.Windows.Point leftTop,
+                                System.Windows.Point rightTop,
+                                System.Windows.Point rightBottom,
+                                System.Windows.Point leftBottom,
+                                double degree)
+        {
+            LeftTop = leftTop;
+            RightTop = rightTop;
+            RightBottom = rightBottom;
+            LeftBottom = leftBottom;
             Degree = degree;
         }
 
