@@ -24,11 +24,21 @@ namespace MyTrimmingNew2
             }
         }
 
-        public double Left { get { return LeftTop.X; } }
+        public double LeftEnd
+        {
+            get
+            {
+                return Math.Min(LeftTop.X, LeftBottom.X);
+            }
+        }
 
-        public double Top { get { return LeftTop.Y; } }
-
-        public double Degree { get; private set; }
+        public double TopEnd
+        {
+            get
+            {
+                return Math.Min(LeftTop.Y, RightTop.Y);
+            }
+        }
 
         public double RightEnd
         {
@@ -45,6 +55,8 @@ namespace MyTrimmingNew2
                 return Math.Max(RightBottom.Y, LeftBottom.Y);
             }
         }
+
+        public double Degree { get; private set; }
 
         public System.Windows.Point LeftTop { get; private set; }
 

@@ -72,12 +72,12 @@ namespace MyTrimmingNew2
 
         private double CalcXDistance(double xDirection)
         {
-            double newLeft = Before.Left + xDirection;
+            double newLeft = Before.LeftEnd + xDirection;
             double newRight = Before.RightEnd + xDirection;
 
             if (DoLeftStickOutOfImage(newLeft))
             {
-                return -Before.Left;
+                return -Before.LeftEnd;
             }
             else if (DoRightStickOutOfImage(newRight))
             {
@@ -99,12 +99,12 @@ namespace MyTrimmingNew2
 
         private double CalcYDistance(double yDirection)
         {
-            double newTop = Before.Top + yDirection;
-            double newBottom = Before.Top + Before.Height + yDirection;
+            double newTop = Before.TopEnd + yDirection;
+            double newBottom = Before.BottomEnd + yDirection;
 
             if (DoTopStickOutOfImage(newTop))
             {
-                return -Before.Top;
+                return -Before.TopEnd;
             }
             else if (DoBottomStickOutOfImage(newBottom))
             {

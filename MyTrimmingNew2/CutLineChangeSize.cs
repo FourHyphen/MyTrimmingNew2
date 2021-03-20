@@ -65,15 +65,15 @@ namespace MyTrimmingNew2
             // (2) 新左上点が画像をはみ出ている場合は調整する
             double newWidth = -baseWidth;
             double newHeight = -baseHeight;    // Before.Top - newBottom = Before.Top - (Before.Top + baseHeight)
-            if ((Before.Left - newWidth) < 0)
+            if ((Before.LeftEnd - newWidth) < 0)
             {
-                newWidth = Before.Left;
+                newWidth = Before.LeftEnd;
                 newHeight = Before.CalcHeightBaseWidth(newWidth);
             }
 
-            if ((Before.Top - newHeight) < 0)
+            if ((Before.TopEnd - newHeight) < 0)
             {
-                newHeight = Before.Top;
+                newHeight = Before.TopEnd;
                 newWidth = Before.CalcWidthBaseHeight(newHeight);
             }
 
@@ -86,7 +86,7 @@ namespace MyTrimmingNew2
 
         private System.Windows.Point GetNewLeftTopExchangeOrigin(double newWidth, double newHeight)
         {
-            return new System.Windows.Point(Before.Left - newWidth, Before.Top - newHeight);
+            return new System.Windows.Point(Before.LeftEnd - newWidth, Before.TopEnd - newHeight);
         }
 
         private System.Windows.Point GetNewRightTopExchangeOrigin(System.Windows.Point newLeftTop, double newWidth)
@@ -110,17 +110,17 @@ namespace MyTrimmingNew2
             double newWidth = willWidth;
             double newHeight = willHeight;
 
-            double newRight = Before.Left + newWidth;
+            double newRight = Before.LeftEnd + newWidth;
             if (newRight > MaxRight)
             {
-                newWidth = MaxRight - Before.Left;
+                newWidth = MaxRight - Before.LeftEnd;
                 newHeight = Before.CalcHeightBaseWidth(newWidth);
             }
 
-            double newBottom = Before.Top + newHeight;
+            double newBottom = Before.TopEnd + newHeight;
             if (newBottom > MaxBottom)
             {
-                newHeight = MaxBottom - Before.Top;
+                newHeight = MaxBottom - Before.TopEnd;
                 newWidth = Before.CalcWidthBaseHeight(Before.Height);
             }
 

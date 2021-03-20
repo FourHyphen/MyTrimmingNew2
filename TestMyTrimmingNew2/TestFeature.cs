@@ -283,11 +283,11 @@ namespace TestMyTrimmingNew2
 
             // テスト: 右方向
             Driver.EmurateInputKey(System.Windows.Input.Key.Right, tooLong);
-            AreEqualCutLineParameter(expected: Driver.GetImageAreaWidth(), actual: Driver.GetCutLineRightTopX());
+            AreEqualCutLineParameter(expected: Driver.GetShowingImageWidth(), actual: Driver.GetCutLineRightBottomX());
 
             // テスト: 下方向
             Driver.EmurateInputKey(System.Windows.Input.Key.Down, tooLong);
-            AreEqualCutLineParameter(expected: Driver.GetImageAreaHeight(), actual: Driver.GetCutLineLeftBottomX());
+            AreEqualCutLineParameter(expected: Driver.GetShowingImageHeight(), actual: Driver.GetCutLineLeftBottomY());
         }
 
         private void AreEqualCutLineParameter(double expected, double actual, int round = 2)
