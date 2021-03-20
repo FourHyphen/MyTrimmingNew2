@@ -77,7 +77,7 @@ namespace TestMyTrimmingNew2
             return ImageAreaWidth.ContentNum(Tree);
         }
 
-        internal object GetImageAreaHeight()
+        internal double GetImageAreaHeight()
         {
             UpdateNowMainWindowStatus();
             return ImageAreaHeight.ContentNum(Tree);

@@ -257,6 +257,39 @@ namespace TestMyTrimmingNew2
             AreEqualCutLineParameter(expected: 392.85, actual: Driver.GetCutLineLeftBottomY());
         }
 
+        [TestMethod]
+        public void TestCutLineIsInsideImageWhenMoveAfterRotate()
+        {
+            // 回転後の矩形の移動で画像からはみ出ないことを確認するテスト
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            // 準備
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - 200, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);           // 小さくする
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 100);      // 中央に寄せる
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 100);       // 中央に寄せる
+            Driver.EmurateInputKey(System.Windows.Input.Key.OemMinus, 10);    // 回転
+
+            // テスト: 左方向    (500: 各方向に突き抜けるには十分な移動距離)
+            int tooLong = 500;
+            Driver.EmurateInputKey(System.Windows.Input.Key.Left, tooLong);
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineLeftTopX());
+
+            // テスト: 上方向
+            Driver.EmurateInputKey(System.Windows.Input.Key.Up, tooLong);
+            AreEqualCutLineParameter(expected: 0, actual: Driver.GetCutLineRightTopY());
+
+            // テスト: 右方向
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, tooLong);
+            AreEqualCutLineParameter(expected: Driver.GetImageAreaWidth(), actual: Driver.GetCutLineRightTopX());
+
+            // テスト: 下方向
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, tooLong);
+            AreEqualCutLineParameter(expected: Driver.GetImageAreaHeight(), actual: Driver.GetCutLineLeftBottomX());
+        }
+
         private void AreEqualCutLineParameter(double expected, double actual, int round = 2)
         {
             double expectedRound = Math.Round(expected, round);
