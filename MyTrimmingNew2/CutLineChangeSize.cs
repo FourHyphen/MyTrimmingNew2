@@ -74,52 +74,6 @@ namespace MyTrimmingNew2
             }
         }
 
-        private CutLineParameter CreateNewParameterWhenExchangeOrigin(double baseWidth, double baseHeight)
-        {
-            // 左上の座標が変わる場合
-            // (1) 旧左上点を新右下点とし、移動後の旧右下点を新左上点(仮)とする
-            // (2) 新左上点が画像をはみ出ている場合は調整する
-            double newWidth = -baseWidth;
-            double newHeight = -baseHeight;    // Before.Top - newBottom = Before.Top - (Before.Top + baseHeight)
-            if ((Before.LeftEnd - newWidth) < 0)
-            {
-                newWidth = Before.LeftEnd;
-                newHeight = Before.CalcHeightBaseWidth(newWidth);
-            }
-
-            if ((Before.TopEnd - newHeight) < 0)
-            {
-                newHeight = Before.TopEnd;
-                newWidth = Before.CalcWidthBaseHeight(newHeight);
-            }
-
-            System.Windows.Point newLeftTop = GetNewLeftTopExchangeOrigin(newWidth, newHeight);
-            System.Windows.Point newRightTop = GetNewRightTopExchangeOrigin(newLeftTop, newWidth);
-            System.Windows.Point newRightBottom = GetNewRightBottomExchangeOrigin();
-            System.Windows.Point newLeftBottom = GetNewLeftBottomExchangeOrigin(newLeftTop, newHeight);
-            return new CutLineParameter(newLeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
-        }
-
-        private System.Windows.Point GetNewLeftTopExchangeOrigin(double newWidth, double newHeight)
-        {
-            return new System.Windows.Point(Before.LeftEnd - newWidth, Before.TopEnd - newHeight);
-        }
-
-        private System.Windows.Point GetNewRightTopExchangeOrigin(System.Windows.Point newLeftTop, double newWidth)
-        {
-            return new System.Windows.Point(newLeftTop.X + newWidth, newLeftTop.Y);
-        }
-
-        private System.Windows.Point GetNewRightBottomExchangeOrigin()
-        {
-            return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y);
-        }
-
-        private System.Windows.Point GetNewLeftBottomExchangeOrigin(System.Windows.Point newLeftTop, double newHeight)
-        {
-            return new System.Windows.Point(newLeftTop.X, newLeftTop.Y + newHeight);
-        }
-
         private void CreateNewParameterIfOverShowingImage(ref double newWidth, ref double newHeight)
         {
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
@@ -194,6 +148,52 @@ namespace MyTrimmingNew2
             double tmp4 = Before.Height * Before.LeftTop.Y;
             double y = (tmp3 + tmp4) / Before.Height;
             return new System.Windows.Point(x, y);
+        }
+
+        private CutLineParameter CreateNewParameterWhenExchangeOrigin(double baseWidth, double baseHeight)
+        {
+            // 左上の座標が変わる場合
+            // (1) 旧左上点を新右下点とし、移動後の旧右下点を新左上点(仮)とする
+            // (2) 新左上点が画像をはみ出ている場合は調整する
+            double newWidth = -baseWidth;
+            double newHeight = -baseHeight;    // Before.Top - newBottom = Before.Top - (Before.Top + baseHeight)
+            if ((Before.LeftEnd - newWidth) < 0)
+            {
+                newWidth = Before.LeftEnd;
+                newHeight = Before.CalcHeightBaseWidth(newWidth);
+            }
+
+            if ((Before.TopEnd - newHeight) < 0)
+            {
+                newHeight = Before.TopEnd;
+                newWidth = Before.CalcWidthBaseHeight(newHeight);
+            }
+
+            System.Windows.Point newLeftTop = GetNewLeftTopExchangeOrigin(newWidth, newHeight);
+            System.Windows.Point newRightTop = GetNewRightTopExchangeOrigin(newLeftTop, newWidth);
+            System.Windows.Point newRightBottom = GetNewRightBottomExchangeOrigin();
+            System.Windows.Point newLeftBottom = GetNewLeftBottomExchangeOrigin(newLeftTop, newHeight);
+            return new CutLineParameter(newLeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
+        }
+
+        private System.Windows.Point GetNewLeftTopExchangeOrigin(double newWidth, double newHeight)
+        {
+            return new System.Windows.Point(Before.LeftEnd - newWidth, Before.TopEnd - newHeight);
+        }
+
+        private System.Windows.Point GetNewRightTopExchangeOrigin(System.Windows.Point newLeftTop, double newWidth)
+        {
+            return new System.Windows.Point(newLeftTop.X + newWidth, newLeftTop.Y);
+        }
+
+        private System.Windows.Point GetNewRightBottomExchangeOrigin()
+        {
+            return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y);
+        }
+
+        private System.Windows.Point GetNewLeftBottomExchangeOrigin(System.Windows.Point newLeftTop, double newHeight)
+        {
+            return new System.Windows.Point(newLeftTop.X, newLeftTop.Y + newHeight);
         }
     }
 }
