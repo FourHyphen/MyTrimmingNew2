@@ -311,6 +311,8 @@ namespace TestMyTrimmingNew2
             System.Windows.Point beforeLeftTop = cl.LeftTop;
             double beforeLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
             double beforeLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
+            double beforeRightXSlope = CalcSlope(cl.RightBottom, cl.LeftBottom);
+            double beforeRightYSlope = CalcSlope(cl.RightTop, cl.RightBottom);
             double beforeWidth = cl.Width;
             double beforeHeight = cl.Height;
             ChangeSizeBaseRightBottom(cl, -100, -10);
@@ -319,12 +321,16 @@ namespace TestMyTrimmingNew2
             Assert.IsTrue(beforeWidth != cl.Width);
             Assert.IsTrue(beforeHeight != cl.Height);
 
-            // 矩形の角度が変わってないかを厳密にチェック
+            // 矩形の角度が変わってないかをチェック
             double afterLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
             double afterLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
+            double afterRightXSlope = CalcSlope(cl.RightBottom, cl.LeftBottom);
+            double afterRightYSlope = CalcSlope(cl.RightTop, cl.RightBottom);
             Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
-            Assert.AreEqual(expected: beforeLeftXSlope, actual: afterLeftXSlope);
-            Assert.AreEqual(expected: beforeLeftYSlope, actual: afterLeftYSlope);
+            AreEqualRound(beforeLeftXSlope, afterLeftXSlope, 10);    // 厳密には17桁目から違う
+            AreEqualRound(beforeLeftYSlope, afterLeftYSlope, 10);    // 厳密には15桁目から違う
+            AreEqualRound(beforeRightXSlope, afterRightXSlope, 10);    // 厳密には15桁目から違う
+            AreEqualRound(beforeRightYSlope, afterRightYSlope, 10);    // 厳密には15桁目から違う
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
@@ -381,6 +387,13 @@ namespace TestMyTrimmingNew2
                 return 0.0;
             }
             return yDiff / xDiff;
+        }
+
+        private void AreEqualRound(double expected, double actual, int round = 2)
+        {
+            double expectedRound = Math.Round(expected, round);
+            double actualRound = Math.Round(actual, round);
+            Assert.AreEqual(expectedRound, actualRound);
         }
     }
 }

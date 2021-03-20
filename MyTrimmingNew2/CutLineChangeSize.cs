@@ -133,24 +133,82 @@ namespace MyTrimmingNew2
             }
 
             System.Windows.Point newRightTop = GetNewRightTop(newWidth);
-            System.Windows.Point newRightBottom = GetNewRightBottom(newWidth, newHeight);
             System.Windows.Point newLeftBottom = GetNewLeftBottom(newHeight);
+            System.Windows.Point newRightBottom = GetNewRightBottom(newWidth, newHeight, newRightTop, newLeftBottom);
             return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
         private System.Windows.Point GetNewRightTop(double newWidth)
         {
-            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y);
+            if (Before.Degree == 0)
+            {
+                return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y);
+            }
+            else
+            {
+                return GetNewRightTopRotate(newWidth);
+            }
         }
 
-        private System.Windows.Point GetNewRightBottom(double newWidth, double newHeight)
+        private System.Windows.Point GetNewRightTopRotate(double newWidth)
         {
-            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y + newHeight);
+            // 以下条件から連立方程式を組んだ結果
+            // (1) LeftTopとRightTopを結ぶ線分の傾きがサイズ変更前後で正しいこと
+            // (2) 新Width : 旧Width = (新y - 旧LeftTop.Y) : (旧RightTop.Y - 旧LeftTop.Y)
+            double xRT = Before.RightTop.X;
+            double yRT = Before.RightTop.Y;
+            double xLT = Before.LeftTop.X;
+            double yLT = Before.LeftTop.Y;
+            double tmp1 = newWidth * (yRT - yLT) * (xRT - xLT);
+            double tmp2 = Before.Width * yLT * (xRT - xLT);
+            double tmp3 = Before.Width * xLT * yRT;
+            double tmp4 = -(Before.Width * xRT * yLT);
+            double x = (tmp1 + tmp2 + tmp3 + tmp4) / (Before.Width * (yRT - yLT));
+            double y = (newWidth * (yRT - yLT) + Before.Width * yLT) / Before.Width;
+            return new System.Windows.Point(x, y);
         }
 
         private System.Windows.Point GetNewLeftBottom(double newHeight)
         {
-            return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
+            if (Before.Degree == 0)
+            {
+                return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
+            }
+            else
+            {
+                return GetNewLeftBottomRotate(newHeight);
+            }
+        }
+
+        private System.Windows.Point GetNewLeftBottomRotate(double newHeight)
+        {
+            double tmp1 = newHeight * (Before.LeftTop.X - Before.LeftBottom.X);
+            double tmp2 = -(Before.Height * Before.LeftTop.X);
+            double x = (tmp1 + tmp2) / (-Before.Height);
+
+            double tmp3 = newHeight * (Before.LeftBottom.Y - Before.LeftTop.Y);
+            double tmp4 = Before.Height * Before.LeftTop.Y;
+            double y = (tmp3 + tmp4) / Before.Height;
+            return new System.Windows.Point(x, y);
+        }
+
+        private System.Windows.Point GetNewRightBottom(double newWidth, double newHeight, System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
+        {
+            if (Before.Degree == 0)
+            {
+                return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y + newHeight);
+            }
+            else
+            {
+                return GetNewRightBottomRotate(newRightTop, newLeftBottom);
+            }
+        }
+
+        private System.Windows.Point GetNewRightBottomRotate(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
+        {
+            double xDist = newRightTop.X - Before.LeftTop.X;
+            double yDist = newRightTop.Y - Before.LeftTop.Y;
+            return new System.Windows.Point(newLeftBottom.X + xDist, newLeftBottom.Y + yDist);
         }
     }
 }
