@@ -12,7 +12,7 @@ namespace MyTrimmingNew2
         {
             get
             {
-                return Math.Sqrt(Math.Pow(RightTop.X - LeftTop.X, 2.0) + Math.Pow(RightTop.Y - LeftTop.Y, 2.0));
+                return CalcDistance(RightTop, LeftTop);
             }
         }
 
@@ -20,7 +20,7 @@ namespace MyTrimmingNew2
         {
             get
             {
-                return Math.Sqrt(Math.Pow(LeftBottom.X - LeftTop.X, 2.0) + Math.Pow(LeftBottom.Y - LeftTop.Y, 2.0));
+                return CalcDistance(LeftBottom, LeftTop);
             }
         }
 
@@ -92,6 +92,11 @@ namespace MyTrimmingNew2
             RightBottom = rightBottom;
             LeftBottom = leftBottom;
             Degree = degree;
+        }
+
+        private double CalcDistance(System.Windows.Point p1, System.Windows.Point p2)
+        {
+            return Math.Sqrt(Math.Pow(p1.X - p2.X, 2.0) + Math.Pow(p1.Y - p2.Y, 2.0));
         }
 
         public double CalcHeightBaseWidth(double width)
