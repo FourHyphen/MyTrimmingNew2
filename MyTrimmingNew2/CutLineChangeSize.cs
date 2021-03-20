@@ -152,19 +152,14 @@ namespace MyTrimmingNew2
 
         private System.Windows.Point GetNewRightTopRotate(double newWidth)
         {
-            // 以下条件から連立方程式を組んだ結果
-            // (1) LeftTopとRightTopを結ぶ線分の傾きがサイズ変更前後で正しいこと
-            // (2) 新Width : 旧Width = (新y - 旧LeftTop.Y) : (旧RightTop.Y - 旧LeftTop.Y)
-            double xRT = Before.RightTop.X;
-            double yRT = Before.RightTop.Y;
-            double xLT = Before.LeftTop.X;
-            double yLT = Before.LeftTop.Y;
-            double tmp1 = newWidth * (yRT - yLT) * (xRT - xLT);
-            double tmp2 = Before.Width * yLT * (xRT - xLT);
-            double tmp3 = Before.Width * xLT * yRT;
-            double tmp4 = -(Before.Width * xRT * yLT);
-            double x = (tmp1 + tmp2 + tmp3 + tmp4) / (Before.Width * (yRT - yLT));
-            double y = (newWidth * (yRT - yLT) + Before.Width * yLT) / Before.Width;
+            double tmp1 = newWidth * (Before.RightTop.X - Before.LeftTop.X);
+            double tmp2 = Before.Width * Before.LeftTop.X;
+            double x = (tmp1 + tmp2) / Before.Width;
+
+            double tmp3 = newWidth * (Before.RightTop.Y - Before.LeftTop.Y);
+            double tmp4 = Before.Width * Before.LeftTop.Y;
+            double y = (tmp3 + tmp4) / Before.Width;
+
             return new System.Windows.Point(x, y);
         }
 
