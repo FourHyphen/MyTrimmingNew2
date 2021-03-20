@@ -32,7 +32,15 @@ namespace MyTrimmingNew2
 
             if (newWidth >= 0.0 && newHeight >= 0.0)
             {
-                return CreateNewParameterIfOverShowingImage(newWidth, newHeight);
+                CreateNewParameterIfOverShowingImage(ref newWidth, ref newHeight);
+                if (Before.Degree == 0)
+                {
+                    return CreateNewParameter(newWidth, newHeight);
+                }
+                else
+                {
+                    return CreateNewParameterRotate(newWidth, newHeight);
+                }
             }
             else
             {
@@ -112,12 +120,9 @@ namespace MyTrimmingNew2
             return new System.Windows.Point(newLeftTop.X, newLeftTop.Y + newHeight);
         }
 
-        private CutLineParameter CreateNewParameterIfOverShowingImage(double willWidth, double willHeight)
+        private void CreateNewParameterIfOverShowingImage(ref double newWidth, ref double newHeight)
         {
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
-            double newWidth = willWidth;
-            double newHeight = willHeight;
-
             double newRight = Before.LeftEnd + newWidth;
             if (newRight > MaxRight)
             {
@@ -131,23 +136,37 @@ namespace MyTrimmingNew2
                 newHeight = MaxBottom - Before.TopEnd;
                 newWidth = Before.CalcWidthBaseHeight(Before.Height);
             }
+        }
 
+        private CutLineParameter CreateNewParameter(double newWidth, double newHeight)
+        {
             System.Windows.Point newRightTop = GetNewRightTop(newWidth);
             System.Windows.Point newLeftBottom = GetNewLeftBottom(newHeight);
-            System.Windows.Point newRightBottom = GetNewRightBottom(newWidth, newHeight, newRightTop, newLeftBottom);
+            System.Windows.Point newRightBottom = GetNewRightBottom(newWidth, newHeight);
             return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
         private System.Windows.Point GetNewRightTop(double newWidth)
         {
-            if (Before.Degree == 0)
-            {
-                return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y);
-            }
-            else
-            {
-                return GetNewRightTopRotate(newWidth);
-            }
+            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y);
+        }
+
+        private System.Windows.Point GetNewLeftBottom(double newHeight)
+        {
+            return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
+        }
+
+        private System.Windows.Point GetNewRightBottom(double newWidth, double newHeight)
+        {
+            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y + newHeight);
+        }
+
+        private CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
+        {
+            System.Windows.Point newRightTop = GetNewRightTopRotate(newWidth);
+            System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newHeight);
+            System.Windows.Point newRightBottom = GetNewRightBottomRotate(newRightTop, newLeftBottom);
+            return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
         private System.Windows.Point GetNewRightTopRotate(double newWidth)
@@ -163,18 +182,6 @@ namespace MyTrimmingNew2
             return new System.Windows.Point(x, y);
         }
 
-        private System.Windows.Point GetNewLeftBottom(double newHeight)
-        {
-            if (Before.Degree == 0)
-            {
-                return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
-            }
-            else
-            {
-                return GetNewLeftBottomRotate(newHeight);
-            }
-        }
-
         private System.Windows.Point GetNewLeftBottomRotate(double newHeight)
         {
             double tmp1 = newHeight * (Before.LeftTop.X - Before.LeftBottom.X);
@@ -185,18 +192,6 @@ namespace MyTrimmingNew2
             double tmp4 = Before.Height * Before.LeftTop.Y;
             double y = (tmp3 + tmp4) / Before.Height;
             return new System.Windows.Point(x, y);
-        }
-
-        private System.Windows.Point GetNewRightBottom(double newWidth, double newHeight, System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
-        {
-            if (Before.Degree == 0)
-            {
-                return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y + newHeight);
-            }
-            else
-            {
-                return GetNewRightBottomRotate(newRightTop, newLeftBottom);
-            }
         }
 
         private System.Windows.Point GetNewRightBottomRotate(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
