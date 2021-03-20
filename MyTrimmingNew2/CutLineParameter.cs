@@ -8,56 +8,6 @@ namespace MyTrimmingNew2
 
         private static double RatioHeight = 9.0;
 
-        public double Width
-        {
-            get
-            {
-                return CalcDistance(RightTop, LeftTop);
-            }
-        }
-
-        public double Height
-        {
-            get
-            {
-                return CalcDistance(LeftBottom, LeftTop);
-            }
-        }
-
-        public double LeftEnd
-        {
-            get
-            {
-                return Math.Min(LeftTop.X, LeftBottom.X);
-            }
-        }
-
-        public double TopEnd
-        {
-            get
-            {
-                return Math.Min(LeftTop.Y, RightTop.Y);
-            }
-        }
-
-        public double RightEnd
-        {
-            get
-            {
-                return Math.Max(RightTop.X, RightBottom.X);
-            }
-        }
-
-        public double BottomEnd
-        {
-            get
-            {
-                return Math.Max(RightBottom.Y, LeftBottom.Y);
-            }
-        }
-
-        public double Degree { get; private set; }
-
         public System.Windows.Point LeftTop { get; private set; }
 
         public System.Windows.Point RightTop { get; private set; }
@@ -65,6 +15,20 @@ namespace MyTrimmingNew2
         public System.Windows.Point RightBottom { get; private set; }
 
         public System.Windows.Point LeftBottom { get; private set; }
+
+        public double Degree { get; private set; }
+
+        public double Width { get { return CalcDistance(RightTop, LeftTop); } }
+
+        public double Height { get { return CalcDistance(LeftBottom, LeftTop); } }
+
+        public double LeftEnd { get { return Math.Min(LeftTop.X, LeftBottom.X); } }
+
+        public double TopEnd { get { return Math.Min(LeftTop.Y, RightTop.Y); } }
+
+        public double RightEnd { get { return Math.Max(RightTop.X, RightBottom.X); } }
+
+        public double BottomEnd { get { return Math.Max(RightBottom.Y, LeftBottom.Y); } }
 
         public CutLineParameter(ShowingImage image)
         {
