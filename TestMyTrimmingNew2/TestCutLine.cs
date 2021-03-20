@@ -261,6 +261,19 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: moveY, actual: cl.Height);
         }
 
+        [TestMethod]
+        public void TestRotateDoNotStickOutOfImage()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            Rotate(cl, 1);
+            Assert.AreEqual(expected: 0, actual: cl.Degree);
+
+            Rotate(cl, -1);
+            Assert.AreEqual(expected: 0, actual: cl.Degree);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
@@ -292,6 +305,18 @@ namespace TestMyTrimmingNew2
             cl.ExecuteCommand(dragStart, drop);
             Assert.AreEqual(expected: ansWidth, actual: cl.Width);
             Assert.AreEqual(expected: ansHeight, actual: cl.Height);
+        }
+
+        private void Rotate(CutLine cutLine, int degree)
+        {
+            if (degree > 0)
+            {
+                cutLine.ExecuteCommand(System.Windows.Input.Key.OemPlus, degree);
+            }
+            else
+            {
+                cutLine.ExecuteCommand(System.Windows.Input.Key.OemMinus, degree);
+            }
         }
     }
 }
