@@ -262,7 +262,7 @@ namespace TestMyTrimmingNew2
         }
 
         [TestMethod]
-        public void TestRotateDoNotStickOutOfImage()
+        public void TestDoNotRotateIfStickOutOfImage()
         {
             ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
