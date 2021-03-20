@@ -274,6 +274,26 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 0, actual: cl.Degree);
         }
 
+        [TestMethod]
+        public void TestDoNotChangeSizeBaseRightBottomAfterRotateIfOriginChanging()
+        {
+            // 右下点を思いきり左上に引っ張った際、原点の位置が変わる場合に回転済みならサイズ変更しないテスト
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 準備: 適当にサイズを小さくして中央に寄せて回転
+            ChangeSizeBaseRightBottom(cl, -200, 0);
+            Move(cl, System.Windows.Input.Key.Right, 100);
+            Move(cl, System.Windows.Input.Key.Down, 50);
+            Rotate(cl, 10);
+            System.Windows.Point beforeLeftTop = cl.LeftTop;
+
+            // 右下点を思いきり左上に引っ張る
+            ChangeSizeBaseRightBottom(cl, -2000, -1000);
+
+            Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
