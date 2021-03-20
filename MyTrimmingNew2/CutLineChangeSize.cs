@@ -142,7 +142,7 @@ namespace MyTrimmingNew2
         {
             System.Windows.Point newRightTop = GetNewRightTop(newWidth);
             System.Windows.Point newLeftBottom = GetNewLeftBottom(newHeight);
-            System.Windows.Point newRightBottom = GetNewRightBottom(newWidth, newHeight);
+            System.Windows.Point newRightBottom = GetNewRightBottom(newRightTop, newLeftBottom);
             return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
@@ -156,16 +156,18 @@ namespace MyTrimmingNew2
             return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
         }
 
-        private System.Windows.Point GetNewRightBottom(double newWidth, double newHeight)
+        private System.Windows.Point GetNewRightBottom(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
         {
-            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y + newHeight);
+            double xDist = newRightTop.X - Before.LeftTop.X;
+            double yDist = newRightTop.Y - Before.LeftTop.Y;
+            return new System.Windows.Point(newLeftBottom.X + xDist, newLeftBottom.Y + yDist);
         }
 
         private CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
         {
             System.Windows.Point newRightTop = GetNewRightTopRotate(newWidth);
             System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newHeight);
-            System.Windows.Point newRightBottom = GetNewRightBottomRotate(newRightTop, newLeftBottom);
+            System.Windows.Point newRightBottom = GetNewRightBottom(newRightTop, newLeftBottom);
             return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
@@ -192,13 +194,6 @@ namespace MyTrimmingNew2
             double tmp4 = Before.Height * Before.LeftTop.Y;
             double y = (tmp3 + tmp4) / Before.Height;
             return new System.Windows.Point(x, y);
-        }
-
-        private System.Windows.Point GetNewRightBottomRotate(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
-        {
-            double xDist = newRightTop.X - Before.LeftTop.X;
-            double yDist = newRightTop.Y - Before.LeftTop.Y;
-            return new System.Windows.Point(newLeftBottom.X + xDist, newLeftBottom.Y + yDist);
         }
     }
 }
