@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,13 @@ namespace TestMyTrimmingNew2
         public static string GetFilePathOfDependentEnvironment(string filePath)
         {
             return Environment.CurrentDirectory + filePath;
+        }
+
+        public static void AreEqualRound(double expected, double actual, int round = 2)
+        {
+            double expectedRound = Math.Round(expected, round);
+            double actualRound = Math.Round(actual, round);
+            Assert.AreEqual(expectedRound, actualRound);
         }
     }
 }

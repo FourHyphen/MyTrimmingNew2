@@ -307,7 +307,7 @@ namespace TestMyTrimmingNew2
             Move(cl, System.Windows.Input.Key.Down, 50);
             Rotate(cl, 10);
 
-            // 回転後のサイズ変更
+            // パラメーターの保持
             System.Windows.Point beforeLeftTop = cl.LeftTop;
             double beforeLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
             double beforeLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
@@ -315,11 +315,13 @@ namespace TestMyTrimmingNew2
             double beforeRightYSlope = CalcSlope(cl.RightTop, cl.RightBottom);
             double beforeWidth = cl.Width;
             double beforeHeight = cl.Height;
+
+            // 回転後のサイズ変更を実施
             ChangeSizeBaseRightBottom(cl, -100, -10);
 
-            // サイズは変わっていれば良しとする(正解値の計算困難)
-            Assert.IsTrue(beforeWidth != cl.Width);
-            Assert.IsTrue(beforeHeight != cl.Height);
+            // サイズは小さくなっていれば良しとする(正解値の計算困難)
+            Assert.IsTrue(cl.Width < beforeWidth);
+            Assert.IsTrue(cl.Height < beforeHeight);
 
             // 矩形の角度が変わってないかをチェック
             double afterLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
@@ -327,10 +329,10 @@ namespace TestMyTrimmingNew2
             double afterRightXSlope = CalcSlope(cl.RightBottom, cl.LeftBottom);
             double afterRightYSlope = CalcSlope(cl.RightTop, cl.RightBottom);
             Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
-            AreEqualRound(beforeLeftXSlope, afterLeftXSlope, 10);    // 厳密には17桁目から違う
-            AreEqualRound(beforeLeftYSlope, afterLeftYSlope, 10);    // 厳密には15桁目から違う
-            AreEqualRound(beforeRightXSlope, afterRightXSlope, 10);    // 厳密には15桁目から違う
-            AreEqualRound(beforeRightYSlope, afterRightYSlope, 10);    // 厳密には15桁目から違う
+            Common.AreEqualRound(beforeLeftXSlope, afterLeftXSlope, 10);    // 厳密には17桁目から違う
+            Common.AreEqualRound(beforeLeftYSlope, afterLeftYSlope, 10);    // 厳密には15桁目から違う
+            Common.AreEqualRound(beforeRightXSlope, afterRightXSlope, 10);    // 厳密には15桁目から違う
+            Common.AreEqualRound(beforeRightYSlope, afterRightYSlope, 10);    // 厳密には15桁目から違う
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
@@ -387,13 +389,6 @@ namespace TestMyTrimmingNew2
                 return 0.0;
             }
             return yDiff / xDiff;
-        }
-
-        private void AreEqualRound(double expected, double actual, int round = 2)
-        {
-            double expectedRound = Math.Round(expected, round);
-            double actualRound = Math.Round(actual, round);
-            Assert.AreEqual(expectedRound, actualRound);
         }
     }
 }
