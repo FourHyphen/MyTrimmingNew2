@@ -294,6 +294,39 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
         }
 
+        [TestMethod]
+        public void TestChangeSizeBaseRightBottomAfterRotate()
+        {
+            // 回転後のサイズ変更テスト
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 準備: 適当にサイズを小さくして中央に寄せて回転
+            ChangeSizeBaseRightBottom(cl, -300, 0);
+            Move(cl, System.Windows.Input.Key.Right, 200);
+            Move(cl, System.Windows.Input.Key.Down, 50);
+            Rotate(cl, 10);
+
+            // 回転後のサイズ変更
+            System.Windows.Point beforeLeftTop = cl.LeftTop;
+            double beforeLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
+            double beforeLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
+            double beforeWidth = cl.Width;
+            double beforeHeight = cl.Height;
+            ChangeSizeBaseRightBottom(cl, -100, -10);
+
+            // サイズは変わっていれば良しとする(正解値の計算困難)
+            Assert.IsTrue(beforeWidth != cl.Width);
+            Assert.IsTrue(beforeHeight != cl.Height);
+
+            // 矩形の角度が変わってないかを厳密にチェック
+            double afterLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
+            double afterLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
+            Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
+            Assert.AreEqual(expected: beforeLeftXSlope, actual: afterLeftXSlope);
+            Assert.AreEqual(expected: beforeLeftYSlope, actual: afterLeftYSlope);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
@@ -337,6 +370,17 @@ namespace TestMyTrimmingNew2
             {
                 cutLine.ExecuteCommand(System.Windows.Input.Key.OemMinus, degree);
             }
+        }
+
+        private double CalcSlope(System.Windows.Point p1, System.Windows.Point p2)
+        {
+            double xDiff = p2.X - p1.X;
+            double yDiff = p2.Y - p1.Y;
+            if (xDiff == 0.0)
+            {
+                return 0.0;
+            }
+            return yDiff / xDiff;
         }
     }
 }
