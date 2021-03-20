@@ -37,7 +37,15 @@ namespace MyTrimmingNew2
             else
             {
                 // 縮小方向に行き過ぎると、右下点が左上点を超えて原点(左上)が変わる
-                return CreateNewParameterWhenExchangeOrigin(newWidth, newHeight);
+                // 回転後に原点を変更するような大きなサイズ変更はしない
+                if (Before.Degree == 0)
+                {
+                    return CreateNewParameterWhenExchangeOrigin(newWidth, newHeight);
+                }
+                else
+                {
+                    return Before;
+                }
             }
         }
 
