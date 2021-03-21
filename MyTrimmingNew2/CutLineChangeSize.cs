@@ -8,18 +8,12 @@ namespace MyTrimmingNew2
 {
     public class CutLineChangeSize : CutLineCommand
     {
-        private double MaxRight { get; }
-
-        private double MaxBottom { get; }
-
         private System.Windows.Point DragStart { get; }
 
         private System.Windows.Point DropPoint { get; }
 
-        public CutLineChangeSize(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint) : base (cutLine)
+        public CutLineChangeSize(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint) : base (cutLine, image)
         {
-            MaxRight = image.Width;
-            MaxBottom = image.Height;
             DragStart = dragStart;
             DropPoint = dropPoint;
         }
@@ -119,6 +113,11 @@ namespace MyTrimmingNew2
             System.Windows.Point newRightTop = GetNewRightTopRotate(newWidth);
             System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newHeight);
             System.Windows.Point newRightBottom = GetNewRightBottom(newRightTop, newLeftBottom);
+
+            if (DoStickOutImageOfAfterParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom))
+            {
+                return Before;
+            }
             return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 

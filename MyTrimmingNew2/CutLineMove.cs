@@ -9,25 +9,17 @@ namespace MyTrimmingNew2
 {
     public class CutLineMove : CutLineCommand
     {
-        private double MaxRight { get; }
-
-        private double MaxBottom { get; }
-
         private double XDirection { get; set; }
 
         private double YDirection { get; set; }
 
-        public CutLineMove(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base (cutLine)
+        public CutLineMove(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base (cutLine, image)
         {
-            MaxRight = image.Width;
-            MaxBottom = image.Height;
             CalcMoveDistance(key, keyInputNum);
         }
 
-        public CutLineMove(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point drop) : base(cutLine)
+        public CutLineMove(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point drop) : base(cutLine, image)
         {
-            MaxRight = image.Width;
-            MaxBottom = image.Height;
             CalcMoveDistance(dragStart, drop);
         }
 

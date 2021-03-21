@@ -5,16 +5,10 @@ namespace MyTrimmingNew2
 {
     public class CutLineRotate : CutLineCommand
     {
-        private double MaxRight { get; }
-
-        private double MaxBottom { get; }
-
         private double RotateDegree { get; set; }
 
-        public CutLineRotate(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base(cutLine)
+        public CutLineRotate(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base(cutLine, image)
         {
-            MaxRight = image.Width;
-            MaxBottom = image.Height;
             CalcRotateDegree(key, keyInputNum);
         }
 
@@ -80,38 +74,6 @@ namespace MyTrimmingNew2
         private double ToRadian(double degree)
         {
             return degree * Math.PI / 180.0;
-        }
-
-        private bool DoStickOutImageOfAfterParameter(System.Windows.Point newLeftTop,
-                                                     System.Windows.Point newRightTop,
-                                                     System.Windows.Point newRightBottom,
-                                                     System.Windows.Point newLeftBottom)
-        {
-            double leftEnd = Math.Min(newLeftTop.X, newLeftBottom.X);
-            if (leftEnd < 0)
-            {
-                return true;
-            }
-
-            double rightEnd = Math.Max(newRightTop.X, newRightBottom.X);
-            if (rightEnd > MaxRight)
-            {
-                return true;
-            }
-
-            double topEnd = Math.Min(newLeftTop.Y, newRightTop.Y);
-            if (topEnd < 0)
-            {
-                return true;
-            }
-
-            double bottomEnd = Math.Max(newLeftBottom.Y, newRightBottom.Y);
-            if (bottomEnd > MaxBottom)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }
