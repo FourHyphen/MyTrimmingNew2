@@ -336,7 +336,7 @@ namespace TestMyTrimmingNew2
         }
 
         [TestMethod]
-        public void TestChangeSizeDoNotStickOutOfImageAfterRotateBaseRightBottom()
+        public void TestDoNotChangeSizeIfStickOutOfImageAfterRotateBaseRightBottom()
         {
             // 回転後のサイズ変更テスト
             ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
@@ -348,18 +348,21 @@ namespace TestMyTrimmingNew2
             Move(cl, System.Windows.Input.Key.Down, 50);
             Rotate(cl, 10);
 
+            System.Windows.Point beforeRightTop = cl.RightTop;
+
             // 横方向に十分に拡大する
             ChangeSizeBaseRightBottom(cl, 1000, 10);
-            Assert.AreEqual(expected: si.Width, actual: cl.RightTop.X);
+            Assert.AreEqual(expected: beforeRightTop, actual: cl.RightTop);
 
             // 準備: いったん小さくしてから縦方向に近い位置に寄せる;
             ChangeSizeBaseRightBottom(cl, -100, 0);
             Move(cl, System.Windows.Input.Key.Left, 200);
 
+            System.Windows.Point beforeRightBottom = cl.RightBottom;
+
             // 縦方向に十分に拡大する
             ChangeSizeBaseRightBottom(cl, 10, 1000);
-            Assert.IsTrue(cl.RightTop.X < si.Width);    // テストしたい条件を満たしているかの確認
-            Assert.AreEqual(expected: si.Height, actual: cl.RightBottom);    // 実際のテスト
+            Assert.AreEqual(expected: beforeRightBottom, actual: cl.RightBottom);
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
