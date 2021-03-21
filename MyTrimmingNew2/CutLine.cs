@@ -66,6 +66,12 @@ namespace MyTrimmingNew2
             }
         }
 
+        public bool IsPointNearLeftTop(Point p)
+        {
+            //return (IsPointNearRightBottomX(p.X, NearRange)) && (IsPointNearRightBottomY(p.Y, NearRange));
+            return true;
+        }
+
         public bool IsPointNearRightBottom(Point p)
         {
             return (IsPointNearRightBottomX(p.X, NearRange)) && (IsPointNearRightBottomY(p.Y, NearRange));
