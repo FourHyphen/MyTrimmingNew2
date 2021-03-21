@@ -74,17 +74,22 @@ namespace MyTrimmingNew2
 
         public bool IsPointNearRightBottom(Point p)
         {
-            return (IsPointNearRightBottomX(p.X, NearRange)) && (IsPointNearRightBottomY(p.Y, NearRange));
+            return (IsPointNear(Parameter.RightBottom, p));
         }
 
-        private bool IsPointNearRightBottomX(double x, double range)
+        private bool IsPointNear(Point baseP, Point p)
         {
-            return ((x - range) <= Parameter.RightBottom.X) && (Parameter.RightBottom.X <= (x + range));
+            return (IsPointNearX(baseP.X, p.X, NearRange)) && (IsPointNearY(baseP.Y, p.Y, NearRange));
         }
 
-        private bool IsPointNearRightBottomY(double y, double range)
+        private bool IsPointNearX(double baseX, double x, double range)
         {
-            return ((y - range) <= Parameter.RightBottom.Y) && (Parameter.RightBottom.Y <= (y + range));
+            return ((x - range) <= baseX) && (baseX <= (x + range));
+        }
+
+        private bool IsPointNearY(double baseY, double y, double range)
+        {
+            return ((y - range) <= baseY) && (baseY <= (y + range));
         }
 
         public bool IsPointInside(Point p)
