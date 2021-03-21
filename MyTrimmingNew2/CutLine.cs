@@ -68,8 +68,7 @@ namespace MyTrimmingNew2
 
         public bool IsPointNearLeftTop(Point p)
         {
-            //return (IsPointNearRightBottomX(p.X, NearRange)) && (IsPointNearRightBottomY(p.Y, NearRange));
-            return true;
+            return (IsPointNear(Parameter.LeftTop, p));
         }
 
         public bool IsPointNearRightBottom(Point p)
