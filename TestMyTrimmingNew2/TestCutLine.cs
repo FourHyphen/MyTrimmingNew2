@@ -335,6 +335,33 @@ namespace TestMyTrimmingNew2
             Common.AreEqualRound(beforeRightYSlope, afterRightYSlope, 10);    // 厳密には15桁目から違う
         }
 
+        [TestMethod]
+        public void TestChangeSizeDoNotStickOutOfImageAfterRotateBaseRightBottom()
+        {
+            // 回転後のサイズ変更テスト
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 準備: 適当にサイズを小さくして中央に寄せて回転
+            ChangeSizeBaseRightBottom(cl, -300, 0);
+            Move(cl, System.Windows.Input.Key.Right, 200);
+            Move(cl, System.Windows.Input.Key.Down, 50);
+            Rotate(cl, 10);
+
+            // 横方向に十分に拡大する
+            ChangeSizeBaseRightBottom(cl, 1000, 10);
+            Assert.AreEqual(expected: si.Width, actual: cl.RightTop.X);
+
+            // 準備: いったん小さくしてから縦方向に近い位置に寄せる;
+            ChangeSizeBaseRightBottom(cl, -100, 0);
+            Move(cl, System.Windows.Input.Key.Left, 200);
+
+            // 縦方向に十分に拡大する
+            ChangeSizeBaseRightBottom(cl, 10, 1000);
+            Assert.IsTrue(cl.RightTop.X < si.Width);    // テストしたい条件を満たしているかの確認
+            Assert.AreEqual(expected: si.Height, actual: cl.RightBottom);    // 実際のテスト
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
