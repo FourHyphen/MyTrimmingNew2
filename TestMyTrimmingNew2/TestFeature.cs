@@ -289,5 +289,30 @@ namespace TestMyTrimmingNew2
             Driver.EmurateInputKey(System.Windows.Input.Key.Down, tooLong);
             Common.AreEqualRound(expected: Driver.GetShowingImageHeight(), actual: Driver.GetCutLineLeftBottomY());
         }
+
+        [TestMethod]
+        public void TestChangeOfCutLineSizeWhenMouseDragAndDropLeftTop()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            double beforeCutLineWidth = Driver.GetCutLineWidth();
+            double beforeCutLineHeight = Driver.GetCutLineHeight();
+
+            double moveX = 50;    // 根拠なし、適当
+            double heightDiff = moveX * 9.0 / 16.0;
+            double dragStartX = Driver.GetCutLineLeftTopX();
+            double dropX = dragStartX + moveX;
+            System.Windows.Point drag = new System.Windows.Point(dragStartX, Driver.GetCutLineLeftTopY());
+            System.Windows.Point drop = new System.Windows.Point(dropX, Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            double afterCutLineWidth = beforeCutLineWidth - moveX;
+            double afterCutLineHeight = beforeCutLineHeight - heightDiff;
+
+            Common.AreEqualRound(expected: 50, actual: Driver.GetCutLineLeftTopX());
+            Common.AreEqualRound(expected: heightDiff, actual: Driver.GetCutLineLeftTopY());
+            Common.AreEqualRound(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
+            Common.AreEqualRound(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight());
+        }
     }
 }
