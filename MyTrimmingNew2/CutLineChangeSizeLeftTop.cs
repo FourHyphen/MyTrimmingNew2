@@ -27,15 +27,15 @@ namespace MyTrimmingNew2
             double newLeft = Before.RightEnd - newWidth;
             if (newLeft < 0)
             {
-                newWidth = -Before.LeftEnd;
+                newWidth = Before.RightEnd;
                 newHeight = Before.CalcHeightBaseWidth(newWidth);
             }
 
             double newTop = Before.BottomEnd - newHeight;
             if (newTop < 0)
             {
-                newHeight = -Before.TopEnd;
-                newWidth = Before.CalcWidthBaseHeight(Before.Height);
+                newHeight = Before.BottomEnd;
+                newWidth = Before.CalcWidthBaseHeight(newHeight);
             }
         }
 
