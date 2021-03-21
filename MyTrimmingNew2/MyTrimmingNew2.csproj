@@ -56,7 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CutLine.cs" />
-    <Compile Include="CutLineChangeSize.cs" />
+    <Compile Include="CutLineChangeSizeRightBottom.cs" />
     <Compile Include="CutLineCommand.cs" />
     <Compile Include="CutLineCommandFactory.cs" />
     <Compile Include="CutLineDisplay.cs" />

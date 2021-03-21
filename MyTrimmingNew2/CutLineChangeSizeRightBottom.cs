@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew2
 {
-    public class CutLineChangeSize : CutLineCommand
+    public class CutLineChangeSizeRightBottom : CutLineCommand
     {
         private System.Windows.Point DragStart { get; }
 
         private System.Windows.Point DropPoint { get; }
 
-        public CutLineChangeSize(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint) : base (cutLine, image)
+        public CutLineChangeSizeRightBottom(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint) : base (cutLine, image)
         {
             DragStart = dragStart;
             DropPoint = dropPoint;
