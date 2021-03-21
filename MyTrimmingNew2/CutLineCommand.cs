@@ -31,30 +31,47 @@ namespace MyTrimmingNew2
 
         protected abstract CutLineParameter CalcNewParameterCore();
 
-        protected bool DoStickOutImageOfAfterParameter(System.Windows.Point newLeftTop,
-                                                       System.Windows.Point newRightTop,
-                                                       System.Windows.Point newRightBottom,
-                                                       System.Windows.Point newLeftBottom)
+        protected bool DoStickOutImage(System.Windows.Point leftTop,
+                                       System.Windows.Point rightTop,
+                                       System.Windows.Point rightBottom,
+                                       System.Windows.Point leftBottom)
         {
-            double leftEnd = Math.Min(newLeftTop.X, newLeftBottom.X);
+            return (DoStickOutImageWidth(leftTop, rightTop, rightBottom, leftBottom)) ||
+                   (DoStickOutImageHeight(leftTop, rightTop, rightBottom, leftBottom));
+        }
+
+        private bool DoStickOutImageWidth(System.Windows.Point leftTop,
+                                          System.Windows.Point rightTop,
+                                          System.Windows.Point rightBottom,
+                                          System.Windows.Point leftBottom)
+        {
+            double leftEnd = Math.Min(leftTop.X, leftBottom.X);
             if (leftEnd < 0)
             {
                 return true;
             }
 
-            double rightEnd = Math.Max(newRightTop.X, newRightBottom.X);
+            double rightEnd = Math.Max(rightTop.X, rightBottom.X);
             if (rightEnd > MaxRight)
             {
                 return true;
             }
 
-            double topEnd = Math.Min(newLeftTop.Y, newRightTop.Y);
+            return false;
+        }
+
+        private bool DoStickOutImageHeight(System.Windows.Point leftTop,
+                                           System.Windows.Point rightTop,
+                                           System.Windows.Point rightBottom,
+                                           System.Windows.Point leftBottom)
+        {
+            double topEnd = Math.Min(leftTop.Y, rightTop.Y);
             if (topEnd < 0)
             {
                 return true;
             }
 
-            double bottomEnd = Math.Max(newLeftBottom.Y, newRightBottom.Y);
+            double bottomEnd = Math.Max(leftBottom.Y, rightBottom.Y);
             if (bottomEnd > MaxBottom)
             {
                 return true;

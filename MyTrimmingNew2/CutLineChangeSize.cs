@@ -114,7 +114,7 @@ namespace MyTrimmingNew2
             System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newHeight);
             System.Windows.Point newRightBottom = GetNewRightBottom(newRightTop, newLeftBottom);
 
-            if (DoStickOutImageOfAfterParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom))
+            if (DoStickOutImage(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom))
             {
                 return Before;
             }

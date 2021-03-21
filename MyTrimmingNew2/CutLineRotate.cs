@@ -44,7 +44,7 @@ namespace MyTrimmingNew2
             System.Windows.Point newRightBottom = CalcRotatePoint(Before.RightBottom, centerX, centerY, rotateRad);
             System.Windows.Point newLeftBottom = CalcRotatePoint(Before.LeftBottom, centerX, centerY, rotateRad);
 
-            if (DoStickOutImageOfAfterParameter(newLeftTop, newRightTop, newRightBottom, newLeftBottom))
+            if (DoStickOutImage(newLeftTop, newRightTop, newRightBottom, newLeftBottom))
             {
                 return Before;
             }
