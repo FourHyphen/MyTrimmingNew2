@@ -6,66 +6,16 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew2
 {
-    public class CutLineChangeSizeRightBottom : CutLineCommand
+    public class CutLineChangeSizeRightBottom : CutLineChangeSize
     {
-        private System.Windows.Point DragStart { get; }
-
-        private System.Windows.Point DropPoint { get; }
-
-        public CutLineChangeSizeRightBottom(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint) : base (cutLine, image)
+        public CutLineChangeSizeRightBottom(CutLine cutLine,
+                                            ShowingImage image,
+                                            System.Windows.Point dragStart,
+                                            System.Windows.Point dropPoint) : base (cutLine, image, dragStart, dropPoint)
         {
-            DragStart = dragStart;
-            DropPoint = dropPoint;
         }
 
-        protected override CutLineParameter CalcNewParameterCore()
-        {
-            double newWidth = Before.Width;
-            double newHeight = Before.Height;
-            CalcNewParameterWidthAndHeight(ref newWidth, ref newHeight);
-
-            if (newWidth >= 0.0 && newHeight >= 0.0)
-            {
-                return CreateNewParameter(newWidth, newHeight);
-            }
-            else
-            {
-                // 縮小方向に行き過ぎると、右下点が左上点を超えて原点(左上)が変わる
-                return CreateNewParameterWhenExchangeOrigin(newWidth, newHeight);
-            }
-        }
-
-        private void CalcNewParameterWidthAndHeight(ref double newWidth, ref double newHeight)
-        {
-            double distanceX = DropPoint.X - DragStart.X;
-            double distanceY = DropPoint.Y - DragStart.Y;
-            double changeSizeY = Before.CalcHeightBaseWidth(distanceX);
-            if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
-            {
-                newWidth += distanceX;
-                newHeight += changeSizeY;
-            }
-            else
-            {
-                newWidth += Before.CalcWidthBaseHeight(distanceY);
-                newHeight += distanceY;
-            }
-        }
-
-        private CutLineParameter CreateNewParameter(double newWidth, double newHeight)
-        {
-            AdjustWidthAndHeightIfOverShowingImage(ref newWidth, ref newHeight);
-            if (Before.Degree == 0)
-            {
-                return CreateNewParameterCore(newWidth, newHeight);
-            }
-            else
-            {
-                return CreateNewParameterRotate(newWidth, newHeight);
-            }
-        }
-
-        private void AdjustWidthAndHeightIfOverShowingImage(ref double newWidth, ref double newHeight)
+        protected override void AdjustWidthAndHeightIfOverShowingImage(ref double newWidth, ref double newHeight)
         {
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
             double newRight = Before.LeftEnd + newWidth;
@@ -83,36 +33,31 @@ namespace MyTrimmingNew2
             }
         }
 
-        private CutLineParameter CreateNewParameterCore(double newWidth, double newHeight)
+        protected override System.Windows.Point GetNewLeftTop(double newWidth, double newHeight)
         {
-            System.Windows.Point newRightTop = GetNewRightTop(newWidth);
-            System.Windows.Point newLeftBottom = GetNewLeftBottom(newHeight);
-            System.Windows.Point newRightBottom = GetNewRightBottom(newRightTop, newLeftBottom);
-            return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
+            return Before.LeftTop;
         }
 
-        private System.Windows.Point GetNewRightTop(double newWidth)
+        protected override System.Windows.Point GetNewRightTop(double newWidth, double newHeight)
         {
             return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.LeftTop.Y);
         }
 
-        private System.Windows.Point GetNewLeftBottom(double newHeight)
+        protected override System.Windows.Point GetNewLeftBottom(double newWidth, double newHeight)
         {
             return new System.Windows.Point(Before.LeftTop.X, Before.LeftTop.Y + newHeight);
         }
 
-        private System.Windows.Point GetNewRightBottom(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
+        protected override System.Windows.Point GetNewRightBottom(double newWidth, double newHeight)
         {
-            double xDist = newRightTop.X - Before.LeftTop.X;
-            double yDist = newRightTop.Y - Before.LeftTop.Y;
-            return new System.Windows.Point(newLeftBottom.X + xDist, newLeftBottom.Y + yDist);
+            return new System.Windows.Point(Before.LeftTop.X + newWidth, Before.RightTop.Y + newHeight);
         }
 
-        private CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
+        protected override CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
         {
             System.Windows.Point newRightTop = GetNewRightTopRotate(newWidth);
             System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newHeight);
-            System.Windows.Point newRightBottom = GetNewRightBottom(newRightTop, newLeftBottom);
+            System.Windows.Point newRightBottom = GetNewRightBottomRotate(newRightTop, newLeftBottom);
 
             if (DoStickOutImage(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom))
             {
@@ -146,7 +91,14 @@ namespace MyTrimmingNew2
             return new System.Windows.Point(x, y);
         }
 
-        private CutLineParameter CreateNewParameterWhenExchangeOrigin(double newWidth, double newHeight)
+        private System.Windows.Point GetNewRightBottomRotate(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
+        {
+            double xDist = newRightTop.X - Before.LeftTop.X;
+            double yDist = newRightTop.Y - Before.LeftTop.Y;
+            return new System.Windows.Point(newLeftBottom.X + xDist, newLeftBottom.Y + yDist);
+        }
+
+        protected override CutLineParameter CreateNewParameterWhenExchangeOrigin(double newWidth, double newHeight)
         {
             // 回転後に原点を変更するような大きなサイズ変更はしない
             if (Before.Degree == 0)
