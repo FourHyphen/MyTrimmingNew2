@@ -38,8 +38,10 @@ namespace MyTrimmingNew2
 
         private void CalcNewParameterWidthAndHeight(ref double newWidth, ref double newHeight)
         {
-            double distanceX = DropPoint.X - DragStart.X;
-            double distanceY = DropPoint.Y - DragStart.Y;
+            // 点によってドラッグ＆ドロップの方向と操作の拡大/縮小の方向が異なるので具象クラスに任せる
+            double distanceX = GetDistanceX(DragStart, DropPoint);
+            double distanceY = GetDistanceY(DragStart, DropPoint);
+
             double changeSizeY = Before.CalcHeightBaseWidth(distanceX);
             if (Math.Abs(changeSizeY) > Math.Abs(distanceY))
             {
@@ -52,6 +54,22 @@ namespace MyTrimmingNew2
                 newHeight += distanceY;
             }
         }
+
+        /// <summary>
+        /// ドラッグ＆ドロップ操作が拡大を意図しているなら＋値の距離を、縮小の意図なら－値の距離を返す
+        /// </summary>
+        /// <param name="dragStart"></param>
+        /// <param name="dropPoint"></param>
+        /// <returns></returns>
+        protected abstract double GetDistanceX(System.Windows.Point dragStart, System.Windows.Point dropPoint);
+
+        /// <summary>
+        /// ドラッグ＆ドロップ操作が拡大を意図しているなら＋値の距離を、縮小の意図なら－値の距離を返す
+        /// </summary>
+        /// <param name="dragStart"></param>
+        /// <param name="dropPoint"></param>
+        /// <returns></returns>
+        protected abstract double GetDistanceY(System.Windows.Point dragStart, System.Windows.Point dropPoint);
 
         private CutLineParameter CreateNewParameter(double newWidth, double newHeight)
         {

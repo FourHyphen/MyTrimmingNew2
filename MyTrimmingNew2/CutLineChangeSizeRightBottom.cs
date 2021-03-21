@@ -15,6 +15,16 @@ namespace MyTrimmingNew2
         {
         }
 
+        protected override double GetDistanceX(System.Windows.Point dragStart, System.Windows.Point dropPoint)
+        {
+            return DropPoint.X - DragStart.X;
+        }
+
+        protected override double GetDistanceY(System.Windows.Point dragStart, System.Windows.Point dropPoint)
+        {
+            return DropPoint.Y - DragStart.Y;
+        }
+
         protected override void AdjustWidthAndHeightIfOverShowingImage(ref double newWidth, ref double newHeight)
         {
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
