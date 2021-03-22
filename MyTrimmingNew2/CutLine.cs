@@ -76,9 +76,9 @@ namespace MyTrimmingNew2
             return (IsPointNear(Parameter.LeftTop, p));
         }
 
-        public bool IsPointNearRightTop(Point dragStart)
+        public bool IsPointNearRightTop(Point p)
         {
-            return false;
+            return (IsPointNear(Parameter.RightTop, p));
         }
 
         public bool IsPointNearRightBottom(Point p)
