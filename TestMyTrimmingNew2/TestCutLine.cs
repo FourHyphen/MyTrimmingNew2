@@ -406,6 +406,22 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
         }
 
+        [TestMethod]
+        public void TestIsPointNearRightTop()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            System.Windows.Point near = new System.Windows.Point(cl.RightTop.X - 10, cl.RightTop.Y - 10);
+            System.Windows.Point far = new System.Windows.Point(cl.RightTop.X - 21, cl.RightTop.Y - 21);
+            Assert.IsTrue(cl.IsPointNearRightTop(near));
+            Assert.IsFalse(cl.IsPointNearRightTop(far));
+
+            near = new System.Windows.Point(cl.RightTop.X + 10, cl.RightTop.Y + 10);
+            far = new System.Windows.Point(cl.RightTop.X + 21, cl.RightTop.Y + 21);
+            Assert.IsTrue(cl.IsPointNearRightTop(near));
+            Assert.IsFalse(cl.IsPointNearRightTop(far));
+        }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
