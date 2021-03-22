@@ -316,7 +316,7 @@ namespace TestMyTrimmingNew2
         }
 
         [TestMethod]
-        public void TestMoveCutLineOfKeyInputWithShift()
+        public void TestMoveCutLineOfCursolKeyInputWithShift()
         {
             // Shiftキー＋カーソルキーなら所定の幅を一気に移動する
             string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");

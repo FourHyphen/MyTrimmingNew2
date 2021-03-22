@@ -33,7 +33,7 @@ namespace MyTrimmingNew2
             if (modifierKeys == ModifierKeys.Shift)
             {
                 // TODO: 定数の外部管理化
-                // dist = num * 10;
+                dist = num * 10;
             }
             CalcMoveDistance(key, dist);
         }
