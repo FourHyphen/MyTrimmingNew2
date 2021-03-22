@@ -19,7 +19,8 @@ namespace MyTrimmingNew2
             if (IsPurposeMove(key))
             {
                 return new CutLineMove(cutLine, image, key, modifierKeys, keyInputNum);
-            } else if (IsPurposeRotate(key))
+            }
+            else if (IsPurposeRotate(key))
             {
                 return new CutLineRotate(cutLine, image, key, keyInputNum);
             }
@@ -50,6 +51,10 @@ namespace MyTrimmingNew2
             else if (cutLine.IsPointNearLeftTop(dragStart))
             {
                 return new CutLineChangeSizeLeftTop(cutLine, image, dragStart, dropPoint);
+            }
+            else if (cutLine.IsPointNearRightTop(dragStart))
+            {
+                return new CutLineChangeSizeRightTop(cutLine, image, dragStart, dropPoint);
             }
             else if (cutLine.IsPointInside(dragStart))
             {
