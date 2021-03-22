@@ -13,14 +13,29 @@ namespace MyTrimmingNew2
 
         private double YDirection { get; set; }
 
-        public CutLineMove(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base (cutLine, image)
+        public CutLineMove(CutLine cutLine,
+                           ShowingImage image,
+                           Key key,
+                           System.Windows.Input.ModifierKeys modifierKeys,
+                           int keyInputNum) : base (cutLine, image)
         {
-            CalcMoveDistance(key, keyInputNum);
+            CalcMoveDistance(key, modifierKeys, keyInputNum);
         }
 
         public CutLineMove(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point drop) : base(cutLine, image)
         {
             CalcMoveDistance(dragStart, drop);
+        }
+
+        private void CalcMoveDistance(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys, int num)
+        {
+            int dist = num;
+            if (modifierKeys == ModifierKeys.Shift)
+            {
+                // TODO: 定数の外部管理化
+                // dist = num * 10;
+            }
+            CalcMoveDistance(key, dist);
         }
 
         private void CalcMoveDistance(Key key, int num)

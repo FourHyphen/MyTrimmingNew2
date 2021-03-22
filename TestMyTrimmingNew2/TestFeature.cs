@@ -314,5 +314,31 @@ namespace TestMyTrimmingNew2
             Common.AreEqualRound(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
             Common.AreEqualRound(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight(), 1);    // 339.755と339.76の比較、この差は無視する
         }
+
+        [TestMethod]
+        public void TestMoveCutLineOfKeyInputWithShift()
+        {
+            // Shiftキー＋カーソルキーなら所定の幅を一気に移動する
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            // まず切り抜き線を適当に小さくし、左右に動けるスペースを作る
+            double moveX = 100;
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 1, System.Windows.Input.ModifierKeys.Shift);
+            Assert.AreEqual(expected: 10, actual: Driver.GetCutLineLeftTopX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1, System.Windows.Input.ModifierKeys.Shift);
+            Assert.AreEqual(expected: 10, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Left, 1, System.Windows.Input.ModifierKeys.Shift);
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Up, 1, System.Windows.Input.ModifierKeys.Shift);
+            Assert.AreEqual(expected: 0, actual: Driver.GetCutLineLeftTopY());
+        }
     }
 }

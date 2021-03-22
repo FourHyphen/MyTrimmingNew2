@@ -80,14 +80,15 @@ namespace MyTrimmingNew2
         private void MainWindowKeyDown(object sender, KeyEventArgs e)
         {
             System.Windows.Input.Key key = e.Key;
-            InputKey(key);
+            System.Windows.Input.ModifierKeys modifierKeys = e.KeyboardDevice.Modifiers;
+            InputKey(key, modifierKeys);
         }
 
-        private void InputKey(System.Windows.Input.Key key)
+        private void InputKey(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
             if (_CutLine != null)
             {
-                _CutLine.ExecuteCommand(key, 1);
+                _CutLine.ExecuteCommand(key, 1, modifierKeys);
                 CutLineDisplay.Update(this, _CutLine);
             }
         }

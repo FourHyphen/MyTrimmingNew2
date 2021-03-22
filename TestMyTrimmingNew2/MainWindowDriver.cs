@@ -166,11 +166,11 @@ namespace TestMyTrimmingNew2
             Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
         }
 
-        internal void EmurateInputKey(Key key, int num)
+        internal void EmurateInputKey(Key key, int num, ModifierKeys modifierKeys = ModifierKeys.None)
         {
             for (int i = 0; i < num; i++)
             {
-                MainWindow.InputKey(key);
+                MainWindow.InputKey(key, modifierKeys);
             }
         }
 

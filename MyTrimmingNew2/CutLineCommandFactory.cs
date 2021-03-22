@@ -10,11 +10,15 @@ namespace MyTrimmingNew2
     {
         private CutLineCommandFactory() { }
 
-        public static CutLineCommand Create(CutLine cutLine, ShowingImage image, System.Windows.Input.Key key, int keyInputNum)
+        public static CutLineCommand Create(CutLine cutLine,
+                                            ShowingImage image,
+                                            System.Windows.Input.Key key,
+                                            int keyInputNum,
+                                            System.Windows.Input.ModifierKeys modifierKeys = System.Windows.Input.ModifierKeys.None)
         {
             if (IsPurposeMove(key))
             {
-                return new CutLineMove(cutLine, image, key, keyInputNum);
+                return new CutLineMove(cutLine, image, key, modifierKeys, keyInputNum);
             } else if (IsPurposeRotate(key))
             {
                 return new CutLineRotate(cutLine, image, key, keyInputNum);
