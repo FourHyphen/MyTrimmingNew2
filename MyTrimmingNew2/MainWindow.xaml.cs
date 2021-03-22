@@ -88,7 +88,7 @@ namespace MyTrimmingNew2
         {
             if (_CutLine != null)
             {
-                _CutLine.ExecuteCommand(key, 1, modifierKeys);
+                _CutLine.ExecuteCommand(key, modifierKeys, 1);
                 CutLineDisplay.Update(this, _CutLine);
             }
         }

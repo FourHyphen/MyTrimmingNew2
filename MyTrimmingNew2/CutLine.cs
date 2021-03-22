@@ -46,9 +46,14 @@ namespace MyTrimmingNew2
             return new CutLineParameter(Parameter.LeftTop, Parameter.RightTop, Parameter.RightBottom, Parameter.LeftBottom, Parameter.Degree);
         }
 
-        public void ExecuteCommand(Key key, int keyInputNum = 1, System.Windows.Input.ModifierKeys modifierKeys = ModifierKeys.None)
+        public void ExecuteCommand(Key key, int keyInputNum = 1)
         {
-            CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage, key, keyInputNum, modifierKeys);
+            ExecuteCommand(key, ModifierKeys.None, keyInputNum);
+        }
+
+        public void ExecuteCommand(Key key, System.Windows.Input.ModifierKeys modifierKeys, int keyInputNum = 1)
+        {
+            CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage, key, modifierKeys, keyInputNum);
             ExecuteCommandCore(command);
         }
 

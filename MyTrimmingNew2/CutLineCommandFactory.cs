@@ -13,8 +13,8 @@ namespace MyTrimmingNew2
         public static CutLineCommand Create(CutLine cutLine,
                                             ShowingImage image,
                                             System.Windows.Input.Key key,
-                                            int keyInputNum,
-                                            System.Windows.Input.ModifierKeys modifierKeys = System.Windows.Input.ModifierKeys.None)
+                                            System.Windows.Input.ModifierKeys modifierKeys,
+                                            int keyInputNum)
         {
             if (IsPurposeMove(key))
             {
