@@ -385,7 +385,6 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestDoNotStickOutOfImageWhcnChangeSizeBaseLeftTop()
         {
-            // メッセージ：左上点操作すると現在画像からはみ出るのでそれの確認テストを実装
             ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
 
@@ -421,6 +420,30 @@ namespace TestMyTrimmingNew2
             far = new System.Windows.Point(cl.RightTop.X + 21, cl.RightTop.Y + 21);
             Assert.IsTrue(cl.IsPointNearRightTop(near));
             Assert.IsFalse(cl.IsPointNearRightTop(far));
+        }
+
+        [TestMethod]
+        public void TestDoNotStickOutOfImageWhcnChangeSizeBaseRightTop()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // x方向にはみ出さないテストの準備：小さくして右に少しのスペースを作る(上方向には拡大に十分なスペースを作る)
+            cl.ExecuteCommand(cl.RightBottom, new Point(cl.RightBottom.X - 300, cl.RightBottom.Y));
+            cl.ExecuteCommand(System.Windows.Input.Key.Right, 250);
+            cl.ExecuteCommand(System.Windows.Input.Key.Down, 200);
+
+            // x方向にはみ出さないテスト
+            cl.ExecuteCommand(cl.RightTop, new Point(cl.RightTop.X + 100, cl.RightTop.Y));
+            Assert.AreEqual(expected: si.Width, actual: cl.RightTop.X);
+
+            // y方向にはみ出さないテストの準備：上に寄せる(右方向には拡大に十分なスペースを作る)
+            cl.ExecuteCommand(System.Windows.Input.Key.Left, 300);
+            cl.ExecuteCommand(System.Windows.Input.Key.Up, 100);
+
+            // y方向にはみ出さないテスト
+            cl.ExecuteCommand(cl.RightTop, new Point(cl.RightTop.X, cl.RightTop.Y - 200));
+            Assert.AreEqual(expected: 0, actual: cl.RightTop.Y);
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
