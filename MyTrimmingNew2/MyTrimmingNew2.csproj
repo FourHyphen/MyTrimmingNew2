@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="CutLine.cs" />
     <Compile Include="CutLineChangeSize.cs" />
+    <Compile Include="CutLineChangeSizeLeftBottom.cs" />
     <Compile Include="CutLineChangeSizeLeftTop.cs" />
     <Compile Include="CutLineChangeSizeRightBottom.cs" />
     <Compile Include="CutLineChangeSizeRightTop.cs" />

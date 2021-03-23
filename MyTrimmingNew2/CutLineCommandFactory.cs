@@ -56,6 +56,10 @@ namespace MyTrimmingNew2
             {
                 return new CutLineChangeSizeRightTop(cutLine, image, dragStart, dropPoint);
             }
+            else if (cutLine.IsPointNearLeftBottom(dragStart))
+            {
+                return new CutLineChangeSizeLeftBottom(cutLine, image, dragStart, dropPoint);
+            }
             else if (cutLine.IsPointInside(dragStart))
             {
                 return new CutLineMove(cutLine, image, dragStart, dropPoint);

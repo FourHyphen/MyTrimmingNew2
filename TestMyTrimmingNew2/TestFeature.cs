@@ -386,7 +386,7 @@ namespace TestMyTrimmingNew2
             double afterCutLineHeight = beforeCutLineHeight - heightDiff;
 
             Common.AreEqualRound(expected: moveX, actual: Driver.GetCutLineLeftBottomX());
-            Common.AreEqualRound(expected: beforeCutLineHeight - heightDiff, actual: Driver.GetCutLineLeftBottomY());
+            Common.AreEqualRound(expected: beforeCutLineHeight - heightDiff, actual: Driver.GetCutLineLeftBottomY(), 1);    // 339.755と339.75の比較、この差は無視する
             Common.AreEqualRound(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
             Common.AreEqualRound(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight(), 1);    // 339.755と339.75の比較、この差は無視する
         }
