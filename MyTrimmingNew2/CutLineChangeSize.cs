@@ -88,6 +88,46 @@ namespace MyTrimmingNew2
 
         protected abstract void AdjustWidthAndHeightIfOverShowingImage(ref double newWidth, ref double newHeight);
 
+        protected void AdjustWidthAndHeightIfOverShowingImageWidthLeftSide(ref double newWidth, ref double newHeight)
+        {
+            double newLeft = Before.RightEnd - newWidth;
+            if (newLeft < 0)
+            {
+                newWidth = Before.RightEnd;
+                newHeight = Before.CalcHeightBaseWidth(newWidth);
+            }
+        }
+
+        protected void AdjustWidthAndHeightIfOverShowingImageWidthRightSide(ref double newWidth, ref double newHeight)
+        {
+            double newRight = Before.LeftEnd + newWidth;
+            if (newRight > MaxRight)
+            {
+                newWidth = MaxRight - Before.LeftEnd;
+                newHeight = Before.CalcHeightBaseWidth(newWidth);
+            }
+        }
+
+        protected void AdjustWidthAndHeightIfOverShowingImageHeightTopSide(ref double newWidth, ref double newHeight)
+        {
+            double newTop = Before.BottomEnd - newHeight;
+            if (newTop < 0)
+            {
+                newHeight = Before.BottomEnd;
+                newWidth = Before.CalcWidthBaseHeight(newHeight);
+            }
+        }
+
+        protected void AdjustWidthAndHeightIfOverShowingImageHeightBottomSide(ref double newWidth, ref double newHeight)
+        {
+            double newBottom = Before.TopEnd + newHeight;
+            if (newBottom > MaxBottom)
+            {
+                newHeight = MaxBottom - Before.TopEnd;
+                newWidth = Before.CalcWidthBaseHeight(Before.Height);
+            }
+        }
+
         private CutLineParameter CreateNewParameterNormal(double newWidth, double newHeight)
         {
             System.Windows.Point newLeftTop = GetNewLeftTop(newWidth, newHeight);

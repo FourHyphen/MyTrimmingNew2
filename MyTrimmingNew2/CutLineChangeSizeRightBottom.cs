@@ -28,19 +28,8 @@ namespace MyTrimmingNew2
         protected override void AdjustWidthAndHeightIfOverShowingImage(ref double newWidth, ref double newHeight)
         {
             // 拡大し過ぎると切り抜き線が画像をはみ出すのでその対応
-            double newRight = Before.LeftEnd + newWidth;
-            if (newRight > MaxRight)
-            {
-                newWidth = MaxRight - Before.LeftEnd;
-                newHeight = Before.CalcHeightBaseWidth(newWidth);
-            }
-
-            double newBottom = Before.TopEnd + newHeight;
-            if (newBottom > MaxBottom)
-            {
-                newHeight = MaxBottom - Before.TopEnd;
-                newWidth = Before.CalcWidthBaseHeight(Before.Height);
-            }
+            AdjustWidthAndHeightIfOverShowingImageWidthRightSide(ref newWidth, ref newHeight);
+            AdjustWidthAndHeightIfOverShowingImageHeightBottomSide(ref newWidth, ref newHeight);
         }
 
         protected override System.Windows.Point GetNewLeftTop(double newWidth, double newHeight)
