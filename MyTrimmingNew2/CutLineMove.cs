@@ -16,10 +16,10 @@ namespace MyTrimmingNew2
         public CutLineMove(CutLine cutLine,
                            ShowingImage image,
                            Key key,
-                           System.Windows.Input.ModifierKeys modifierKeys,
+                           System.Windows.Input.ModifierKeys modifierKey,
                            int keyInputNum) : base (cutLine, image)
         {
-            CalcMoveDistance(key, modifierKeys, keyInputNum);
+            CalcMoveDistance(key, modifierKey, keyInputNum);
         }
 
         public CutLineMove(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point drop) : base(cutLine, image)
@@ -27,10 +27,10 @@ namespace MyTrimmingNew2
             CalcMoveDistance(dragStart, drop);
         }
 
-        private void CalcMoveDistance(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys, int num)
+        private void CalcMoveDistance(Key key, ModifierKeys modifierKey, int num)
         {
             int dist = num;
-            if (modifierKeys == ModifierKeys.Shift)
+            if (modifierKey == ModifierKeys.Shift)
             {
                 // TODO: 定数の外部管理化
                 dist = num * 10;

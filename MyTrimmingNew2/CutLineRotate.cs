@@ -7,20 +7,30 @@ namespace MyTrimmingNew2
     {
         private double RotateDegree { get; set; }
 
-        public CutLineRotate(CutLine cutLine, ShowingImage image, Key key, int keyInputNum) : base(cutLine, image)
+        public CutLineRotate(CutLine cutLine,
+                             ShowingImage image,
+                             Key key,
+                             ModifierKeys modifierKey,
+                             int keyInputNum) : base(cutLine, image)
         {
-            CalcRotateDegree(key, keyInputNum);
+            CalcRotateDegree(key, modifierKey, keyInputNum);
         }
 
-        private void CalcRotateDegree(System.Windows.Input.Key key, int keyInputNum)
+        private void CalcRotateDegree(Key key, ModifierKeys modifierKey, int keyInputNum)
         {
+            int rate = 1;
+            if (modifierKey == ModifierKeys.Shift)
+            {
+                rate = 10;
+            }
+
             if (key == Key.OemPlus)
             {
-                RotateDegree = keyInputNum;
+                RotateDegree = keyInputNum * rate;
             }
             else if (key == Key.OemMinus)
             {
-                RotateDegree = -keyInputNum;
+                RotateDegree = -keyInputNum * rate;
             }
             else
             {

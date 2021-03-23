@@ -410,7 +410,7 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 20, actual: Driver.GetCutLineRotateDegree());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.OemMinus, 3, System.Windows.Input.ModifierKeys.Shift);
-            Assert.AreEqual(expected: -30, actual: Driver.GetCutLineRotateDegree());
+            Assert.AreEqual(expected: -10, actual: Driver.GetCutLineRotateDegree());
         }
     }
 }
