@@ -83,7 +83,7 @@ namespace MyTrimmingNew2
 
         public bool IsPointNearLeftBottom(Point p)
         {
-            return false;
+            return (IsPointNear(Parameter.LeftBottom, p));
         }
 
         public bool IsPointNearRightBottom(Point p)
