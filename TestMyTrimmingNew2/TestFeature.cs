@@ -390,5 +390,27 @@ namespace TestMyTrimmingNew2
             Common.AreEqualRound(expected: afterCutLineWidth, actual: Driver.GetCutLineWidth());
             Common.AreEqualRound(expected: afterCutLineHeight, actual: Driver.GetCutLineHeight(), 1);    // 339.755と339.75の比較、この差は無視する
         }
+
+        [TestMethod]
+        public void TestRotateCutLineOfCursolKeyInputWithShift()
+        {
+            // Shiftキー＋"+" or "-"キーなら所定の角度で一気に回転する
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            // まず切り抜き線を適当に小さくして中央に寄せ、回転できるスペースを作る
+            double moveX = 200;
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 10, System.Windows.Input.ModifierKeys.Shift);
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 8, System.Windows.Input.ModifierKeys.Shift);
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.OemPlus, 2, System.Windows.Input.ModifierKeys.Shift);
+            Assert.AreEqual(expected: 20, actual: Driver.GetCutLineRotateDegree());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.OemMinus, 3, System.Windows.Input.ModifierKeys.Shift);
+            Assert.AreEqual(expected: -30, actual: Driver.GetCutLineRotateDegree());
+        }
     }
 }
