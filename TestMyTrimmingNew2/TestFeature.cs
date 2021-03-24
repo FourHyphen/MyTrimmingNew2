@@ -408,6 +408,40 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: -10, actual: Driver.GetCutLineRotateDegree());
         }
 
+        [TestMethod]
+        public void TestUndoAndRedo()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            // 準備：回転、移動、サイズ変更できるよう適当に小さくして中央に寄せる
+            MakeSmallerAndMoveToCenter();
+
+            double beforeLeftTopX = Driver.GetCutLineLeftTopX();
+            double beforeLeftTopY = Driver.GetCutLineLeftTopY();
+            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 1);
+            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 1);
+            Assert.AreEqual(expected: beforeLeftTopX + 1, actual: Driver.GetCutLineLeftTopX());
+            Assert.AreEqual(expected: beforeLeftTopY + 1, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Z, 1);
+            Assert.AreEqual(expected: beforeLeftTopY, actual: Driver.GetCutLineLeftTopY());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Z, 1);
+            Assert.AreEqual(expected: beforeLeftTopX, actual: Driver.GetCutLineLeftTopX());
+
+            Driver.EmurateInputKey(System.Windows.Input.Key.Y, 1);
+            Assert.AreEqual(expected: beforeLeftTopX + 1, actual: Driver.GetCutLineLeftTopX());
+            Driver.EmurateInputKey(System.Windows.Input.Key.Y, 1);
+            Assert.AreEqual(expected: beforeLeftTopY + 1, actual: Driver.GetCutLineLeftTopY());
+
+            // 履歴の長さを超えて取り消そうとしたときの確認
+            Driver.EmurateInputKey(System.Windows.Input.Key.Z, 30);
+
+            // 履歴の長さを超えてやり直そうとしたときの確認
+            Driver.EmurateInputKey(System.Windows.Input.Key.Y, 50);
+        }
+
         private void MakeSmallerAndMoveToCenter()
         {
             double moveX = 200;
