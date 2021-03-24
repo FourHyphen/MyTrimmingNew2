@@ -399,18 +399,27 @@ namespace TestMyTrimmingNew2
             Driver.EmurateOpenImage(imagePath);
 
             // まず切り抜き線を適当に小さくして中央に寄せ、回転できるスペースを作る
-            double moveX = 200;
-            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
-            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
-            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
-            Driver.EmurateInputKey(System.Windows.Input.Key.Right, 10, System.Windows.Input.ModifierKeys.Shift);
-            Driver.EmurateInputKey(System.Windows.Input.Key.Down, 8, System.Windows.Input.ModifierKeys.Shift);
+            MakeSmallerAndMoveToCenter();
 
             Driver.EmurateInputKey(System.Windows.Input.Key.OemPlus, 2, System.Windows.Input.ModifierKeys.Shift);
             Assert.AreEqual(expected: 20, actual: Driver.GetCutLineRotateDegree());
 
             Driver.EmurateInputKey(System.Windows.Input.Key.OemMinus, 3, System.Windows.Input.ModifierKeys.Shift);
             Assert.AreEqual(expected: -10, actual: Driver.GetCutLineRotateDegree());
+        }
+
+        private void MakeSmallerAndMoveToCenter()
+        {
+            double moveX = 200;
+            System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
+            Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
+
+            double dragX = (Driver.GetCutLineRightTopX() - Driver.GetCutLineLeftTopX()) / 2.0;
+            double dragY = (Driver.GetCutLineRightTopY() - Driver.GetCutLineLeftTopY()) / 2.0;
+            double dropX = dragX + 100;
+            double dropY = dragY + 80;
+            Driver.EmurateShowingImageMouseDragAndDrop(new System.Windows.Point(dragX, dragY), new System.Windows.Point(dropX, dropY));
         }
     }
 }
