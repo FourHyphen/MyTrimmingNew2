@@ -14,6 +14,8 @@ namespace MyTrimmingNew2
 
         private CutLineParameter Parameter { get; set; }
 
+        private CutLineCommandHistory CommandHistory { get; set; } = new CutLineCommandHistory();
+
         private static double NearRange = 20.0;
 
         public double Width { get { return Parameter.Width; } }
@@ -53,8 +55,19 @@ namespace MyTrimmingNew2
 
         public void ExecuteCommand(Key key, System.Windows.Input.ModifierKeys modifierKeys, int keyInputNum = 1)
         {
-            CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage, key, modifierKeys, keyInputNum);
-            ExecuteCommandCore(command);
+            if (IsPurposeUndo(key, modifierKeys))
+            {
+                ExecuteUndo(keyInputNum);
+            }
+            else if (IsPurposeRedo(key, modifierKeys))
+            {
+                ExecuteRedo(keyInputNum);
+            }
+            else
+            {
+                CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage, key, modifierKeys, keyInputNum);
+                ExecuteCommandCore(command);
+            }
         }
 
         public void ExecuteCommand(Point dragStart, Point dropPoint)
@@ -67,8 +80,28 @@ namespace MyTrimmingNew2
         {
             if (command != null)
             {
-                Parameter = command.CalcNewParameter();
+                Parameter = CommandHistory.Execute(command);
             }
+        }
+
+        private bool IsPurposeUndo(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKey)
+        {
+            return (modifierKey == ModifierKeys.Control && key == Key.Z);
+        }
+
+        private void ExecuteUndo(int undoNum)
+        {
+            Parameter = CommandHistory.Undo(undoNum);
+        }
+
+        private bool IsPurposeRedo(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKey)
+        {
+            return (modifierKey == ModifierKeys.Control && key == Key.Y);
+        }
+
+        private void ExecuteRedo(int redoNum)
+        {
+            Parameter = CommandHistory.Redo(redoNum);
         }
 
         public bool IsPointNearLeftTop(Point p)

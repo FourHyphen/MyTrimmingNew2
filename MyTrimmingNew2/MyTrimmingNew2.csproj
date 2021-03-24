@@ -63,6 +63,7 @@
     <Compile Include="CutLineChangeSizeRightTop.cs" />
     <Compile Include="CutLineCommand.cs" />
     <Compile Include="CutLineCommandFactory.cs" />
+    <Compile Include="CutLineCommandHistory.cs" />
     <Compile Include="CutLineDisplay.cs" />
     <Compile Include="CutLineMove.cs" />
     <Compile Include="CutLineParameter.cs" />

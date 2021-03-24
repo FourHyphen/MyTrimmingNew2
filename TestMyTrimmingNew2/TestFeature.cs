@@ -424,22 +424,22 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: beforeLeftTopX + 1, actual: Driver.GetCutLineLeftTopX());
             Assert.AreEqual(expected: beforeLeftTopY + 1, actual: Driver.GetCutLineLeftTopY());
 
-            Driver.EmurateInputKey(System.Windows.Input.Key.Z, 1);
+            Undo(1);
             Assert.AreEqual(expected: beforeLeftTopY, actual: Driver.GetCutLineLeftTopY());
 
-            Driver.EmurateInputKey(System.Windows.Input.Key.Z, 1);
+            Undo(1);
             Assert.AreEqual(expected: beforeLeftTopX, actual: Driver.GetCutLineLeftTopX());
 
-            Driver.EmurateInputKey(System.Windows.Input.Key.Y, 1);
+            Redo(1);
             Assert.AreEqual(expected: beforeLeftTopX + 1, actual: Driver.GetCutLineLeftTopX());
-            Driver.EmurateInputKey(System.Windows.Input.Key.Y, 1);
+            Redo(1);
             Assert.AreEqual(expected: beforeLeftTopY + 1, actual: Driver.GetCutLineLeftTopY());
 
             // 履歴の長さを超えて取り消そうとしたときの確認
-            Driver.EmurateInputKey(System.Windows.Input.Key.Z, 30);
+            Undo(1);
 
             // 履歴の長さを超えてやり直そうとしたときの確認
-            Driver.EmurateInputKey(System.Windows.Input.Key.Y, 50);
+            Redo(50);
         }
 
         private void MakeSmallerAndMoveToCenter()
@@ -454,6 +454,16 @@ namespace TestMyTrimmingNew2
             double dropX = dragX + 100;
             double dropY = dragY + 80;
             Driver.EmurateShowingImageMouseDragAndDrop(new System.Windows.Point(dragX, dragY), new System.Windows.Point(dropX, dropY));
+        }
+
+        private void Undo(int undoNum)
+        {
+            Driver.EmurateInputKey(System.Windows.Input.Key.Z, undoNum, System.Windows.Input.ModifierKeys.Control);
+        }
+
+        private void Redo(int redoNum)
+        {
+            Driver.EmurateInputKey(System.Windows.Input.Key.Y, redoNum, System.Windows.Input.ModifierKeys.Control);
         }
     }
 }
