@@ -487,6 +487,59 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: si.Height, actual: cl.LeftBottom.Y);
         }
 
+        [TestMethod]
+        public void TestHistory()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // (1) 実際には変更しなかった操作の場合、それを履歴に残さないかのテスト
+            cl.ExecuteCommand(System.Windows.Input.Key.Down, 1);
+            cl.ExecuteCommand(System.Windows.Input.Key.Down, 1);
+
+            // 今param:                           ↓
+            // 履歴   :  [0] Key.Down  [1] Key.Down
+            double beforeWidth = cl.Width;
+            cl.ExecuteCommand(cl.RightBottom, new Point(cl.RightBottom.X - 200, cl.RightBottom.Y));    // ここの履歴に戻りたい
+            double afterWidth = cl.Width;
+
+            // 今param:                                                 ↓
+            // 履歴   :  [0] Key.Down  [1] Key.Down  [2] 右下点操作で縮小
+            cl.ExecuteCommand(System.Windows.Input.Key.Left, 1);    // 画像左側に接しているため実際には移動しない。よって履歴には残さないで欲しい
+
+            Undo(cl, 1);
+            // 今param:                            ↓
+            // 履歴   :  [0] Key.Down  [1] Key.Down  [2] 右下点操作で縮小
+            Assert.AreEqual(expected: beforeWidth, actual: cl.Width);    // 何も対処しない場合、Key.Leftの履歴に戻ることになってしまう
+
+            // (2) 開いた直後の状態に戻れるかのテスト
+            Undo(cl, 2);
+            // 今param:↓
+            // 履歴   :  [0] Key.Down  [1] Key.Down  [2] 右下点操作で縮小
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
+
+            // (3) 最新の状態に戻れるかのテスト
+            Redo(cl, 3);
+            // 今param:                                                  ↓
+            // 履歴   :  [0] Key.Down  [1] Key.Down  [2] 右下点操作で縮小
+            Assert.AreEqual(expected: afterWidth, actual: cl.Width);
+
+            // (4) 途中に操作を差し込んだときにかつての履歴を参照しないかのテスト
+            Undo(cl, 2);
+            // 今param:              ↓
+            // 履歴   :  [0] Key.Down  [1] Key.Down  [2] 右下点操作で縮小
+            cl.ExecuteCommand(cl.LeftTop, new Point(cl.LeftBottom.X + 200, cl.LeftBottom.Y));
+            // 今param:                                    ↓
+            // 履歴   :  [0] Key.Down  [1] 左下点操作で縮小
+            Redo(cl, 1);
+            Assert.AreEqual(expected: 1, actual: cl.LeftTop.Y);    // 何も対処しない場合、2回目のKey.Downの履歴に戻ることになるのでTop.Y = 2になってしまう
+
+            Undo(cl, 2);
+            // 今param:↓
+            // 履歴   :  [0] Key.Down  [1] 左下点操作で縮小
+            Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
@@ -541,6 +594,16 @@ namespace TestMyTrimmingNew2
                 return 0.0;
             }
             return yDiff / xDiff;
+        }
+
+        private void Undo(CutLine cutLine, int undoNum)
+        {
+            cutLine.ExecuteCommand(System.Windows.Input.Key.Z, System.Windows.Input.ModifierKeys.Control, undoNum);
+        }
+
+        private void Redo(CutLine cutLine, int redoNum)
+        {
+            cutLine.ExecuteCommand(System.Windows.Input.Key.Y, System.Windows.Input.ModifierKeys.Control, redoNum);
         }
     }
 }
