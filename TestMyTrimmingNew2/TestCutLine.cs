@@ -534,10 +534,19 @@ namespace TestMyTrimmingNew2
             Redo(cl, 1);
             Assert.AreEqual(expected: 1, actual: cl.LeftTop.Y);    // 何も対処しない場合、2回目のKey.Downの履歴に戻ることになるのでTop.Y = 2になってしまう
 
+            // (5) 途中で差し込んだ操作が実際には変更なかった場合はそれまでの履歴を保持するかのテスト
             Undo(cl, 2);
             // 今param:↓
             // 履歴   :  [0] Key.Down  [1] 左下点操作で縮小
             Assert.AreEqual(expected: 0, actual: cl.LeftTop.Y);
+
+            cl.ExecuteCommand(System.Windows.Input.Key.Up, 1);    // 実際には移動しないので今までの履歴を残してほしい
+            // 今param:↓
+            // 履歴   :  [0] Key.Down  [1] 左下点操作で縮小
+            Redo(cl, 1);
+            // 今param:              ↓
+            // 履歴   :  [0] Key.Down  [1] 左下点操作で縮小
+            Assert.AreEqual(expected: 1, actual: cl.LeftTop.Y);    // 何も対処しない場合、Key.Upの結果今までの履歴を消してしまい、Key.Down後の状態にならない
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
