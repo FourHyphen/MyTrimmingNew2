@@ -87,13 +87,44 @@ namespace MyTrimmingNew2
 
         public override bool Equals(object obj)
         {
-            CutLineParameter clp = (CutLineParameter)obj;
-            return Equals(clp);
+            try
+            {
+                return Equals((CutLineParameter)obj);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool Equals(CutLineParameter clp)
         {
-            return false;
+            if (!LeftTop.Equals(clp.LeftTop))
+            {
+                return false;
+            }
+
+            if (!RightTop.Equals(clp.RightTop))
+            {
+                return false;
+            }
+
+            if (!RightBottom.Equals(clp.RightBottom))
+            {
+                return false;
+            }
+
+            if (!LeftBottom.Equals(clp.LeftBottom))
+            {
+                return false;
+            }
+
+            if (Degree != clp.Degree)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
