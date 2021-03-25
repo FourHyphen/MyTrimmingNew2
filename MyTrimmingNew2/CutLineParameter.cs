@@ -84,5 +84,16 @@ namespace MyTrimmingNew2
         {
             return height * RatioWidth / RatioHeight;
         }
+
+        public override bool Equals(object obj)
+        {
+            CutLineParameter clp = (CutLineParameter)obj;
+            return Equals(clp);
+        }
+
+        private bool Equals(CutLineParameter clp)
+        {
+            return false;
+        }
     }
 }

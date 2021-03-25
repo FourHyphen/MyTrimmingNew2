@@ -549,6 +549,22 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: 1, actual: cl.LeftTop.Y);    // 何も対処しない場合、Key.Upの結果今までの履歴を消してしまい、Key.Down後の状態にならない
         }
 
+        [TestMethod]
+        public void TestEquals()
+        {
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLineParameter clp = new CutLineParameter(si);
+            ShowingImage si2 = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLineParameter clp2 = new CutLineParameter(si2);
+            ShowingImage si3 = CreateShowingImage("/Resource/test001.jpg", 700, 600);
+            CutLineParameter clp3 = new CutLineParameter(si3);
+
+            Assert.IsTrue(clp.Equals(clp2));
+            Assert.IsFalse(clp.Equals(clp3));
+            Assert.IsFalse(clp.Equals(si));
+            Assert.IsFalse(clp.Equals(null));
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
