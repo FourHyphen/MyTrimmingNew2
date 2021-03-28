@@ -125,6 +125,11 @@ namespace MyTrimmingNew2
 
         private void MenuSaveFileClick(object sender, RoutedEventArgs e)
         {
+            if (_OriginalImage == null)
+            {
+                return;
+            }
+
             string filePath = DialogSaveImageFile.Show(_OriginalImage);
             if (filePath != "")
             {
