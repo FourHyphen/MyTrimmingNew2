@@ -35,17 +35,22 @@ namespace MyTrimmingNew2
         public CutLine(ShowingImage showingImage)
         {
             _ShowingImage = showingImage;
-            Init();
-        }
-
-        private void Init()
-        {
-            Parameter = new CutLineParameter(_ShowingImage);
+            ExecuteCommandInit();
         }
 
         public CutLineParameter CloneParameter()
         {
+            if (Parameter == null)
+            {
+                return null;
+            }
             return new CutLineParameter(Parameter.LeftTop, Parameter.RightTop, Parameter.RightBottom, Parameter.LeftBottom, Parameter.Degree);
+        }
+
+        private void ExecuteCommandInit()
+        {
+            CutLineCommand command = CutLineCommandFactory.Create(this, _ShowingImage);
+            ExecuteCommandCore(command);
         }
 
         public void ExecuteCommand(Key key, int keyInputNum = 1)

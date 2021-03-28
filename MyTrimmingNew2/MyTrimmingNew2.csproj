@@ -65,6 +65,7 @@
     <Compile Include="CutLineCommandFactory.cs" />
     <Compile Include="CutLineCommandHistory.cs" />
     <Compile Include="CutLineDisplay.cs" />
+    <Compile Include="CutLineInit.cs" />
     <Compile Include="CutLineMove.cs" />
     <Compile Include="CutLineParameter.cs" />
     <Compile Include="CutLineRotate.cs" />

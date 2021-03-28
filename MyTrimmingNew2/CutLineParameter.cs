@@ -87,6 +87,11 @@ namespace MyTrimmingNew2
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
+
             try
             {
                 return Equals((CutLineParameter)obj);

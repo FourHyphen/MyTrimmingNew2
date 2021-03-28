@@ -10,6 +10,11 @@ namespace MyTrimmingNew2
     {
         private CutLineCommandFactory() { }
 
+        public static CutLineCommand Create(CutLine cutLine, ShowingImage image)
+        {
+            return new CutLineInit(cutLine, image);
+        }
+
         public static CutLineCommand Create(CutLine cutLine,
                                             ShowingImage image,
                                             System.Windows.Input.Key key,

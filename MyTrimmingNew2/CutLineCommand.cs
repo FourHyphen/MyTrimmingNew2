@@ -23,10 +23,9 @@ namespace MyTrimmingNew2
             MaxBottom = image.Height;
         }
 
-        public CutLineParameter CalcNewParameter()
+        public void CalcNewParameter()
         {
             After = CalcNewParameterCore();
-            return After;
         }
 
         protected abstract CutLineParameter CalcNewParameterCore();
