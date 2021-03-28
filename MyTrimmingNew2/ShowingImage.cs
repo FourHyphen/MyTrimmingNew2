@@ -62,6 +62,5 @@ namespace MyTrimmingNew2
             }
             return ratioBaseHeight;
         }
-
     }
 }
