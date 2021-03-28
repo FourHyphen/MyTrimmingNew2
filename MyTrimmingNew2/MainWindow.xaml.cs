@@ -17,6 +17,8 @@ namespace MyTrimmingNew2
 {
     public partial class MainWindow : Window
     {
+        private OriginalImage _OriginalImage { get; set; } = null;
+
         private CutLine _CutLine { get; set; } = null;
 
         private System.Windows.Point MouseDownPoint { get; set; }
@@ -55,9 +57,9 @@ namespace MyTrimmingNew2
 
         private void DisplayImage(string imagePath)
         {
-            OriginalImage originalImage = new OriginalImage(imagePath);
-            ShowingImage showingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
-            DisplayImageCore(originalImage, showingImage);
+            _OriginalImage = new OriginalImage(imagePath);
+            ShowingImage showingImage = new ShowingImage(_OriginalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
+            DisplayImageCore(_OriginalImage, showingImage);
             DisplayCutLine(showingImage);
         }
 
@@ -119,6 +121,20 @@ namespace MyTrimmingNew2
                     CutLineDisplay.Update(this, _CutLine);
                 }
             }
+        }
+
+        private void MenuSaveFileClick(object sender, RoutedEventArgs e)
+        {
+            string filePath = DialogSaveImageFile.Show(_OriginalImage);
+            if (filePath != "")
+            {
+                SaveImage(filePath);
+            }
+        }
+
+        private void SaveImage(string filePath)
+        {
+            // TODO: 実装
         }
     }
 }

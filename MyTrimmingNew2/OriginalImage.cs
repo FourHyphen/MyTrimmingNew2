@@ -32,5 +32,15 @@ namespace MyTrimmingNew2
                 }
             }
         }
+
+        public string GetSaveImageNameExample()
+        {
+            string fileName = System.IO.Path.GetFileName(Path);
+            string ext = System.IO.Path.GetExtension(fileName);
+            string fileNameBase = fileName.Replace(ext, "");
+
+            string example = fileNameBase + "_resize_" + ext;
+            return example;
+        }
     }
 }
