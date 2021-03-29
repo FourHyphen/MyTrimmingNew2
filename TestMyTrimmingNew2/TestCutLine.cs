@@ -571,6 +571,13 @@ namespace TestMyTrimmingNew2
             Assert.IsFalse(clp.Equals(null));
         }
 
+        [TestMethod]
+        [Ignore]
+        public void TestMoveByMouseWhenRotated()
+        {
+            // メッセージ：回転時のマウス移動が、矩形内ドラッグでも移動しなかったり矩形外ドラッグでも移動したりする
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
