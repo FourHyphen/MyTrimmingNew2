@@ -412,11 +412,11 @@ namespace TestMyTrimmingNew2
         {
             double moveX = 200;
             System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
-            System.Windows.Point drop = new System.Windows.Point(Driver.GetCutLineRightBottomX() - moveX, Driver.GetCutLineRightBottomY());
+            System.Windows.Point drop = new System.Windows.Point(drag.X - moveX, drag.Y);
             Driver.EmurateShowingImageMouseDragAndDrop(drag, drop);
 
-            double dragX = (Driver.GetCutLineRightTopX() - Driver.GetCutLineLeftTopX()) / 2.0;
-            double dragY = (Driver.GetCutLineRightTopY() - Driver.GetCutLineLeftTopY()) / 2.0;
+            double dragX = (Driver.GetCutLineLeftTopX() + Driver.GetCutLineRightBottomX()) / 2.0;
+            double dragY = (Driver.GetCutLineLeftTopY() + Driver.GetCutLineRightBottomY()) / 2.0;
             double dropX = dragX + 100;
             double dropY = dragY + 80;
             Driver.EmurateShowingImageMouseDragAndDrop(new System.Windows.Point(dragX, dragY), new System.Windows.Point(dropX, dropY));
