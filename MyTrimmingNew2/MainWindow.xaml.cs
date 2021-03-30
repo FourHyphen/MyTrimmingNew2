@@ -19,6 +19,8 @@ namespace MyTrimmingNew2
     {
         private OriginalImage _OriginalImage { get; set; } = null;
 
+        private ShowingImage _ShowingImage { get; set; } = null;
+
         private CutLine _CutLine { get; set; } = null;
 
         private System.Windows.Point MouseDownPoint { get; set; }
@@ -58,9 +60,9 @@ namespace MyTrimmingNew2
         private void DisplayImage(string imagePath)
         {
             _OriginalImage = new OriginalImage(imagePath);
-            ShowingImage showingImage = new ShowingImage(_OriginalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
-            DisplayImageCore(_OriginalImage, showingImage);
-            DisplayCutLine(showingImage);
+            _ShowingImage = new ShowingImage(_OriginalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
+            DisplayImageCore(_OriginalImage, _ShowingImage);
+            DisplayCutLine(_ShowingImage);
         }
 
         private void DisplayImageCore(OriginalImage originalImage, ShowingImage showingImage)
@@ -139,7 +141,19 @@ namespace MyTrimmingNew2
 
         private void SaveImage(string filePath)
         {
-            // TODO: 実装
+            ImageProcess.SaveImage(filePath,
+                                   _OriginalImage.Path,
+                                   _ShowingImage.ToOriginalScale(_CutLine.LeftTop),
+                                   _ShowingImage.ToOriginalScale(_CutLine.RightTop),
+                                   _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
+                                   _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
+                                   _CutLine.Degree);
         }
+
+        //using System.Windows.Forms;
+        //private static void ShowSaveResult(string message, string title)
+        //{
+        //    MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //}
     }
 }

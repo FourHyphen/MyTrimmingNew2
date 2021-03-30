@@ -12,6 +12,8 @@ namespace MyTrimmingNew2
         private int ImageAreaWidth { get; }
         private int ImageAreaHeight { get; }
 
+        public double Ratio { get; private set; }
+
         public BitmapSource Source { get; set; }
 
         public int Width
@@ -44,9 +46,9 @@ namespace MyTrimmingNew2
 
         private void CreateShowingImageSourceFitImageArea(OriginalImage image)
         {
-            double ratio = CalcRatioOfFittingImageAreaKeepingImageRatio(image.Width, image.Height);
-            double fitWidth = (double)image.Width * ratio;
-            double fitHeight = (double)image.Height * ratio;
+            Ratio = CalcRatioOfFittingImageAreaKeepingImageRatio(image.Width, image.Height);
+            double fitWidth = (double)image.Width * Ratio;
+            double fitHeight = (double)image.Height * Ratio;
             Source = ImageProcess.GetShowImage(image.Path, (int)fitWidth, (int)fitHeight);
         }
 
@@ -61,6 +63,11 @@ namespace MyTrimmingNew2
                 return ratioBaseWidth;
             }
             return ratioBaseHeight;
+        }
+
+        public System.Windows.Point ToOriginalScale(System.Windows.Point p)
+        {
+            return new System.Windows.Point(p.X / Ratio, p.Y / Ratio);
         }
     }
 }

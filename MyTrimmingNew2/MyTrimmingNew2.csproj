@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common.cs" />
     <Compile Include="CutLine.cs" />
     <Compile Include="CutLineChangeSize.cs" />
     <Compile Include="CutLineChangeSizeLeftBottom.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="CutLineRotate.cs" />
     <Compile Include="DialogSaveImageFile.cs" />
     <Compile Include="OriginalImage.cs" />
+    <Compile Include="RectLine.cs" />
     <Compile Include="ShowingImage.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
