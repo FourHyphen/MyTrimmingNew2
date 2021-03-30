@@ -572,10 +572,24 @@ namespace TestMyTrimmingNew2
         }
 
         [TestMethod]
-        [Ignore]
         public void TestMoveByMouseWhenRotated()
         {
-            // メッセージ：回転時のマウス移動が、矩形内ドラッグでも移動しなかったり矩形外ドラッグでも移動したりする
+            // 回転時のマウス移動が、矩形内ドラッグでも移動しなかったり矩形外ドラッグでも移動したりする
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 準備：状況再現できる矩形の状態にする
+            cl.ExecuteCommand(cl.RightBottom, new Point(cl.RightBottom.X - 600, cl.RightBottom.Y));
+            cl.ExecuteCommand(System.Windows.Input.Key.Right, 300);
+            cl.ExecuteCommand(System.Windows.Input.Key.Down, 200);
+            Rotate(cl, -30);
+            double beforeLeftTopX = cl.LeftTop.X;
+
+            System.Windows.Point drag = new Point((cl.LeftTop.X + cl.RightBottom.X) / 2.0, (cl.LeftTop.Y + cl.RightBottom.Y) / 2.0);
+            System.Windows.Point drop = new Point(drag.X + 100, drag.Y);
+            cl.ExecuteCommand(drag, drop);
+
+            Assert.AreEqual(expected: beforeLeftTopX + 100, actual: cl.LeftTop.X);
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
@@ -619,7 +633,7 @@ namespace TestMyTrimmingNew2
             }
             else
             {
-                cutLine.ExecuteCommand(System.Windows.Input.Key.OemMinus, degree);
+                cutLine.ExecuteCommand(System.Windows.Input.Key.OemMinus, Math.Abs(degree));
             }
         }
 
