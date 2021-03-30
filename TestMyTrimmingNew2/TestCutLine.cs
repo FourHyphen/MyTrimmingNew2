@@ -574,7 +574,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestMoveByMouseWhenRotated()
         {
-            // 回転時のマウス移動が、矩形内ドラッグでも移動しなかったり矩形外ドラッグでも移動したりする
+            // 回転時のマウス移動が、矩形内ドラッグでも移動しなかったり矩形外ドラッグでも移動したりするバグの修正
             ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
             CutLine cl = new CutLine(si);
 
