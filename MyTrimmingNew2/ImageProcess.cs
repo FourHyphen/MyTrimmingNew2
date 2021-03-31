@@ -64,12 +64,22 @@ namespace MyTrimmingNew2
         {
             if (degree == 0)
             {
-
+                SaveImageNotRotate(savePath, originalImagePath, leftTop, rightBottom);
             }
             else
             {
                 SaveImageRotate(savePath, originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
             }
+        }
+
+        private static void SaveImageNotRotate(string savePath,
+                                               string originalImagePath,
+                                               System.Windows.Point leftTop,
+                                               System.Windows.Point rightBottom)
+        {
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(originalImagePath);
+            System.Drawing.Bitmap saveBitmap = CreateTrimBitmapWithoutMargin(bitmap, (int)leftTop.X, (int)leftTop.Y, (int)rightBottom.X, (int)rightBottom.Y);
+            saveBitmap.Save(savePath);
         }
 
         private static void SaveImageRotate(string savePath,
