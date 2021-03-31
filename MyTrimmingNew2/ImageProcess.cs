@@ -62,6 +62,24 @@ namespace MyTrimmingNew2
                                      System.Windows.Point leftBottom,
                                      double degree)
         {
+            if (degree == 0)
+            {
+
+            }
+            else
+            {
+                SaveImageRotate(savePath, originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
+            }
+        }
+
+        private static void SaveImageRotate(string savePath,
+                                            string originalImagePath,
+                                            System.Windows.Point leftTop,
+                                            System.Windows.Point rightTop,
+                                            System.Windows.Point rightBottom,
+                                            System.Windows.Point leftBottom,
+                                            double degree)
+        {
             int minX, minY, maxX, maxY;
             System.Drawing.Bitmap trimBitmapWithMargin;
 
