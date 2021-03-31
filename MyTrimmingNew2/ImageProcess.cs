@@ -62,6 +62,41 @@ namespace MyTrimmingNew2
                                      System.Windows.Point leftBottom,
                                      double degree)
         {
+            int minX, minY, maxX, maxY;
+            System.Drawing.Bitmap trimBitmapWithMargin;
+
+            CreateTrimImageWithMargin(originalImagePath,
+                                      leftTop,
+                                      rightTop,
+                                      rightBottom,
+                                      leftBottom,
+                                      degree,
+                                      out trimBitmapWithMargin,
+                                      out minX,
+                                      out minY,
+                                      out maxX,
+                                      out maxY);
+
+            System.Drawing.Bitmap saveBitmap = CreateTrimBitmapWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
+            saveBitmap.Save(savePath);
+        }
+
+        private static void CreateTrimImageWithMargin(string originalImagePath,
+                                                      System.Windows.Point leftTop,
+                                                      System.Windows.Point rightTop,
+                                                      System.Windows.Point rightBottom,
+                                                      System.Windows.Point leftBottom,
+                                                      double degree,
+                                                      out System.Drawing.Bitmap trimBitmapWithMargin,
+                                                      out int minX,
+                                                      out int minY,
+                                                      out int maxX,
+                                                      out int maxY)
+        {
+            // 切り抜き画像作成(余白あり)
+            // trimBitmapWithMargin = 切り抜き線に沿って切り抜いた領域を、傾いてない画像として白いキャンバスに貼り付けた画像
+            // minおよびmax変数 = 白いキャンバスに存在する切り抜き後画像領域の場所
+
             // 回転パラメーター準備
             double centerX = Common.CalcCenterX(leftTop, rightBottom);
             double centerY = Common.CalcCenterY(leftBottom, rightTop);
@@ -69,14 +104,13 @@ namespace MyTrimmingNew2
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
 
-            // 切り抜き画像作成
             Bitmap bitmap = new Bitmap(originalImagePath);
-            Bitmap trimBitmap = new Bitmap(bitmap.Width, bitmap.Height);
             RectLine rectLine = new RectLine(leftTop, rightTop, rightBottom, leftBottom);
-            int minX = bitmap.Width;
-            int minY = bitmap.Height;
-            int maxX = 0;
-            int maxY = 0;
+            trimBitmapWithMargin = new Bitmap(bitmap.Width, bitmap.Height);
+            minX = bitmap.Width;
+            minY = bitmap.Height;
+            maxX = 0;
+            maxY = 0;
 
             for (int y = 0; y < bitmap.Height; y++)
             {
@@ -86,7 +120,7 @@ namespace MyTrimmingNew2
                     if (rectLine.IsInside(rotate))
                     {
                         System.Drawing.Color c = bitmap.GetPixel((int)rotate.X, (int)rotate.Y);
-                        trimBitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
+                        trimBitmapWithMargin.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
                         if (x < minX)
                         {
                             minX = x;
@@ -112,23 +146,21 @@ namespace MyTrimmingNew2
             maxY -= 1;
             minX += 1;
             minY += 1;
+        }
+
+        private static System.Drawing.Bitmap CreateTrimBitmapWithoutMargin(Bitmap bitmap,
+                                                                           int minX,
+                                                                           int minY,
+                                                                           int maxX,
+                                                                           int maxY)
+        {
             int width = maxX - minX;
             int height = maxY - minY;
 
-            System.Drawing.Bitmap saveBitmap = CreateTrimBitmap(trimBitmap, minX, minY, width, height);
-            saveBitmap.Save(savePath);
-        }
-
-        private static System.Drawing.Bitmap CreateTrimBitmap(Bitmap bitmap,
-                                                              int originX,
-                                                              int originY,
-                                                              int trimWidth,
-                                                              int trimHeight)
-        {
-            Bitmap trimBitmap = new Bitmap(trimWidth, trimHeight);
+            Bitmap trimBitmap = new Bitmap(width, height);
             Graphics g = Graphics.FromImage(trimBitmap);
-            Rectangle trim = new Rectangle(originX, originY, trimWidth, trimHeight);
-            Rectangle draw = new Rectangle(0, 0, trimWidth, trimHeight);
+            Rectangle trim = new Rectangle(minX, minY, width, height);
+            Rectangle draw = new Rectangle(0, 0, width, height);
             g.DrawImage(bitmap, draw, trim, GraphicsUnit.Pixel);
             g.Dispose();
 
