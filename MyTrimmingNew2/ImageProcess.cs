@@ -140,12 +140,6 @@ namespace MyTrimmingNew2
                     }
                 }
             }
-
-            // 予備実験の結果、端1pixel分は計算誤差として無視した方が良いと判断した
-            maxX -= 1;
-            maxY -= 1;
-            minX += 1;
-            minY += 1;
         }
 
         private static System.Drawing.Bitmap CreateTrimBitmapWithoutMargin(Bitmap bitmap,
