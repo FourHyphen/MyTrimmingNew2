@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -81,7 +82,7 @@ namespace MyTrimmingNew2
             CutLineDisplay.Update(this, _CutLine);
         }
 
-        private void MainWindowKeyDown(object sender, KeyEventArgs e)
+        private void MainWindowKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             System.Windows.Input.Key key = e.Key;
             System.Windows.Input.ModifierKeys modifierKeys = e.KeyboardDevice.Modifiers;
@@ -141,19 +142,26 @@ namespace MyTrimmingNew2
 
         private void SaveImage(string filePath)
         {
-            ImageProcess.SaveImage(filePath,
-                                   _OriginalImage.Path,
-                                   _ShowingImage.ToOriginalScale(_CutLine.LeftTop),
-                                   _ShowingImage.ToOriginalScale(_CutLine.RightTop),
-                                   _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
-                                   _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
-                                   _CutLine.Degree);
+            try
+            {
+                ImageProcess.SaveImage(filePath,
+                                       _OriginalImage.Path,
+                                       _ShowingImage.ToOriginalScale(_CutLine.LeftTop),
+                                       _ShowingImage.ToOriginalScale(_CutLine.RightTop),
+                                       _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
+                                       _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
+                                       _CutLine.Degree);
+                ShowSaveResult("画像の保存に成功しました。", "Info");
+            }
+            catch
+            {
+                ShowSaveResult("画像の保存に失敗しました。再度保存してください。", "Error");
+            }
         }
 
-        //using System.Windows.Forms;
-        //private static void ShowSaveResult(string message, string title)
-        //{
-        //    MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //}
+        private static void ShowSaveResult(string message, string title)
+        {
+            System.Windows.Forms.MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
