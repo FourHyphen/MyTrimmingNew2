@@ -15,9 +15,10 @@
 
         <Grid Column="0">
             <Image Name="PreviewImage"
-                    Panel.ZIndex="0"
-                    Stretch="None"
-                    VerticalAlignment="Top"/>
+                   HorizontalAlignment="Left"
+                   Panel.ZIndex="0"
+                   Stretch="None"
+                   VerticalAlignment="Top"/>
         </Grid>
 
         <Grid Column="1">
