@@ -429,6 +429,19 @@ namespace TestMyTrimmingNew2
             }
         }
 
+        [TestMethod]
+        public void TestDisplayCutSizeWidthAndHeight()
+        {
+            // 切り抜いて保存する画像のサイズを画面に表示する
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+
+            double ansWidth = Driver.GetOriginalImageWidth();
+            double ansHeight = ansWidth * 9.0 / 16.0;
+            Common.AreEqualRound(ansWidth, Driver.GetCutSizeWidth());
+            Common.AreEqualRound(ansHeight, Driver.GetCutSizeHeight(), 2);
+        }
+
         private void MakeSmallerAndMoveToCenter()
         {
             double moveX = 200;

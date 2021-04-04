@@ -30,6 +30,8 @@ namespace TestMyTrimmingNew2
         private LabelAdapter CutLineRightBottomX { get; }
         private LabelAdapter CutLineRightBottomY { get; }
         private LabelAdapter CutLineRotateDegree { get; }
+        private LabelAdapter CutSizeWidth { get; }
+        private LabelAdapter CutSizeHeight { get; }
 
         public MainWindowDriver(dynamic mainWindow)
         {
@@ -52,6 +54,8 @@ namespace TestMyTrimmingNew2
             CutLineRightBottomX = new LabelAdapter("CutLineRightBottomX");
             CutLineRightBottomY = new LabelAdapter("CutLineRightBottomY");
             CutLineRotateDegree = new LabelAdapter("CutLineRotateDegree");
+            CutSizeWidth = new LabelAdapter("CutSizeWidth");
+            CutSizeHeight = new LabelAdapter("CutSizeHeight");
         }
 
         internal void EmurateOpenImage(string imagePath)
@@ -159,6 +163,18 @@ namespace TestMyTrimmingNew2
         {
             UpdateNowMainWindowStatus();
             return CutLineRotateDegree.ContentNum(Tree);
+        }
+
+        internal double GetCutSizeWidth()
+        {
+            UpdateNowMainWindowStatus();
+            return CutSizeWidth.ContentNum(Tree);
+        }
+
+        internal double GetCutSizeHeight()
+        {
+            UpdateNowMainWindowStatus();
+            return CutSizeHeight.ContentNum(Tree);
         }
 
         private void UpdateNowMainWindowStatus()
