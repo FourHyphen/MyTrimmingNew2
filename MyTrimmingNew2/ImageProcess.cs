@@ -200,5 +200,35 @@ namespace MyTrimmingNew2
 
             return trimBitmap;
         }
+
+        public static System.Windows.Media.Imaging.BitmapSource CreateTrimImage(string originalImagePath,
+                                                                        System.Windows.Point leftTop,
+                                                                        System.Windows.Point rightTop,
+                                                                        System.Windows.Point rightBottom,
+                                                                        System.Windows.Point leftBottom,
+                                                                        double degree,
+                                                                        int fitWidth,
+                                                                        int fitHeight,
+                                                                        out int willSaveWidth,
+                                                                        out int willSaveHeight)
+        {
+            System.Drawing.Bitmap trimBitmap = CreateTrimBitmap(originalImagePath,
+                                                                leftTop,
+                                                                rightTop,
+                                                                rightBottom,
+                                                                leftBottom,
+                                                                degree);
+            willSaveWidth = trimBitmap.Width;
+            willSaveHeight = trimBitmap.Height;
+
+            System.Drawing.Bitmap resize = new Bitmap(fitWidth, fitHeight);
+            using (Graphics g = Graphics.FromImage(resize))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.DrawImage(trimBitmap, 0, 0, fitWidth, fitHeight);
+            }
+
+            return CreateBitmapSourceImage(resize);
+        }
     }
 }

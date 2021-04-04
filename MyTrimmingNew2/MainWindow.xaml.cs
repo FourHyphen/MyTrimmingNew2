@@ -123,7 +123,7 @@ namespace MyTrimmingNew2
                 return;
             }
 
-            PreviewWindow = new Preview();
+            PreviewWindow = new Preview(_OriginalImage, _ShowingImage, _CutLine);
             PreviewWindow.Show();
         }
 

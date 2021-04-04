@@ -16,9 +16,28 @@ namespace MyTrimmingNew2
 {
     public partial class Preview : Window
     {
-        public Preview()
+        public Preview(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
             InitializeComponent();
+            Init(originalImage, showingImage, cutLine);
+        }
+
+        private void Init(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
+        {
+            int willSaveWidth, willSaveHeight;
+            ImageSource source = ImageProcess.CreateTrimImage(originalImage.Path,
+                                                           showingImage.ToOriginalScale(cutLine.LeftTop),
+                                                           showingImage.ToOriginalScale(cutLine.RightTop),
+                                                           showingImage.ToOriginalScale(cutLine.RightBottom),
+                                                           showingImage.ToOriginalScale(cutLine.LeftBottom),
+                                                           cutLine.Degree,
+                                                           (int)cutLine.Width,
+                                                           (int)cutLine.Height,
+                                                           out willSaveWidth,
+                                                           out willSaveHeight);
+            PreviewImage.Source = source;
+            TrimImageWidth.Content = willSaveWidth.ToString();
+            TrimImageHeight.Content = willSaveHeight.ToString();
         }
 
         private void PreviewWindowKeyDown(object sender, KeyEventArgs e)
