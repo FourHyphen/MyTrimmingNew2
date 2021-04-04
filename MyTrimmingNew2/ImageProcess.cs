@@ -217,16 +217,17 @@ namespace MyTrimmingNew2
             return trimBitmap;
         }
 
-        public static System.Windows.Media.Imaging.BitmapSource CreateTrimImage(string originalImagePath,
-                                                                                System.Windows.Point leftTop,
-                                                                                System.Windows.Point rightTop,
-                                                                                System.Windows.Point rightBottom,
-                                                                                System.Windows.Point leftBottom,
-                                                                                double degree,
-                                                                                int fitWidth,
-                                                                                int fitHeight,
-                                                                                out int willSaveWidth,
-                                                                                out int willSaveHeight)
+        public static void CreateTrimImage(string originalImagePath,
+                                           System.Windows.Point leftTop,
+                                           System.Windows.Point rightTop,
+                                           System.Windows.Point rightBottom,
+                                           System.Windows.Point leftBottom,
+                                           double degree,
+                                           int trimImageWidth,
+                                           int trimImageHeight,
+                                           out System.Windows.Media.Imaging.BitmapSource trimImage,
+                                           out int willSaveWidth,
+                                           out int willSaveHeight)
         {
             System.Drawing.Bitmap trimBitmap = CreateTrimBitmap(originalImagePath,
                                                                 leftTop,
@@ -237,10 +238,10 @@ namespace MyTrimmingNew2
             willSaveWidth = trimBitmap.Width;
             willSaveHeight = trimBitmap.Height;
 
-            using (System.Drawing.Bitmap resize = CreateResizeBitmap(trimBitmap, fitWidth, fitHeight))
+            using (System.Drawing.Bitmap resize = CreateResizeBitmap(trimBitmap, trimImageWidth, trimImageHeight))
             {
                 trimBitmap.Dispose();
-                return CreateBitmapSourceImage(resize);
+                trimImage = CreateBitmapSourceImage(resize);
             }
         }
     }

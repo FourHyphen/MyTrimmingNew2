@@ -25,22 +25,35 @@ namespace MyTrimmingNew2
         private void Init(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
             int willSaveWidth, willSaveHeight;
-            double showWidth = this.Width * 4.0 / 5.0;
-            double showHeight = showWidth * cutLine.Ratio;
+            BitmapSource source;
 
-            ImageSource source = ImageProcess.CreateTrimImage(originalImage.Path,
-                                                           showingImage.ToOriginalScale(cutLine.LeftTop),
-                                                           showingImage.ToOriginalScale(cutLine.RightTop),
-                                                           showingImage.ToOriginalScale(cutLine.RightBottom),
-                                                           showingImage.ToOriginalScale(cutLine.LeftBottom),
-                                                           cutLine.Degree,
-                                                           (int)showWidth,
-                                                           (int)showHeight,
-                                                           out willSaveWidth,
-                                                           out willSaveHeight);
+            CreatePreviewImage(originalImage, showingImage, cutLine, out source, out willSaveWidth, out willSaveHeight);
             PreviewImage.Source = source;
             TrimImageWidth.Content = willSaveWidth.ToString();
             TrimImageHeight.Content = willSaveHeight.ToString();
+        }
+
+        private void CreatePreviewImage(OriginalImage originalImage,
+                                        ShowingImage showingImage,
+                                        CutLine cutLine,
+                                        out BitmapSource source,
+                                        out int willSaveWidth,
+                                        out int willSaveHeight)
+        {
+            double showWidth = this.Width * 4.0 / 5.0;
+            double showHeight = showWidth * cutLine.Ratio;
+
+            ImageProcess.CreateTrimImage(originalImage.Path,
+                                         showingImage.ToOriginalScale(cutLine.LeftTop),
+                                         showingImage.ToOriginalScale(cutLine.RightTop),
+                                         showingImage.ToOriginalScale(cutLine.RightBottom),
+                                         showingImage.ToOriginalScale(cutLine.LeftBottom),
+                                         cutLine.Degree,
+                                         (int)showWidth,
+                                         (int)showHeight,
+                                         out source,
+                                         out willSaveWidth,
+                                         out willSaveHeight);
         }
 
         private void PreviewWindowKeyDown(object sender, KeyEventArgs e)
