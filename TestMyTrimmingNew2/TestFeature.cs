@@ -36,7 +36,6 @@ namespace TestMyTrimmingNew2
             TestProcess = Process.GetProcessById(TestApp.ProcessId);
             MainWindow = TestApp.Type("System.Windows.Application").Current.MainWindow;
             Driver = new MainWindowDriver(MainWindow);
-
             BeforeEnvironment = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Common.GetEnvironmentDirPath();
         }
@@ -46,6 +45,7 @@ namespace TestMyTrimmingNew2
         {
             TestApp.Dispose();
             TestProcess.CloseMainWindow();
+            TestProcess.Dispose();
 
             Environment.CurrentDirectory = BeforeEnvironment;
         }
@@ -408,6 +408,25 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: -10, actual: Driver.GetCutLineRotateDegree());
         }
 
+        [TestMethod]
+        public void TestPreviewWindow()
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            Driver.EmurateOpenImage(imagePath);
+            Driver.EmurateInputKey(System.Windows.Input.Key.P, 1, System.Windows.Input.ModifierKeys.Control);
+
+            PreviewDriver pd = new PreviewDriver(MainWindow, TestApp);
+            try
+            {
+                Assert.AreEqual(expected: Driver.GetOriginalImageWidth(), actual: pd.GetPreviewTrimImageWidth());
+            }
+            finally
+            {
+                // 後始末
+                ClosePreviewWindow(pd);
+            }
+        }
+
         private void MakeSmallerAndMoveToCenter()
         {
             double moveX = 200;
@@ -420,6 +439,11 @@ namespace TestMyTrimmingNew2
             double dropX = dragX + 100;
             double dropY = dragY + 80;
             Driver.EmurateShowingImageMouseDragAndDrop(new System.Windows.Point(dragX, dragY), new System.Windows.Point(dropX, dropY));
+        }
+
+        private void ClosePreviewWindow(PreviewDriver pd)
+        {
+            pd.EmurateInputKey(System.Windows.Input.Key.W, 1, System.Windows.Input.ModifierKeys.Control);
         }
     }
 }

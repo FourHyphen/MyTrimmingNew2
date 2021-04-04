@@ -73,6 +73,9 @@
     <Compile Include="CutLineRotate.cs" />
     <Compile Include="DialogSaveImageFile.cs" />
     <Compile Include="OriginalImage.cs" />
+    <Compile Include="Preview.xaml.cs">
+      <DependentUpon>Preview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RectLine.cs" />
     <Compile Include="ShowingImage.cs" />
     <Page Include="MainWindow.xaml">
@@ -88,6 +91,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Preview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageProcess.cs" />
