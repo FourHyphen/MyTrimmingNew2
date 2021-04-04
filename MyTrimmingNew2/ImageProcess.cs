@@ -12,17 +12,17 @@ namespace MyTrimmingNew2
         /// <returns></returns>
         public static System.Windows.Media.Imaging.BitmapSource GetShowImage(string imagePath, int width, int height)
         {
-            using (Bitmap resized = CreateResizeBitmap(imagePath, width, height))
+            using (Bitmap bitmap = new Bitmap(imagePath))
             {
-                return CreateBitmapSourceImage(resized);
+                return GetShowImage(bitmap, width, height);
             }
         }
 
-        private static Bitmap CreateResizeBitmap(string imagePath, int newWidth, int newHeight)
+        public static System.Windows.Media.Imaging.BitmapSource GetShowImage(Bitmap bitmap, int width, int height)
         {
-            using (Bitmap bitmap = new Bitmap(imagePath))
+            using (Bitmap resized = CreateResizeBitmap(bitmap, width, height))
             {
-                return CreateResizeBitmap(bitmap, newWidth, newHeight);
+                return CreateBitmapSourceImage(resized);
             }
         }
 
@@ -79,12 +79,12 @@ namespace MyTrimmingNew2
             saveBitmap.Dispose();
         }
 
-        private static System.Drawing.Bitmap CreateTrimBitmap(string originalImagePath,
-                                                              System.Windows.Point leftTop,
-                                                              System.Windows.Point rightTop,
-                                                              System.Windows.Point rightBottom,
-                                                              System.Windows.Point leftBottom,
-                                                              double degree)
+        public static System.Drawing.Bitmap CreateTrimBitmap(string originalImagePath,
+                                                             System.Windows.Point leftTop,
+                                                             System.Windows.Point rightTop,
+                                                             System.Windows.Point rightBottom,
+                                                             System.Windows.Point leftBottom,
+                                                             double degree)
         {
             if (degree == 0)
             {
@@ -215,34 +215,6 @@ namespace MyTrimmingNew2
             }
 
             return trimBitmap;
-        }
-
-        public static void CreateTrimImage(string originalImagePath,
-                                           System.Windows.Point leftTop,
-                                           System.Windows.Point rightTop,
-                                           System.Windows.Point rightBottom,
-                                           System.Windows.Point leftBottom,
-                                           double degree,
-                                           int trimImageWidth,
-                                           int trimImageHeight,
-                                           out System.Windows.Media.Imaging.BitmapSource trimImage,
-                                           out int willSaveWidth,
-                                           out int willSaveHeight)
-        {
-            System.Drawing.Bitmap trimBitmap = CreateTrimBitmap(originalImagePath,
-                                                                leftTop,
-                                                                rightTop,
-                                                                rightBottom,
-                                                                leftBottom,
-                                                                degree);
-            willSaveWidth = trimBitmap.Width;
-            willSaveHeight = trimBitmap.Height;
-
-            using (System.Drawing.Bitmap resize = CreateResizeBitmap(trimBitmap, trimImageWidth, trimImageHeight))
-            {
-                trimBitmap.Dispose();
-                trimImage = CreateBitmapSourceImage(resize);
-            }
         }
     }
 }

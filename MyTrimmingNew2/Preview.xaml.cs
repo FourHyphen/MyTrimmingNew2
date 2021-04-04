@@ -25,10 +25,10 @@ namespace MyTrimmingNew2
         private void Init(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
             int willSaveWidth, willSaveHeight;
-            BitmapSource source;
+            BitmapSource previewImage;
+            CreatePreviewImage(originalImage, showingImage, cutLine, out previewImage, out willSaveWidth, out willSaveHeight);
 
-            CreatePreviewImage(originalImage, showingImage, cutLine, out source, out willSaveWidth, out willSaveHeight);
-            PreviewImage.Source = source;
+            PreviewImage.Source = previewImage;
             TrimImageWidth.Content = willSaveWidth.ToString();
             TrimImageHeight.Content = willSaveHeight.ToString();
         }
@@ -40,20 +40,25 @@ namespace MyTrimmingNew2
                                         out int willSaveWidth,
                                         out int willSaveHeight)
         {
-            double showWidth = this.Width * 4.0 / 5.0;
-            double showHeight = showWidth * cutLine.Ratio;
+            // 1/1サイズを作成
+            System.Drawing.Bitmap trimBitmapOriginalScale = CreateTrimBitmap(originalImage, showingImage, cutLine);
+            willSaveWidth = trimBitmapOriginalScale.Width;
+            willSaveHeight = trimBitmapOriginalScale.Height;
 
-            ImageProcess.CreateTrimImage(originalImage.Path,
-                                         showingImage.ToOriginalScale(cutLine.LeftTop),
-                                         showingImage.ToOriginalScale(cutLine.RightTop),
-                                         showingImage.ToOriginalScale(cutLine.RightBottom),
-                                         showingImage.ToOriginalScale(cutLine.LeftBottom),
-                                         cutLine.Degree,
-                                         (int)showWidth,
-                                         (int)showHeight,
-                                         out source,
-                                         out willSaveWidth,
-                                         out willSaveHeight);
+            // プレビュー画面用に縮小
+            double showWidth = this.Width * 4.0 / 5.0;    // 画面配置Gridの比率
+            double showHeight = showWidth * cutLine.Ratio;
+            source = ImageProcess.GetShowImage(trimBitmapOriginalScale, (int)showWidth, (int)showHeight);
+        }
+
+        private System.Drawing.Bitmap CreateTrimBitmap(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
+        {
+            return ImageProcess.CreateTrimBitmap(originalImage.Path,
+                                                 showingImage.ToOriginalScale(cutLine.LeftTop),
+                                                 showingImage.ToOriginalScale(cutLine.RightTop),
+                                                 showingImage.ToOriginalScale(cutLine.RightBottom),
+                                                 showingImage.ToOriginalScale(cutLine.LeftBottom),
+                                                 cutLine.Degree);
         }
 
         private void PreviewWindowKeyDown(object sender, KeyEventArgs e)
