@@ -62,64 +62,76 @@ namespace MyTrimmingNew2
                                      System.Windows.Point leftBottom,
                                      double degree)
         {
-            if (degree == 0)
-            {
-                SaveImageNotRotate(savePath, originalImagePath, leftTop, rightBottom);
-            }
-            else
-            {
-                SaveImageRotate(savePath, originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
-            }
-        }
-
-        private static void SaveImageNotRotate(string savePath,
-                                               string originalImagePath,
-                                               System.Windows.Point leftTop,
-                                               System.Windows.Point rightBottom)
-        {
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(originalImagePath);
-            System.Drawing.Bitmap saveBitmap = CreateTrimBitmapWithoutMargin(bitmap, (int)leftTop.X, (int)leftTop.Y, (int)rightBottom.X, (int)rightBottom.Y);
+            System.Drawing.Bitmap saveBitmap = CreateTrimBitmap(originalImagePath,
+                                                                leftTop,
+                                                                rightTop,
+                                                                rightBottom,
+                                                                leftBottom,
+                                                                degree);
             saveBitmap.Save(savePath);
         }
 
-        private static void SaveImageRotate(string savePath,
-                                            string originalImagePath,
-                                            System.Windows.Point leftTop,
-                                            System.Windows.Point rightTop,
-                                            System.Windows.Point rightBottom,
-                                            System.Windows.Point leftBottom,
-                                            double degree)
+        private static System.Drawing.Bitmap CreateTrimBitmap(string originalImagePath,
+                                                              System.Windows.Point leftTop,
+                                                              System.Windows.Point rightTop,
+                                                              System.Windows.Point rightBottom,
+                                                              System.Windows.Point leftBottom,
+                                                              double degree)
+        {
+            if (degree == 0)
+            {
+                return CreateTrimBitmapCore(originalImagePath, leftTop, rightBottom);
+            }
+            else
+            {
+                return CreateTrimBitmapCore(originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
+            }
+        }
+
+        private static System.Drawing.Bitmap CreateTrimBitmapCore(string originalImagePath,
+                                                                  System.Windows.Point leftTop,
+                                                                  System.Windows.Point rightBottom)
+        {
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(originalImagePath);
+            return CreateTrimBitmapRotateWithoutMargin(bitmap, (int)leftTop.X, (int)leftTop.Y, (int)rightBottom.X, (int)rightBottom.Y);
+        }
+
+        private static System.Drawing.Bitmap CreateTrimBitmapCore(string originalImagePath,
+                                                                  System.Windows.Point leftTop,
+                                                                  System.Windows.Point rightTop,
+                                                                  System.Windows.Point rightBottom,
+                                                                  System.Windows.Point leftBottom,
+                                                                  double degree)
         {
             int minX, minY, maxX, maxY;
             System.Drawing.Bitmap trimBitmapWithMargin;
 
-            CreateTrimImageWithMargin(originalImagePath,
-                                      leftTop,
-                                      rightTop,
-                                      rightBottom,
-                                      leftBottom,
-                                      degree,
-                                      out trimBitmapWithMargin,
-                                      out minX,
-                                      out minY,
-                                      out maxX,
-                                      out maxY);
+            CreateTrimBitmapRotateWithMargin(originalImagePath,
+                                             leftTop,
+                                             rightTop,
+                                             rightBottom,
+                                             leftBottom,
+                                             degree,
+                                             out trimBitmapWithMargin,
+                                             out minX,
+                                             out minY,
+                                             out maxX,
+                                             out maxY);
 
-            System.Drawing.Bitmap saveBitmap = CreateTrimBitmapWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
-            saveBitmap.Save(savePath);
+            return CreateTrimBitmapRotateWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
         }
 
-        private static void CreateTrimImageWithMargin(string originalImagePath,
-                                                      System.Windows.Point leftTop,
-                                                      System.Windows.Point rightTop,
-                                                      System.Windows.Point rightBottom,
-                                                      System.Windows.Point leftBottom,
-                                                      double degree,
-                                                      out System.Drawing.Bitmap trimBitmapWithMargin,
-                                                      out int minX,
-                                                      out int minY,
-                                                      out int maxX,
-                                                      out int maxY)
+        private static void CreateTrimBitmapRotateWithMargin(string originalImagePath,
+                                                             System.Windows.Point leftTop,
+                                                             System.Windows.Point rightTop,
+                                                             System.Windows.Point rightBottom,
+                                                             System.Windows.Point leftBottom,
+                                                             double degree,
+                                                             out System.Drawing.Bitmap trimBitmapWithMargin,
+                                                             out int minX,
+                                                             out int minY,
+                                                             out int maxX,
+                                                             out int maxY)
         {
             // 切り抜き画像作成(余白あり)
             // trimBitmapWithMargin = 切り抜き線に沿って切り抜いた領域を、傾いてない画像として白いキャンバスに貼り付けた画像
@@ -170,11 +182,11 @@ namespace MyTrimmingNew2
             }
         }
 
-        private static System.Drawing.Bitmap CreateTrimBitmapWithoutMargin(Bitmap bitmap,
-                                                                           int minX,
-                                                                           int minY,
-                                                                           int maxX,
-                                                                           int maxY)
+        private static System.Drawing.Bitmap CreateTrimBitmapRotateWithoutMargin(Bitmap bitmap,
+                                                                                 int minX,
+                                                                                 int minY,
+                                                                                 int maxX,
+                                                                                 int maxY)
         {
             int width = maxX - minX;
             int height = maxY - minY;
