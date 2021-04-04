@@ -12,22 +12,29 @@ namespace MyTrimmingNew2
         /// <returns></returns>
         public static System.Windows.Media.Imaging.BitmapSource GetShowImage(string imagePath, int width, int height)
         {
-            Bitmap resized = CreateBitmap(imagePath, width, height);
-            return CreateBitmapSourceImage(resized);
+            using (Bitmap resized = CreateResizeBitmap(imagePath, width, height))
+            {
+                return CreateBitmapSourceImage(resized);
+            }
         }
 
-        private static Bitmap CreateBitmap(string imagePath, int newWidth, int newHeight)
+        private static Bitmap CreateResizeBitmap(string imagePath, int newWidth, int newHeight)
+        {
+            using (Bitmap bitmap = new Bitmap(imagePath))
+            {
+                return CreateResizeBitmap(bitmap, newWidth, newHeight);
+            }
+        }
+
+        private static System.Drawing.Bitmap CreateResizeBitmap(System.Drawing.Bitmap bitmap, int newWidth, int newHeight)
         {
             Bitmap reductionImage = new Bitmap(newWidth, newHeight);
 
             // 縮小画像作成(TODO: 最も画像劣化の少ない縮小アルゴリズムの選定)
-            using (Bitmap bitmap = new Bitmap(imagePath))
+            using (Graphics g = Graphics.FromImage(reductionImage))
             {
-                using (Graphics g = Graphics.FromImage(reductionImage))
-                {
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    g.DrawImage(bitmap, 0, 0, newWidth, newHeight);
-                }
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.DrawImage(bitmap, 0, 0, newWidth, newHeight);
             }
 
             return reductionImage;
@@ -69,6 +76,7 @@ namespace MyTrimmingNew2
                                                                 leftBottom,
                                                                 degree);
             saveBitmap.Save(savePath);
+            saveBitmap.Dispose();
         }
 
         private static System.Drawing.Bitmap CreateTrimBitmap(string originalImagePath,
@@ -92,8 +100,10 @@ namespace MyTrimmingNew2
                                                                   System.Windows.Point leftTop,
                                                                   System.Windows.Point rightBottom)
         {
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(originalImagePath);
-            return CreateTrimBitmapRotateWithoutMargin(bitmap, (int)leftTop.X, (int)leftTop.Y, (int)rightBottom.X, (int)rightBottom.Y);
+            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(originalImagePath))
+            {
+                return CreateTrimBitmapRotateWithoutMargin(bitmap, (int)leftTop.X, (int)leftTop.Y, (int)rightBottom.X, (int)rightBottom.Y);
+            }
         }
 
         private static System.Drawing.Bitmap CreateTrimBitmapCore(string originalImagePath,
@@ -118,7 +128,10 @@ namespace MyTrimmingNew2
                                              out maxX,
                                              out maxY);
 
-            return CreateTrimBitmapRotateWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
+            System.Drawing.Bitmap trimBitmap = CreateTrimBitmapRotateWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
+
+            trimBitmapWithMargin.Dispose();
+            return trimBitmap;
         }
 
         private static void CreateTrimBitmapRotateWithMargin(string originalImagePath,
@@ -180,6 +193,8 @@ namespace MyTrimmingNew2
                     }
                 }
             }
+
+            bitmap.Dispose();
         }
 
         private static System.Drawing.Bitmap CreateTrimBitmapRotateWithoutMargin(Bitmap bitmap,
@@ -192,25 +207,26 @@ namespace MyTrimmingNew2
             int height = maxY - minY;
 
             Bitmap trimBitmap = new Bitmap(width, height);
-            Graphics g = Graphics.FromImage(trimBitmap);
-            Rectangle trim = new Rectangle(minX, minY, width, height);
-            Rectangle draw = new Rectangle(0, 0, width, height);
-            g.DrawImage(bitmap, draw, trim, GraphicsUnit.Pixel);
-            g.Dispose();
+            using (Graphics g = Graphics.FromImage(trimBitmap))
+            {
+                Rectangle trim = new Rectangle(minX, minY, width, height);
+                Rectangle draw = new Rectangle(0, 0, width, height);
+                g.DrawImage(bitmap, draw, trim, GraphicsUnit.Pixel);
+            }
 
             return trimBitmap;
         }
 
         public static System.Windows.Media.Imaging.BitmapSource CreateTrimImage(string originalImagePath,
-                                                                        System.Windows.Point leftTop,
-                                                                        System.Windows.Point rightTop,
-                                                                        System.Windows.Point rightBottom,
-                                                                        System.Windows.Point leftBottom,
-                                                                        double degree,
-                                                                        int fitWidth,
-                                                                        int fitHeight,
-                                                                        out int willSaveWidth,
-                                                                        out int willSaveHeight)
+                                                                                System.Windows.Point leftTop,
+                                                                                System.Windows.Point rightTop,
+                                                                                System.Windows.Point rightBottom,
+                                                                                System.Windows.Point leftBottom,
+                                                                                double degree,
+                                                                                int fitWidth,
+                                                                                int fitHeight,
+                                                                                out int willSaveWidth,
+                                                                                out int willSaveHeight)
         {
             System.Drawing.Bitmap trimBitmap = CreateTrimBitmap(originalImagePath,
                                                                 leftTop,
@@ -221,14 +237,11 @@ namespace MyTrimmingNew2
             willSaveWidth = trimBitmap.Width;
             willSaveHeight = trimBitmap.Height;
 
-            System.Drawing.Bitmap resize = new Bitmap(fitWidth, fitHeight);
-            using (Graphics g = Graphics.FromImage(resize))
+            using (System.Drawing.Bitmap resize = CreateResizeBitmap(trimBitmap, fitWidth, fitHeight))
             {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                g.DrawImage(trimBitmap, 0, 0, fitWidth, fitHeight);
+                trimBitmap.Dispose();
+                return CreateBitmapSourceImage(resize);
             }
-
-            return CreateBitmapSourceImage(resize);
         }
     }
 }
