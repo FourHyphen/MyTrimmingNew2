@@ -25,14 +25,17 @@ namespace MyTrimmingNew2
         private void Init(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
             int willSaveWidth, willSaveHeight;
+            double showWidth = this.Width * 4.0 / 5.0;
+            double showHeight = showWidth * cutLine.Ratio;
+
             ImageSource source = ImageProcess.CreateTrimImage(originalImage.Path,
                                                            showingImage.ToOriginalScale(cutLine.LeftTop),
                                                            showingImage.ToOriginalScale(cutLine.RightTop),
                                                            showingImage.ToOriginalScale(cutLine.RightBottom),
                                                            showingImage.ToOriginalScale(cutLine.LeftBottom),
                                                            cutLine.Degree,
-                                                           (int)cutLine.Width,
-                                                           (int)cutLine.Height,
+                                                           (int)showWidth,
+                                                           (int)showHeight,
                                                            out willSaveWidth,
                                                            out willSaveHeight);
             PreviewImage.Source = source;

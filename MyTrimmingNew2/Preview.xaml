@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyTrimmingNew2"
         mc:Ignorable="d"
         PreviewKeyDown="PreviewWindowKeyDown"
-        Title="Preview" Height="600" Width="800">
+        Title="Preview" Height="640" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>

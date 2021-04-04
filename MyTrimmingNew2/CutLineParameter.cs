@@ -22,6 +22,8 @@ namespace MyTrimmingNew2
 
         public double Height { get { return CalcDistance(LeftBottom, LeftTop); } }
 
+        public double Ratio { get { return RatioHeight / RatioWidth; } }
+
         public double LeftEnd { get { return Math.Min(LeftTop.X, LeftBottom.X); } }
 
         public double TopEnd { get { return Math.Min(LeftTop.Y, RightTop.Y); } }

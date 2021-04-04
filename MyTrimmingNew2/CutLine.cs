@@ -22,6 +22,8 @@ namespace MyTrimmingNew2
 
         public double Height { get { return Parameter.Height; } }
 
+        public double Ratio { get { return Parameter.Ratio; } }
+
         public double Degree { get { return Parameter.Degree; } }
 
         public System.Windows.Point LeftTop { get { return Parameter.LeftTop; } }
