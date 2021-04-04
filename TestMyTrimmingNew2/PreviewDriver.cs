@@ -17,6 +17,8 @@ namespace TestMyTrimmingNew2
 
         public PreviewDriver(dynamic mainWindow, WindowsAppFriend app)
         {
+            // 本来はPreview画面を取得すべきだが知識不足でできなかったためMainWindowで代用
+            // (Preview画面を取得できればPreview.InputKey()に直接繋げられるためMainWindowのIsPurposeClosePreview()周りが不要になる)
             MainWindow = mainWindow;
             _WindowControl = WindowControl.FromZTop(app);
             Tree = TreeUtilityExtensions.LogicalTree(_WindowControl);

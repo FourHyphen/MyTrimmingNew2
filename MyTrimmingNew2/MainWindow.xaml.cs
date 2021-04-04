@@ -116,6 +116,17 @@ namespace MyTrimmingNew2
             return (key == Key.P && modifierKeys == ModifierKeys.Control);
         }
 
+        private void OpenPreviewWindow()
+        {
+            if (_OriginalImage == null)
+            {
+                return;
+            }
+
+            PreviewWindow = new Preview();
+            PreviewWindow.Show();
+        }
+
         private bool IsPurposeClosePreview(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
             if (PreviewWindow == null)
@@ -123,6 +134,15 @@ namespace MyTrimmingNew2
                 return false;
             }
             return PreviewWindow.IsPurposeClose(key, modifierKeys);
+        }
+
+        private void ClosePreviewWindow()
+        {
+            if (PreviewWindow != null)
+            {
+                PreviewWindow.Close();
+                PreviewWindow = null;
+            }
         }
 
         private void ShowingImageMouseDown(object sender, MouseButtonEventArgs e)
@@ -189,25 +209,6 @@ namespace MyTrimmingNew2
         private static void ShowSaveResult(string message, string title)
         {
             System.Windows.Forms.MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void OpenPreviewWindow()
-        {
-            if (_OriginalImage == null)
-            {
-                return;
-            }
-
-            PreviewWindow = new Preview();
-            PreviewWindow.Show();
-        }
-
-        private void ClosePreviewWindow()
-        {
-            if (PreviewWindow != null)
-            {
-                PreviewWindow.Close();
-            }
         }
     }
 }
