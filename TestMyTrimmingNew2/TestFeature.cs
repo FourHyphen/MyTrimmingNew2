@@ -416,9 +416,11 @@ namespace TestMyTrimmingNew2
             Driver.EmurateInputKey(System.Windows.Input.Key.P, 1, System.Windows.Input.ModifierKeys.Control);
 
             PreviewDriver pd = new PreviewDriver(MainWindow, TestApp);
+            double ansHeight = Driver.GetOriginalImageWidth() * 9.0 / 16.0;
             try
             {
                 Assert.AreEqual(expected: Driver.GetOriginalImageWidth(), actual: pd.GetPreviewTrimImageWidth());
+                Common.AreEqualRound(ansHeight, actual: pd.GetPreviewTrimImageHeight(), 2);
             }
             finally
             {

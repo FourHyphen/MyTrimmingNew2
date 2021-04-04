@@ -14,6 +14,7 @@ namespace TestMyTrimmingNew2
         private WindowControl _WindowControl { get; set; }
         private IWPFDependencyObjectCollection<System.Windows.DependencyObject> Tree { get; set; }
         private LabelAdapter PreviewTrimImageWidth { get; }
+        private LabelAdapter PreviewTrimImageHeight { get; }
 
         public PreviewDriver(dynamic mainWindow, WindowsAppFriend app)
         {
@@ -24,12 +25,19 @@ namespace TestMyTrimmingNew2
             Tree = TreeUtilityExtensions.LogicalTree(_WindowControl);
 
             PreviewTrimImageWidth = new LabelAdapter("TrimImageWidth");
+            PreviewTrimImageHeight = new LabelAdapter("TrimImageHeight");
         }
 
         internal double GetPreviewTrimImageWidth()
         {
             UpdateNowMainWindowStatus();
             return PreviewTrimImageWidth.ContentNum(Tree);
+        }
+
+        internal double GetPreviewTrimImageHeight()
+        {
+            UpdateNowMainWindowStatus();
+            return PreviewTrimImageHeight.ContentNum(Tree);
         }
 
         private void UpdateNowMainWindowStatus()
