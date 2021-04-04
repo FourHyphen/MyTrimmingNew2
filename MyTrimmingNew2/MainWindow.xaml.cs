@@ -95,11 +95,11 @@ namespace MyTrimmingNew2
         {
             if (_CutLine != null)
             {
-                if (IsPurposeShowPreview(key, modifierKeys))
+                if (AppKey.IsPurposeShowPreview(key, modifierKeys))
                 {
                     OpenPreviewWindow();
                 }
-                else if (IsPurposeClosePreview(key, modifierKeys))
+                else if (AppKey.IsPurposeClosePreview(key, modifierKeys))
                 {
                     ClosePreviewWindow();
                 }
@@ -111,11 +111,6 @@ namespace MyTrimmingNew2
             }
         }
 
-        private bool IsPurposeShowPreview(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
-        {
-            return (key == Key.P && modifierKeys == ModifierKeys.Control);
-        }
-
         private void OpenPreviewWindow()
         {
             if (_OriginalImage == null)
@@ -125,15 +120,6 @@ namespace MyTrimmingNew2
 
             PreviewWindow = new Preview(_OriginalImage, _ShowingImage, _CutLine);
             PreviewWindow.Show();
-        }
-
-        private bool IsPurposeClosePreview(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
-        {
-            if (PreviewWindow == null)
-            {
-                return false;
-            }
-            return PreviewWindow.IsPurposeClose(key, modifierKeys);
         }
 
         private void ClosePreviewWindow()

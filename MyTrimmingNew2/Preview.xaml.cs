@@ -49,15 +49,10 @@ namespace MyTrimmingNew2
 
         private void InputKey(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
-            if (IsPurposeClose(key, modifierKeys))
+            if (AppKey.IsPurposeClosePreview(key, modifierKeys))
             {
                 Close();
             }
-        }
-
-        public bool IsPurposeClose(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
-        {
-            return (key == Key.W && modifierKeys == ModifierKeys.Control);
         }
     }
 }

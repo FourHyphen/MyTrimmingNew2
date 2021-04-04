@@ -21,30 +21,16 @@ namespace MyTrimmingNew2
                                             System.Windows.Input.ModifierKeys modifierKey,
                                             int keyInputNum)
         {
-            if (IsPurposeMove(key))
+            if (AppKey.IsPurposeMove(key))
             {
                 return new CutLineMove(cutLine, image, key, modifierKey, keyInputNum);
             }
-            else if (IsPurposeRotate(key))
+            else if (AppKey.IsPurposeRotate(key))
             {
                 return new CutLineRotate(cutLine, image, key, modifierKey, keyInputNum);
             }
 
             return null;
-        }
-
-        private static bool IsPurposeMove(System.Windows.Input.Key key)
-        {
-            return (key == System.Windows.Input.Key.Up ||
-                    key == System.Windows.Input.Key.Down ||
-                    key == System.Windows.Input.Key.Right ||
-                    key == System.Windows.Input.Key.Left);
-        }
-
-        private static bool IsPurposeRotate(System.Windows.Input.Key key)
-        {
-            return (key == System.Windows.Input.Key.OemPlus ||
-                    key == System.Windows.Input.Key.OemMinus);
         }
 
         public static CutLineCommand Create(CutLine cutLine, ShowingImage image, System.Windows.Point dragStart, System.Windows.Point dropPoint)

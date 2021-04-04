@@ -60,11 +60,11 @@ namespace MyTrimmingNew2
 
         public void ExecuteCommand(Key key, System.Windows.Input.ModifierKeys modifierKeys, int keyInputNum = 1)
         {
-            if (IsPurposeUndo(key, modifierKeys))
+            if (AppKey.IsPurposeUndo(key, modifierKeys))
             {
                 ExecuteUndo(keyInputNum);
             }
-            else if (IsPurposeRedo(key, modifierKeys))
+            else if (AppKey.IsPurposeRedo(key, modifierKeys))
             {
                 ExecuteRedo(keyInputNum);
             }
@@ -89,19 +89,9 @@ namespace MyTrimmingNew2
             }
         }
 
-        private bool IsPurposeUndo(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKey)
-        {
-            return (modifierKey == ModifierKeys.Control && key == Key.Z);
-        }
-
         private void ExecuteUndo(int undoNum)
         {
             Parameter = CommandHistory.Undo(undoNum);
-        }
-
-        private bool IsPurposeRedo(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKey)
-        {
-            return (modifierKey == ModifierKeys.Control && key == Key.Y);
         }
 
         private void ExecuteRedo(int redoNum)

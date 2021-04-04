@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppKey.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="CutLine.cs" />
     <Compile Include="CutLineChangeSize.cs" />
