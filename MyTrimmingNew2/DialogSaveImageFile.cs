@@ -20,6 +20,7 @@ namespace MyTrimmingNew2
         private static SaveFileDialog CreateSaveFileDialog(OriginalImage image)
         {
             SaveFileDialog sfd = new SaveFileDialog();
+            sfd.InitialDirectory = System.IO.Path.GetDirectoryName(image.Path);
             sfd.FileName = image.GetSaveImageNameExample(sfd.InitialDirectory);
             sfd.Title = "保存先を指定してください";
             sfd.RestoreDirectory = true;
