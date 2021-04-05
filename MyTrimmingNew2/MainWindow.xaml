@@ -47,7 +47,7 @@
                 <Grid Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="4*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
@@ -73,6 +73,21 @@
                                    Content="0"/>
                                 <Label Content=" x 縦"/>
                                 <Label x:Name="ShowingImageHeight"
+                                   Content="0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <StackPanel>
+                            <Label Content=""/>
+                            <Label Content="保存画像サイズ(pixel)"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="横"/>
+                                <Label x:Name="CutSizeWidth"
+                                   Content="0"/>
+                                <Label Content=" x 縦"/>
+                                <Label x:Name="CutSizeHeight"
                                    Content="0"/>
                             </StackPanel>
                         </StackPanel>

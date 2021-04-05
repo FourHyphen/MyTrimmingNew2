@@ -81,7 +81,7 @@ namespace MyTrimmingNew2
         private void DisplayCutLine(ShowingImage image)
         {
             _CutLine = new CutLine(image);
-            CutLineDisplay.Update(this, _CutLine);
+            CutLineDisplay.Update(this, image, _CutLine);
         }
 
         private void MainWindowKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -106,7 +106,7 @@ namespace MyTrimmingNew2
                 else
                 {
                     _CutLine.ExecuteCommand(key, modifierKeys, 1);
-                    CutLineDisplay.Update(this, _CutLine);
+                    CutLineDisplay.Update(this, _ShowingImage, _CutLine);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace MyTrimmingNew2
                 if (mouseDown != GetMouseDownInitPoint())
                 {
                     _CutLine.ExecuteCommand(mouseDown, mouseUp);
-                    CutLineDisplay.Update(this, _CutLine);
+                    CutLineDisplay.Update(this, _ShowingImage, _CutLine);
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace MyTrimmingNew2
 {
     class CutLineDisplay
     {
-        internal static void Update(MainWindow main, CutLine cutLine)
+        internal static void Update(MainWindow main, ShowingImage showingImage, CutLine cutLine)
         {
             main.CutLine.Points[0] = cutLine.LeftTop;
             main.CutLine.Points[1] = cutLine.RightTop;
@@ -25,6 +25,9 @@ namespace MyTrimmingNew2
             main.CutLineWidth.Content = ToDisplayString(cutLine.Width);
             main.CutLineHeight.Content = ToDisplayString(cutLine.Height);
             main.CutLineRotateDegree.Content = ToDisplayString(cutLine.Degree);
+
+            main.CutSizeWidth.Content = ToDisplayString(cutLine.Width / showingImage.Ratio);
+            main.CutSizeHeight.Content = ToDisplayString(cutLine.Height / showingImage.Ratio);
         }
 
         private static void SetLabelCoordinate(System.Windows.Point p, Label labelX, Label labelY)
