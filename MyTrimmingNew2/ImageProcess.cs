@@ -217,7 +217,7 @@ namespace MyTrimmingNew2
             bitmap.Dispose();
         }
 
-        private static System.Drawing.Color GetPixelColorFakePixelMixing(Bitmap bitmap, System.Windows.Point rotate)
+        public static System.Drawing.Color GetPixelColorFakePixelMixing(Bitmap bitmap, System.Windows.Point rotate)
         {
             int x = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);
             int y = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);

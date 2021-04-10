@@ -40,5 +40,52 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: resizeWidth, actual: bsResize.PixelWidth);
             Assert.AreEqual(expected: resizeHeight, actual: bsResize.PixelHeight);
         }
+
+        [TestMethod]
+        public void TestFakePixelMixing()
+        {
+            // テスト作成時点の実際の計算結果を正とする
+            System.Drawing.Bitmap bitmap = CreateTestBitmap();
+
+            // (1) 中央
+            System.Windows.Point rotate = new System.Windows.Point(1, 1);
+            System.Drawing.Color c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            Assert.AreEqual(expected: System.Drawing.Color.FromArgb(100, 75, 100), actual: c);
+
+            // (2) 左上方向
+            rotate = new System.Windows.Point(0.8, 0.9);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            Assert.AreEqual(expected: System.Drawing.Color.FromArgb(72, 62, 87), actual: c);
+
+            // (3) 右上方向
+            rotate = new System.Windows.Point(1.3, 0.7);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            Assert.AreEqual(expected: System.Drawing.Color.FromArgb(138, 55, 80), actual: c);
+
+            // (4) 左下方向
+            rotate = new System.Windows.Point(0.6, 1.4);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            Assert.AreEqual(expected: System.Drawing.Color.FromArgb(55, 97, 122), actual: c);
+
+            // (5) 右下方向
+            rotate = new System.Windows.Point(1.2, 1.1);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            Assert.AreEqual(expected: System.Drawing.Color.FromArgb(127, 87, 112), actual: c);
+        }
+
+        private System.Drawing.Bitmap CreateTestBitmap()
+        {
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(3, 3);
+            bitmap.SetPixel(0, 0, System.Drawing.Color.FromArgb(0, 25, 50));
+            bitmap.SetPixel(0, 1, System.Drawing.Color.FromArgb(0, 75, 100));
+            bitmap.SetPixel(0, 2, System.Drawing.Color.FromArgb(0, 125, 150));
+            bitmap.SetPixel(1, 0, System.Drawing.Color.FromArgb(100, 25, 50));
+            bitmap.SetPixel(1, 1, System.Drawing.Color.FromArgb(100, 75, 100));
+            bitmap.SetPixel(1, 2, System.Drawing.Color.FromArgb(100, 125, 150));
+            bitmap.SetPixel(2, 0, System.Drawing.Color.FromArgb(200, 25, 50));
+            bitmap.SetPixel(2, 1, System.Drawing.Color.FromArgb(200, 75, 100));
+            bitmap.SetPixel(2, 2, System.Drawing.Color.FromArgb(200, 125, 150));
+            return bitmap;
+        }
     }
 }
