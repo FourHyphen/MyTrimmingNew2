@@ -40,8 +40,6 @@ namespace MyTrimmingNew2
 
         private void Init()
         {
-            ImageAreaWidth.Content = ((int)ImageArea.ActualWidth).ToString();
-            ImageAreaHeight.Content = ((int)ImageArea.ActualHeight).ToString();
             MouseDownPoint = GetMouseDownInitPoint();
         }
 
@@ -63,8 +61,13 @@ namespace MyTrimmingNew2
         private void DisplayImage(string imagePath)
         {
             _OriginalImage = new OriginalImage(imagePath);
-            _ShowingImage = new ShowingImage(_OriginalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
-            DisplayImageCore(_OriginalImage, _ShowingImage);
+            DisplayImage(_OriginalImage);
+        }
+
+        private void DisplayImage(OriginalImage originalImage)
+        {
+            _ShowingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
+            DisplayImageCore(originalImage, _ShowingImage);
             DisplayCutLine(_ShowingImage);
         }
 
@@ -111,10 +114,24 @@ namespace MyTrimmingNew2
             }
         }
 
+        private void MainWindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double width = e.NewSize.Width;
+            double height = e.NewSize.Height;
+            ChangeWindowSize((int)width, (int)height);
+        }
+
         private void ChangeWindowSize(int width, int height)
         {
             this.Width = width;
             this.Height = height;
+            ImageAreaWidth.Content = ((int)ImageArea.ActualWidth).ToString();
+            ImageAreaHeight.Content = ((int)ImageArea.ActualHeight).ToString();
+
+            if (_OriginalImage != null)
+            {
+                DisplayImage(_OriginalImage);
+            }
         }
 
         private void OpenPreviewWindow()

@@ -440,10 +440,11 @@ namespace TestMyTrimmingNew2
         {
             // 画面サイズ変更テスト
             OpenImage("/Resource/test001.jpg");
-
-            double ansWidth = 1000.0;
+            int windowWidth = 1000;
+            int windowHeight = 800;
+            double ansWidth = 821.0;
             double ansHeight = ansWidth * 9.0 / 16.0;
-            Driver.EmurateChangeWindowSize((int)ansWidth, 800);
+            Driver.EmurateChangeWindowSize(windowWidth, windowHeight);
             Common.AreEqualRound(ansWidth, Driver.GetCutLineWidth());
             Common.AreEqualRound(ansHeight, Driver.GetCutLineHeight());
         }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MyTrimmingNew2"
         mc:Ignorable="d"
         Loaded="MainWindowLoaded"
+        SizeChanged="MainWindowSizeChanged"
         PreviewKeyDown="MainWindowKeyDown"
         Title="MainWindow" Height="600" Width="800">
     <Grid>
