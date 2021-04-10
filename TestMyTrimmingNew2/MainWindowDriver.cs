@@ -194,5 +194,10 @@ namespace TestMyTrimmingNew2
         {
             MainWindow.ShowingImageMouseUp(drag, drop);
         }
+
+        internal void EmurateChangeWindowSize(int width, int height)
+        {
+            MainWindow.ChangeWindowSize(width, height);
+        }
     }
 }

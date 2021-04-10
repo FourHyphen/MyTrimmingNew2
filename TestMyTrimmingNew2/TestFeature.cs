@@ -53,8 +53,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestSuccessImageOpen()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             Assert.AreEqual(expected: 3840, actual: Driver.GetOriginalImageWidth());
             Assert.AreEqual(expected: 2560, actual: Driver.GetOriginalImageHeight());
 
@@ -67,8 +67,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestDisplayCutLineOfImageWidthLongerThanHeight()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
 
             double cutLineWidth = Driver.GetCutLineWidth();
             double cutLineHeight = Driver.GetCutLineHeight();
@@ -80,8 +79,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestDisplayCutLineOfImageHeightLongerThanWidth()
         {
-            string imagePath2 = Common.GetFilePathOfDependentEnvironment("/Resource/test002.jpg");
-            Driver.EmurateOpenImage(imagePath2);
+            OpenImage("/Resource/test002.jpg");
 
             double cutLineWidth = Driver.GetCutLineWidth();
             double cutLineHeight = Driver.GetCutLineHeight();
@@ -94,8 +92,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestMoveCutLineWhenInputCursolKeyUpAndDown()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double maxBottom = Driver.GetShowingImageHeight();
             double maxTop = maxBottom - Driver.GetCutLineHeight();
 
@@ -122,8 +120,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestChangeOfCutLineSizeWhenMouseDragAndDropRightBottom()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double beforeCutLineWidth = Driver.GetCutLineWidth();
             double beforeCutLineHeight = Driver.GetCutLineHeight();
 
@@ -149,8 +147,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestMoveCutLineWhenInputCursolKeyLeftAnRight()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double moveX = 50;
             double minLeft = 0;
             double maxLeft = moveX;
@@ -181,8 +179,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestMoveCutLineByMouseDragAndDrop()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double moveX = 50;
             double minLeft = 0;
             double maxRight = Driver.GetShowingImageWidth();
@@ -228,8 +226,7 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestRotateCutLine()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
 
             // まず切り抜き線を適当に小さくして中央に寄せ、回転できるスペースを作る
             System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
@@ -261,8 +258,7 @@ namespace TestMyTrimmingNew2
         public void TestCutLineIsInsideImageWhenMoveAfterRotate()
         {
             // 回転後の矩形の移動で画像からはみ出ないことを確認するテスト
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
 
             // 準備
             System.Windows.Point drag = new System.Windows.Point(Driver.GetCutLineRightBottomX(), Driver.GetCutLineRightBottomY());
@@ -293,8 +289,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestChangeOfCutLineSizeWhenMouseDragAndDropLeftTop()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double beforeCutLineWidth = Driver.GetCutLineWidth();
             double beforeCutLineHeight = Driver.GetCutLineHeight();
 
@@ -319,8 +315,7 @@ namespace TestMyTrimmingNew2
         public void TestMoveCutLineOfCursolKeyInputWithShift()
         {
             // Shiftキー＋カーソルキーなら所定の幅を一気に移動する
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
 
             // まず切り抜き線を適当に小さくし、左右に動けるスペースを作る
             double moveX = 100;
@@ -344,8 +339,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestChangeOfCutLineSizeWhenMouseDragAndDropRightTop()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double beforeCutLineWidth = Driver.GetCutLineWidth();
             double beforeCutLineHeight = Driver.GetCutLineHeight();
 
@@ -369,8 +364,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestChangeOfCutLineSizeWhenMouseDragAndDropLeftBottom()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             double beforeCutLineWidth = Driver.GetCutLineWidth();
             double beforeCutLineHeight = Driver.GetCutLineHeight();
 
@@ -395,8 +390,7 @@ namespace TestMyTrimmingNew2
         public void TestRotateCutLineOfCursolKeyInputWithShift()
         {
             // Shiftキー＋"+" or "-"キーなら所定の角度で一気に回転する
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
 
             // まず切り抜き線を適当に小さくして中央に寄せ、回転できるスペースを作る
             MakeSmallerAndMoveToCenter();
@@ -411,8 +405,8 @@ namespace TestMyTrimmingNew2
         [TestMethod]
         public void TestPreviewWindow()
         {
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
+
             Driver.EmurateInputKey(System.Windows.Input.Key.P, 1, System.Windows.Input.ModifierKeys.Control);
 
             PreviewDriver pd = new PreviewDriver(MainWindow, TestApp);
@@ -433,13 +427,32 @@ namespace TestMyTrimmingNew2
         public void TestDisplayCutSizeWidthAndHeight()
         {
             // 切り抜いて保存する画像のサイズを画面に表示する
-            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
-            Driver.EmurateOpenImage(imagePath);
+            OpenImage("/Resource/test001.jpg");
 
             double ansWidth = Driver.GetOriginalImageWidth();
             double ansHeight = ansWidth * 9.0 / 16.0;
             Common.AreEqualRound(ansWidth, Driver.GetCutSizeWidth());
             Common.AreEqualRound(ansHeight, Driver.GetCutSizeHeight(), 2);
+        }
+
+        [TestMethod]
+        public void TestChangeWindowSize()
+        {
+            // 画面サイズ変更テスト
+            OpenImage("/Resource/test001.jpg");
+
+            double ansWidth = 1000.0;
+            double ansHeight = ansWidth * 9.0 / 16.0;
+            Driver.EmurateChangeWindowSize((int)ansWidth, 800);
+            Common.AreEqualRound(ansWidth, Driver.GetCutLineWidth());
+            Common.AreEqualRound(ansHeight, Driver.GetCutLineHeight());
+        }
+
+        private void OpenImage(string relativeImagePath)
+        {
+            string imagePath = Common.GetFilePathOfDependentEnvironment(relativeImagePath);
+            Driver.EmurateOpenImage(imagePath);
+            Driver.EmurateChangeWindowSize(800, 600);
         }
 
         private void MakeSmallerAndMoveToCenter()

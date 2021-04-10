@@ -111,6 +111,12 @@ namespace MyTrimmingNew2
             }
         }
 
+        private void ChangeWindowSize(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+        }
+
         private void OpenPreviewWindow()
         {
             if (_OriginalImage == null)
