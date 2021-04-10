@@ -20,6 +20,11 @@ namespace MyTrimmingNew2
             return (p1.Y + p2.Y) / 2.0;
         }
 
+        public static double CalcDistance(System.Windows.Point p1, System.Windows.Point p2)
+        {
+            return Math.Sqrt(Math.Pow(p1.X - p2.X, 2.0) + Math.Pow(p1.Y - p2.Y, 2.0));
+        }
+
         public static double ToRadian(double degree)
         {
             return degree * Math.PI / 180.0;

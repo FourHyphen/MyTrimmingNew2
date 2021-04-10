@@ -244,10 +244,10 @@ namespace MyTrimmingNew2
             if (directionX < 0.0 && directionY < 0.0)
             {
                 // c1, c2, c4, c5
-                double d1 = 1.0 / CalcDistance(new System.Windows.Point(-1.0, -1.0), p);
-                double d2 = 1.0 / CalcDistance(new System.Windows.Point(0.0, -1.0), p);
-                double d3 = 1.0 / CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
-                double d4 = 1.0 / CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, -1.0), p);
+                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, -1.0), p);
+                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
+                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
                 double sum = d1 + d2 + d3 + d4;
                 rd = c1.R * d1 / sum + c2.R * d2 / sum + c4.R * d3 / sum + c5.R * d4 / sum;
                 gd = c1.G * d1 / sum + c2.G * d2 / sum + c4.G * d3 / sum + c5.G * d4 / sum;
@@ -256,10 +256,10 @@ namespace MyTrimmingNew2
             else if (directionX >= 0.0 && directionY < 0.0)
             {
                 // c2, c3, c5, c6
-                double d1 = 1.0 / CalcDistance(new System.Windows.Point(0.0, -1.0), p);
-                double d2 = 1.0 / CalcDistance(new System.Windows.Point(1.0, -1.0), p);
-                double d3 = 1.0 / CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double d4 = 1.0 / CalcDistance(new System.Windows.Point(1.0, 0.0), p);
+                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, -1.0), p);
+                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, -1.0), p);
+                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 0.0), p);
                 double sum = d1 + d2 + d3 + d4;
                 rd = c2.R * d1 / sum + c3.R * d2 / sum + c5.R * d3 / sum + c6.R * d4 / sum;
                 gd = c2.G * d1 / sum + c3.G * d2 / sum + c5.G * d3 / sum + c6.G * d4 / sum;
@@ -268,10 +268,10 @@ namespace MyTrimmingNew2
             else if (directionX < 0.0 && directionY >= 0.0)
             {
                 // c4, c5, c7, c8
-                double d1 = 1.0 / CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
-                double d2 = 1.0 / CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double d3 = 1.0 / CalcDistance(new System.Windows.Point(-1.0, 1.0), p);
-                double d4 = 1.0 / CalcDistance(new System.Windows.Point(0.0, 1.0), p);
+                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
+                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 1.0), p);
+                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 1.0), p);
                 double sum = d1 + d2 + d3 + d4;
                 rd = c4.R * d1 / sum + c5.R * d2 / sum + c7.R * d3 / sum + c8.R * d4 / sum;
                 gd = c4.G * d1 / sum + c5.G * d2 / sum + c7.G * d3 / sum + c8.G * d4 / sum;
@@ -280,10 +280,10 @@ namespace MyTrimmingNew2
             else
             {
                 // c5, c6, c8, c9
-                double d1 = 1.0 / CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double d2 = 1.0 / CalcDistance(new System.Windows.Point(1.0, 0.0), p);
-                double d3 = 1.0 / CalcDistance(new System.Windows.Point(0.0, 1.0), p);
-                double d4 = 1.0 / CalcDistance(new System.Windows.Point(1.0, 1.0), p);
+                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 0.0), p);
+                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 1.0), p);
+                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 1.0), p);
                 double sum = d1 + d2 + d3 + d4;
                 rd = c5.R * d1 / sum + c6.R * d2 / sum + c8.R * d3 / sum + c9.R * d4 / sum;
                 gd = c5.G * d1 / sum + c6.G * d2 / sum + c8.G * d3 / sum + c9.G * d4 / sum;
@@ -294,11 +294,6 @@ namespace MyTrimmingNew2
             byte g = (gd > 255.0) ? (byte)255 : (byte)gd;
             byte b = (bd > 255.0) ? (byte)255 : (byte)bd;
             return System.Drawing.Color.FromArgb(r, g, b);
-        }
-
-        private static double CalcDistance(System.Windows.Point p1, System.Windows.Point p2)
-        {
-            return Math.Sqrt(Math.Pow(p1.X - p2.X, 2.0) + Math.Pow(p1.Y - p2.Y, 2.0));
         }
 
         private static System.Drawing.Bitmap CreateTrimBitmapRotateWithoutMargin(Bitmap bitmap,
