@@ -93,6 +93,7 @@
     <Compile Include="LabelAdapter.cs" />
     <Compile Include="MainWindowDriver.cs" />
     <Compile Include="PreviewDriver.cs" />
+    <Compile Include="TestCommon.cs" />
     <Compile Include="TestCutLine.cs" />
     <Compile Include="TestFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
