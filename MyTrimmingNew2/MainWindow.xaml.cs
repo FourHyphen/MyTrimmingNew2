@@ -200,16 +200,35 @@ namespace MyTrimmingNew2
 
         private void SaveImage(string filePath)
         {
+            ImageProcess.Interpolate interpolate = GetInterpolate();
+            double unsharpMask = GetUnsharpMaskValue();
             try
             {
                 SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
-                si.Execute(filePath);
+                si.Execute(filePath, interpolate, unsharpMask);
                 ShowSaveResult("画像の保存に成功しました。", "Info");
             }
             catch
             {
                 ShowSaveResult("画像の保存に失敗しました。再度保存してください。", "Error");
             }
+        }
+
+        private ImageProcess.Interpolate GetInterpolate()
+        {
+            if ((bool)(InterpolatePixelMixing.IsChecked))
+            {
+                return ImageProcess.Interpolate.PixelMixing;
+            }
+            else
+            {
+                return ImageProcess.Interpolate.NearestNeighbor;
+            }
+        }
+
+        private double GetUnsharpMaskValue()
+        {
+            return UnsharpMaskSlider.Value;
         }
 
         private static void ShowSaveResult(string message, string title)

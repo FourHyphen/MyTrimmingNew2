@@ -7,6 +7,12 @@ namespace MyTrimmingNew2
 {
     public class ImageProcess
     {
+        public enum Interpolate
+        {
+            NearestNeighbor,
+            PixelMixing
+        }
+
         /// <summary>
         /// 表示用画像
         /// </summary>
@@ -68,14 +74,18 @@ namespace MyTrimmingNew2
                                      System.Windows.Point rightTop,
                                      System.Windows.Point rightBottom,
                                      System.Windows.Point leftBottom,
-                                     double degree)
+                                     double degree,
+                                     Interpolate interpolate,
+                                     double unsharpMask)
         {
             System.Drawing.Bitmap saveBitmap = CreateTrimBitmap(originalImagePath,
                                                                 leftTop,
                                                                 rightTop,
                                                                 rightBottom,
                                                                 leftBottom,
-                                                                degree);
+                                                                degree,
+                                                                interpolate,
+                                                                unsharpMask);
             saveBitmap.Save(savePath);
             saveBitmap.Dispose();
         }
@@ -85,7 +95,9 @@ namespace MyTrimmingNew2
                                                              System.Windows.Point rightTop,
                                                              System.Windows.Point rightBottom,
                                                              System.Windows.Point leftBottom,
-                                                             double degree)
+                                                             double degree,
+                                                             Interpolate interpolate,
+                                                             double unsharpMask)
         {
             if (degree == 0)
             {
@@ -93,9 +105,7 @@ namespace MyTrimmingNew2
             }
             else
             {
-                // TODO: Nearest Neighbor, pixel mixing, pixel mixing -> unsharp の3種類用意する
-                // unsharpマスクはデフォルト0.5のMax1.0とする
-                return CreateTrimBitmapCore(originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
+                return CreateTrimBitmapCore(originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree, interpolate, unsharpMask);
             }
         }
 
@@ -115,7 +125,8 @@ namespace MyTrimmingNew2
                                                                   System.Windows.Point rightBottom,
                                                                   System.Windows.Point leftBottom,
                                                                   double degree,
-                                                                  double? unsharpK = null)
+                                                                  Interpolate interpolate,
+                                                                  double unsharpMask)
         {
             int minX, minY, maxX, maxY;
             System.Drawing.Bitmap trimBitmapWithMargin;
@@ -126,6 +137,7 @@ namespace MyTrimmingNew2
                                              rightBottom,
                                              leftBottom,
                                              degree,
+                                             interpolate,
                                              out trimBitmapWithMargin,
                                              out minX,
                                              out minY,
@@ -135,13 +147,13 @@ namespace MyTrimmingNew2
             System.Drawing.Bitmap trimBitmap = CreateTrimBitmapRotateWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
             trimBitmapWithMargin.Dispose();
 
-            if (unsharpK == null)
+            if (unsharpMask == 0.0)
             {
                 return trimBitmap;
             }
             else
             {
-                System.Drawing.Bitmap unsharp = ApplyUnsharpMasking(trimBitmap, (double)unsharpK);
+                System.Drawing.Bitmap unsharp = ApplyUnsharpMasking(trimBitmap, unsharpMask);
                 trimBitmap.Dispose();
                 return unsharp;
             }
@@ -153,6 +165,7 @@ namespace MyTrimmingNew2
                                                              System.Windows.Point rightBottom,
                                                              System.Windows.Point leftBottom,
                                                              double degree,
+                                                             Interpolate interpolate,
                                                              out System.Drawing.Bitmap trimBitmapWithMargin,
                                                              out int minX,
                                                              out int minY,
@@ -185,13 +198,18 @@ namespace MyTrimmingNew2
                     System.Windows.Point rotate = Common.CalcRotatePoint(new System.Windows.Point(x, y), centerX, centerY, cos, sin);
                     if (rectLine.IsInside(rotate))
                     {
-                        // Nearest Neighbor
-                        //int rotateX = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);
-                        //int rotateY = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);
-                        //System.Drawing.Color c = bitmap.GetPixel(rotateX, rotateY);
-
-                        // Pixel Mixingもどき
-                        System.Drawing.Color c = GetPixelColorFakePixelMixing(bitmap, rotate);
+                        System.Drawing.Color c;
+                        if (interpolate == Interpolate.PixelMixing)
+                        {
+                            c = GetPixelColorFakePixelMixing(bitmap, rotate);
+                        }
+                        else
+                        {
+                            // Nearest Neighbor
+                            int rotateX = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);
+                            int rotateY = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);
+                            c = bitmap.GetPixel(rotateX, rotateY);
+                        }
 
                         trimBitmapWithMargin.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
                         if (x < minX)
@@ -316,7 +334,7 @@ namespace MyTrimmingNew2
             return trimBitmap;
         }
 
-        private static System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k = 1)
+        private static System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
         {
             System.Drawing.Bitmap unsharp = new Bitmap(bitmap.Width, bitmap.Height);
 

@@ -53,12 +53,15 @@ namespace MyTrimmingNew2
 
         private System.Drawing.Bitmap CreateTrimBitmap(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
+            // 速度重視でNearestNeighbor補間＋アンシャープマスクなし
             return ImageProcess.CreateTrimBitmap(originalImage.Path,
                                                  showingImage.ToOriginalScale(cutLine.LeftTop),
                                                  showingImage.ToOriginalScale(cutLine.RightTop),
                                                  showingImage.ToOriginalScale(cutLine.RightBottom),
                                                  showingImage.ToOriginalScale(cutLine.LeftBottom),
-                                                 cutLine.Degree);
+                                                 cutLine.Degree,
+                                                 ImageProcess.Interpolate.NearestNeighbor,
+                                                 0.0);
         }
 
         private void PreviewWindowKeyDown(object sender, KeyEventArgs e)

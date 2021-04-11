@@ -95,22 +95,26 @@
 
                             <Label Content=""/>
                             <Label Content="以下回転時のみ"/>
-                            <Label Content="Pixel補間方法"/>
-                            <RadioButton GroupName="Interpolate"
-                                         Content="Nearest Neighbor"/>
-                            <RadioButton GroupName="Interpolate"
-                                         Content="Pixel Mixing"
-                                         IsChecked="True"/>
+                            <StackPanel>
+                                <Label Content="Pixel補間方法"/>
+                                <RadioButton x:Name="InterpolateNearestNeighbor"
+                                             Content="Nearest Neighbor"/>
+                                <RadioButton x:Name="InterpolatePixelMixing"
+                                             Content="Pixel Mixing"
+                                             IsChecked="True"/>
+                            </StackPanel>
 
-                            <Label Content="Unsharp Mask"/>
-                            <Slider x:Name="UnsharpMaskSlider"
-                                    Value="0.5"
-                                    IsSnapToTickEnabled="True"
-                                    Maximum="1.0"
-                                    Minimum="0.0"
-                                    TickFrequency="0.1"
-                                    TickPlacement="BottomRight"/>
-                            <Label Content="{Binding Value, ElementName=UnsharpMaskSlider}"/>
+                            <StackPanel>
+                                <Label Content="Unsharp Mask"/>
+                                <Slider x:Name="UnsharpMaskSlider"
+                                        Value="0.5"
+                                        IsSnapToTickEnabled="True"
+                                        Maximum="1.0"
+                                        Minimum="0.0"
+                                        TickFrequency="0.1"
+                                        TickPlacement="BottomRight"/>
+                                <Label Content="{Binding Value, ElementName=UnsharpMaskSlider}"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
 

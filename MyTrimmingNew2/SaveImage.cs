@@ -21,7 +21,7 @@ namespace MyTrimmingNew2
             _CutLine = cutLine;
         }
 
-        public void Execute(string filePath)
+        public void Execute(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             ImageProcess.SaveImage(filePath,
                                    _OriginalImage.Path,
@@ -29,7 +29,9 @@ namespace MyTrimmingNew2
                                    _ShowingImage.ToOriginalScale(_CutLine.RightTop),
                                    _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
                                    _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
-                                   _CutLine.Degree);
+                                   _CutLine.Degree,
+                                   interpolate,
+                                   unsharpMask);
         }
     }
 }
