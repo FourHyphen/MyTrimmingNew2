@@ -78,6 +78,7 @@
       <DependentUpon>Preview.xaml</DependentUpon>
     </Compile>
     <Compile Include="RectLine.cs" />
+    <Compile Include="SaveImage.cs" />
     <Compile Include="ShowingImage.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

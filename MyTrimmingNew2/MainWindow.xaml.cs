@@ -202,13 +202,8 @@ namespace MyTrimmingNew2
         {
             try
             {
-                ImageProcess.SaveImage(filePath,
-                                       _OriginalImage.Path,
-                                       _ShowingImage.ToOriginalScale(_CutLine.LeftTop),
-                                       _ShowingImage.ToOriginalScale(_CutLine.RightTop),
-                                       _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
-                                       _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
-                                       _CutLine.Degree);
+                SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
+                si.Execute(filePath);
                 ShowSaveResult("画像の保存に成功しました。", "Info");
             }
             catch
