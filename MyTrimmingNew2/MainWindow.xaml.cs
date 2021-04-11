@@ -54,24 +54,24 @@ namespace MyTrimmingNew2
             string filePath = DialogOpenImageFile.Show();
             if (filePath != "")
             {
-                DisplayImage(filePath);
+                DisplayImageAndCutLine(filePath);
             }
         }
 
-        private void DisplayImage(string imagePath)
+        private void DisplayImageAndCutLine(string imagePath)
         {
             _OriginalImage = new OriginalImage(imagePath);
-            DisplayImage(_OriginalImage);
+            DisplayImageAndCutLine(_OriginalImage);
         }
 
-        private void DisplayImage(OriginalImage originalImage)
+        private void DisplayImageAndCutLine(OriginalImage originalImage)
         {
             _ShowingImage = new ShowingImage(originalImage, (int)ImageArea.ActualWidth, (int)ImageArea.ActualHeight);
-            DisplayImageCore(originalImage, _ShowingImage);
+            DisplayImage(originalImage, _ShowingImage);
             DisplayCutLine(_ShowingImage);
         }
 
-        private void DisplayImageCore(OriginalImage originalImage, ShowingImage showingImage)
+        private void DisplayImage(OriginalImage originalImage, ShowingImage showingImage)
         {
             OriginalImageWidth.Content = originalImage.Width.ToString();
             OriginalImageHeight.Content = originalImage.Height.ToString();
@@ -116,6 +116,8 @@ namespace MyTrimmingNew2
 
         private void MainWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
+            // TODO: サイズ変更中は連続的に本イベントが発生する、本当はResizeEndが良い
+            // FormのResizeEndに相当するイベントがWPFにはないので別途検討
             double width = e.NewSize.Width;
             double height = e.NewSize.Height;
             ChangeWindowSize((int)width, (int)height);
@@ -130,7 +132,7 @@ namespace MyTrimmingNew2
 
             if (_OriginalImage != null)
             {
-                DisplayImage(_OriginalImage);
+                DisplayImageAndCutLine(_OriginalImage);
             }
         }
 
