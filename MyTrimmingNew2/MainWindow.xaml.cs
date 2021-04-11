@@ -204,6 +204,7 @@ namespace MyTrimmingNew2
             double unsharpMask = GetUnsharpMaskValue();
             try
             {
+                // TODO: 処理中はプログレスバーを表示する
                 SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
                 si.Execute(filePath, interpolate, unsharpMask);
                 ShowSaveResult("画像の保存に成功しました。", "Info");
