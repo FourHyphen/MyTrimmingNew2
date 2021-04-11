@@ -61,7 +61,7 @@ namespace MyTrimmingNew2
                                          cutLine.Degree);
 
             // 速度重視でNearestNeighbor補間＋アンシャープマスクなし
-            return it.CreateTrimBitmap(ImageProcess.Interpolate.NearestNeighbor, 0.0);
+            return it.Create(ImageProcess.Interpolate.NearestNeighbor, 0.0);
         }
 
         private void PreviewWindowKeyDown(object sender, KeyEventArgs e)

@@ -36,19 +36,19 @@ namespace MyTrimmingNew2
             Degree = degree;
         }
 
-        public System.Drawing.Bitmap CreateTrimBitmap(ImageProcess.Interpolate interpolate, double unsharpMask)
+        public System.Drawing.Bitmap Create(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             if (Degree == 0)
             {
-                return CreateTrimBitmapCore();
+                return CreateCore();
             }
             else
             {
-                return CreateTrimBitmapCore(interpolate, unsharpMask);
+                return CreateCore(interpolate, unsharpMask);
             }
         }
 
-        private System.Drawing.Bitmap CreateTrimBitmapCore()
+        private System.Drawing.Bitmap CreateCore()
         {
             using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(OriginalImagePath))
             {
@@ -56,7 +56,7 @@ namespace MyTrimmingNew2
             }
         }
 
-        private System.Drawing.Bitmap CreateTrimBitmapCore(ImageProcess.Interpolate interpolate, double unsharpMask)
+        private System.Drawing.Bitmap CreateCore(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             int minX, minY, maxX, maxY;
             System.Drawing.Bitmap rotateBitmapWithMargin;

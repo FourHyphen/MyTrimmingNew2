@@ -79,7 +79,7 @@ namespace MyTrimmingNew2
                                      double unsharpMask)
         {
             ImageTrim it = new ImageTrim(originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
-            System.Drawing.Bitmap saveBitmap = it.CreateTrimBitmap(interpolate, unsharpMask);
+            System.Drawing.Bitmap saveBitmap = it.Create(interpolate, unsharpMask);
             saveBitmap.Save(savePath);
             saveBitmap.Dispose();
         }
