@@ -36,56 +36,34 @@ namespace MyTrimmingNew2
             Degree = degree;
         }
 
-        public System.Drawing.Bitmap CreateTrimBitmap(ImageProcess.Interpolate interpolate,
-                                                      double unsharpMask)
+        public System.Drawing.Bitmap CreateTrimBitmap(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             if (Degree == 0)
             {
-                return CreateTrimBitmapCore(OriginalImagePath, LeftTop, RightBottom);
+                return CreateTrimBitmapCore();
             }
             else
             {
-                return CreateTrimBitmapCore(OriginalImagePath, LeftTop, RightTop, RightBottom, LeftBottom, Degree, interpolate, unsharpMask);
+                return CreateTrimBitmapCore(interpolate, unsharpMask);
             }
         }
 
-        private System.Drawing.Bitmap CreateTrimBitmapCore(string originalImagePath,
-                                                           System.Windows.Point leftTop,
-                                                           System.Windows.Point rightBottom)
+        private System.Drawing.Bitmap CreateTrimBitmapCore()
         {
-            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(originalImagePath))
+            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(OriginalImagePath))
             {
-                return CreateTrimBitmapRotateWithoutMargin(bitmap, (int)leftTop.X, (int)leftTop.Y, (int)rightBottom.X, (int)rightBottom.Y);
+                return TrimMargin(bitmap, (int)LeftTop.X, (int)LeftTop.Y, (int)RightBottom.X, (int)RightBottom.Y);
             }
         }
 
-        private System.Drawing.Bitmap CreateTrimBitmapCore(string originalImagePath,
-                                                           System.Windows.Point leftTop,
-                                                           System.Windows.Point rightTop,
-                                                           System.Windows.Point rightBottom,
-                                                           System.Windows.Point leftBottom,
-                                                           double degree,
-                                                           ImageProcess.Interpolate interpolate,
-                                                           double unsharpMask)
+        private System.Drawing.Bitmap CreateTrimBitmapCore(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             int minX, minY, maxX, maxY;
-            System.Drawing.Bitmap trimBitmapWithMargin;
+            System.Drawing.Bitmap rotateBitmapWithMargin;
+            RotateWithMargin(interpolate, out rotateBitmapWithMargin, out minX, out minY, out maxX, out maxY);
 
-            CreateTrimBitmapRotateWithMargin(originalImagePath,
-                                             leftTop,
-                                             rightTop,
-                                             rightBottom,
-                                             leftBottom,
-                                             degree,
-                                             interpolate,
-                                             out trimBitmapWithMargin,
-                                             out minX,
-                                             out minY,
-                                             out maxX,
-                                             out maxY);
-
-            System.Drawing.Bitmap trimBitmap = CreateTrimBitmapRotateWithoutMargin(trimBitmapWithMargin, minX, minY, maxX, maxY);
-            trimBitmapWithMargin.Dispose();
+            System.Drawing.Bitmap trimBitmap = TrimMargin(rotateBitmapWithMargin, minX, minY, maxX, maxY);
+            rotateBitmapWithMargin.Dispose();
 
             if (unsharpMask == 0.0)
             {
@@ -99,33 +77,27 @@ namespace MyTrimmingNew2
             }
         }
 
-        private void CreateTrimBitmapRotateWithMargin(string originalImagePath,
-                                                      System.Windows.Point leftTop,
-                                                      System.Windows.Point rightTop,
-                                                      System.Windows.Point rightBottom,
-                                                      System.Windows.Point leftBottom,
-                                                      double degree,
-                                                      ImageProcess.Interpolate interpolate,
-                                                      out System.Drawing.Bitmap trimBitmapWithMargin,
-                                                      out int minX,
-                                                      out int minY,
-                                                      out int maxX,
-                                                      out int maxY)
+        private void RotateWithMargin(ImageProcess.Interpolate interpolate,
+                                      out System.Drawing.Bitmap rotateBitmapWithMargin,
+                                      out int minX,
+                                      out int minY,
+                                      out int maxX,
+                                      out int maxY)
         {
             // 切り抜き画像作成(余白あり)
-            // trimBitmapWithMargin = 切り抜き線に沿って切り抜いた領域を、傾いてない画像として白いキャンバスに貼り付けた画像
+            // rotateBitmapWithMargin = 切り抜き線に沿って切り抜いた領域を、傾いてない画像として白いキャンバスに貼り付けた画像
             // minおよびmax変数 = 白いキャンバスに存在する切り抜き後画像領域の場所
 
             // 回転パラメーター準備
-            double centerX = Common.CalcCenterX(leftTop, rightBottom);
-            double centerY = Common.CalcCenterY(leftBottom, rightTop);
-            double radian = (double)degree * Math.PI / 180;
+            double centerX = Common.CalcCenterX(LeftTop, RightBottom);
+            double centerY = Common.CalcCenterY(LeftBottom, RightTop);
+            double radian = (double)Degree * Math.PI / 180;
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
 
-            Bitmap bitmap = new Bitmap(originalImagePath);
-            RectLine rectLine = new RectLine(leftTop, rightTop, rightBottom, leftBottom);
-            trimBitmapWithMargin = new Bitmap(bitmap.Width, bitmap.Height);
+            Bitmap bitmap = new Bitmap(OriginalImagePath);
+            RectLine rectLine = new RectLine(LeftTop, RightTop, RightBottom, LeftBottom);
+            rotateBitmapWithMargin = new Bitmap(bitmap.Width, bitmap.Height);
             minX = bitmap.Width;
             minY = bitmap.Height;
             maxX = 0;
@@ -151,7 +123,7 @@ namespace MyTrimmingNew2
                             c = bitmap.GetPixel(rotateX, rotateY);
                         }
 
-                        trimBitmapWithMargin.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
+                        rotateBitmapWithMargin.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
                         if (x < minX)
                         {
                             minX = x;
@@ -175,11 +147,7 @@ namespace MyTrimmingNew2
             bitmap.Dispose();
         }
 
-        private static System.Drawing.Bitmap CreateTrimBitmapRotateWithoutMargin(Bitmap bitmap,
-                                                                         int minX,
-                                                                         int minY,
-                                                                         int maxX,
-                                                                         int maxY)
+        private System.Drawing.Bitmap TrimMargin(Bitmap bitmap, int minX, int minY, int maxX, int maxY)
         {
             int width = maxX - minX;
             int height = maxY - minY;
@@ -195,7 +163,7 @@ namespace MyTrimmingNew2
             return trimBitmap;
         }
 
-        private static System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
+        private System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
         {
             System.Drawing.Bitmap unsharp = new Bitmap(bitmap.Width, bitmap.Height);
 
