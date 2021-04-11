@@ -109,7 +109,7 @@
                                 <Slider x:Name="UnsharpMaskSlider"
                                         Value="0.5"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="1.0"
+                                        Maximum="2.0"
                                         Minimum="0.0"
                                         TickFrequency="0.1"
                                         TickPlacement="BottomRight"/>
