@@ -109,6 +109,8 @@ namespace MyTrimmingNew2
             maxX = 0;
             maxY = 0;
 
+            double progressRate = 50.0 / bitmap.Height;
+
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
@@ -148,6 +150,8 @@ namespace MyTrimmingNew2
                         }
                     }
                 }
+
+                Progress += progressRate;
             }
 
             bitmap.Dispose();
@@ -166,12 +170,15 @@ namespace MyTrimmingNew2
                 g.DrawImage(bitmap, draw, trim, GraphicsUnit.Pixel);
             }
 
+            Progress += 25.0;
             return trimBitmap;
         }
 
         private System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
         {
             System.Drawing.Bitmap unsharp = new Bitmap(bitmap.Width, bitmap.Height);
+
+            double progressRate = 25.0 / bitmap.Height;
 
             // 3x3カーネルを適用するため端を無視
             for (int y = 1; y < bitmap.Height - 1; y++)
@@ -191,6 +198,8 @@ namespace MyTrimmingNew2
                     System.Drawing.Color c = ImageProcess.ApplyUnsharpFilter(new List<System.Drawing.Color>() { c1, c2, c3, c4, c5, c6, c7, c8, c9 }, k);
                     unsharp.SetPixel(x, y, c);
                 }
+
+                Progress += progressRate;
             }
 
             // 3x3カーネル適用時に無視した端を埋める
