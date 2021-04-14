@@ -204,15 +204,94 @@ namespace MyTrimmingNew2
             double unsharpMask = GetUnsharpMaskValue();
             try
             {
-                // TODO: 処理中はプログレスバーを表示する
-                SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
-                si.Execute(filePath, interpolate, unsharpMask);
-                ShowSaveResult("画像の保存に成功しました。", "Info");
+                SaveImage(filePath, interpolate, unsharpMask);
             }
             catch
             {
                 ShowSaveResult("画像の保存に失敗しました。再度保存してください。", "Error");
             }
+        }
+
+        private async void SaveImage(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
+        {
+            // TODO: 処理中はプログレスバーを表示する
+            await Task.Run(() =>
+            {
+                DisplaySaveStatusWindow();
+
+                System.Timers.Timer timer = new System.Timers.Timer();
+                StartSaveImageTimer(timer, filePath, interpolate, unsharpMask);
+                WaitToFinishSaveImageTimer(timer);
+
+                HideSaveStatusWindow();
+                ShowSaveResult("画像の保存に成功しました。", "Info");
+            });
+        }
+
+        private void DisplaySaveStatusWindow()
+        {
+            SaveStatus.Dispatcher.Invoke(() =>
+            {
+                // TODO: 他のコントロールをロックする
+                SaveStatus.Visibility = Visibility.Visible;
+                SaveProgressBar.Value = 0.0;
+            });
+        }
+
+        private void StartSaveImageTimer(System.Timers.Timer timer, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
+        {
+            SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
+            SaveImageAsync(si, filePath, interpolate, unsharpMask);
+
+            timer.Interval = 500;  // 0.5[s]
+            timer.Elapsed += (s, e) =>
+            {
+                SaveProgressBar.Dispatcher.Invoke(() =>
+                {
+                    SaveProgressBar.Value = si.Progress;
+                });
+
+                if (si.Progress >= 100.0)
+                {
+                    timer.Stop();
+                    timer.Enabled = false;
+                }
+            };
+
+            timer.Start();
+        }
+
+        private void WaitToFinishSaveImageTimer(System.Timers.Timer countdownTimer)
+        {
+            Task task = Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (!countdownTimer.Enabled)
+                    {
+                        return;
+                    }
+                }
+            });
+
+            Task.WaitAll(task);
+        }
+
+        private void HideSaveStatusWindow()
+        {
+            SaveStatus.Dispatcher.Invoke(() =>
+            {
+                // TODO: 他のコントロールのロックを解除する
+                SaveStatus.Visibility = Visibility.Hidden;
+            });
+        }
+
+        private async void SaveImageAsync(SaveImage si, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
+        {
+            await Task.Run(() =>
+            {
+                si.Execute(filePath, interpolate, unsharpMask);
+            });
         }
 
         private ImageProcess.Interpolate GetInterpolate()

@@ -68,22 +68,6 @@ namespace MyTrimmingNew2
             }
         }
 
-        public static void SaveImage(string savePath,
-                                     string originalImagePath,
-                                     System.Windows.Point leftTop,
-                                     System.Windows.Point rightTop,
-                                     System.Windows.Point rightBottom,
-                                     System.Windows.Point leftBottom,
-                                     double degree,
-                                     Interpolate interpolate,
-                                     double unsharpMask)
-        {
-            ImageTrim it = new ImageTrim(originalImagePath, leftTop, rightTop, rightBottom, leftBottom, degree);
-            System.Drawing.Bitmap saveBitmap = it.Create(interpolate, unsharpMask);
-            saveBitmap.Save(savePath);
-            saveBitmap.Dispose();
-        }
-
         public static System.Drawing.Color GetPixelColorFakePixelMixing(Bitmap bitmap, System.Windows.Point rotate)
         {
             int x = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);

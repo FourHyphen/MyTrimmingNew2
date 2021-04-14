@@ -21,6 +21,8 @@ namespace MyTrimmingNew2
 
         private double Degree { get; }
 
+        public double Progress { get; private set; } = 0.0;
+
         public ImageTrim(string originalImagePath,
                          System.Windows.Point leftTop,
                          System.Windows.Point rightTop,
@@ -38,14 +40,18 @@ namespace MyTrimmingNew2
 
         public System.Drawing.Bitmap Create(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
+            System.Drawing.Bitmap trim;
             if (Degree == 0)
             {
-                return CreateCore();
+                trim = CreateCore();
             }
             else
             {
-                return CreateCore(interpolate, unsharpMask);
+                trim = CreateCore(interpolate, unsharpMask);
             }
+
+            Progress = 100.0;
+            return trim;
         }
 
         private System.Drawing.Bitmap CreateCore()

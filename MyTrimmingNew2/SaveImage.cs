@@ -8,11 +8,21 @@ namespace MyTrimmingNew2
 {
     public class SaveImage
     {
-        public OriginalImage _OriginalImage { get; }
+        private OriginalImage _OriginalImage { get; }
 
-        public ShowingImage _ShowingImage { get; }
+        private ShowingImage _ShowingImage { get; }
 
-        public CutLine _CutLine { get; }
+        private CutLine _CutLine { get; }
+
+        private ImageTrim _ImageTrim { get; set; }
+
+        public double Progress
+        {
+            get
+            {
+                return ((_ImageTrim == null) ? 0.0 : _ImageTrim.Progress);
+            }
+        }
 
         public SaveImage(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
@@ -23,15 +33,15 @@ namespace MyTrimmingNew2
 
         public void Execute(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
-            ImageProcess.SaveImage(filePath,
-                                   _OriginalImage.Path,
-                                   _ShowingImage.ToOriginalScale(_CutLine.LeftTop),
-                                   _ShowingImage.ToOriginalScale(_CutLine.RightTop),
-                                   _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
-                                   _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
-                                   _CutLine.Degree,
-                                   interpolate,
-                                   unsharpMask);
+            _ImageTrim = new ImageTrim(_OriginalImage.Path,
+                                       _ShowingImage.ToOriginalScale(_CutLine.LeftTop),
+                                       _ShowingImage.ToOriginalScale(_CutLine.RightTop),
+                                       _ShowingImage.ToOriginalScale(_CutLine.RightBottom),
+                                       _ShowingImage.ToOriginalScale(_CutLine.LeftBottom),
+                                       _CutLine.Degree);
+            System.Drawing.Bitmap saveBitmap = _ImageTrim.Create(interpolate, unsharpMask);
+            saveBitmap.Save(filePath);
+            saveBitmap.Dispose();
         }
     }
 }
