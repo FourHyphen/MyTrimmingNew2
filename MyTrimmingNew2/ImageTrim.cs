@@ -21,7 +21,9 @@ namespace MyTrimmingNew2
 
         private double Degree { get; }
 
-        public double Progress { get; private set; } = 0.0;
+        public double Progress { get { return ProgressManager.Progress; } }
+
+        private ImageTrimProgressManager ProgressManager { get; set; }
 
         public ImageTrim(string originalImagePath,
                          System.Windows.Point leftTop,
@@ -40,33 +42,34 @@ namespace MyTrimmingNew2
 
         public System.Drawing.Bitmap Create(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
+            System.Drawing.Bitmap original = new Bitmap(OriginalImagePath);
+            ProgressManager = new ImageTrimProgressManager(original, unsharpMask);
+
             System.Drawing.Bitmap trim;
             if (Degree == 0)
             {
-                trim = CreateCore();
+                trim = CreateCore(original);
             }
             else
             {
-                trim = CreateCore(interpolate, unsharpMask);
+                trim = CreateCore(original, interpolate, unsharpMask);
             }
 
-            Progress = 100.0;
+            ProgressManager.SetComplete();
+            original.Dispose();
             return trim;
         }
 
-        private System.Drawing.Bitmap CreateCore()
+        private System.Drawing.Bitmap CreateCore(System.Drawing.Bitmap original)
         {
-            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(OriginalImagePath))
-            {
-                return TrimMargin(bitmap, (int)LeftTop.X, (int)LeftTop.Y, (int)RightBottom.X, (int)RightBottom.Y);
-            }
+            return TrimMargin(original, (int)LeftTop.X, (int)LeftTop.Y, (int)RightBottom.X, (int)RightBottom.Y);
         }
 
-        private System.Drawing.Bitmap CreateCore(ImageProcess.Interpolate interpolate, double unsharpMask)
+        private System.Drawing.Bitmap CreateCore(System.Drawing.Bitmap original, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             int minX, minY, maxX, maxY;
             System.Drawing.Bitmap rotateBitmapWithMargin;
-            RotateWithMargin(interpolate, out rotateBitmapWithMargin, out minX, out minY, out maxX, out maxY);
+            RotateWithMargin(original, interpolate, out rotateBitmapWithMargin, out minX, out minY, out maxX, out maxY);
 
             System.Drawing.Bitmap trimBitmap = TrimMargin(rotateBitmapWithMargin, minX, minY, maxX, maxY);
             rotateBitmapWithMargin.Dispose();
@@ -83,7 +86,8 @@ namespace MyTrimmingNew2
             }
         }
 
-        private void RotateWithMargin(ImageProcess.Interpolate interpolate,
+        private void RotateWithMargin(Bitmap original,
+                                      ImageProcess.Interpolate interpolate,
                                       out System.Drawing.Bitmap rotateBitmapWithMargin,
                                       out int minX,
                                       out int minY,
@@ -101,19 +105,16 @@ namespace MyTrimmingNew2
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
 
-            Bitmap bitmap = new Bitmap(OriginalImagePath);
             RectLine rectLine = new RectLine(LeftTop, RightTop, RightBottom, LeftBottom);
-            rotateBitmapWithMargin = new Bitmap(bitmap.Width, bitmap.Height);
-            minX = bitmap.Width;
-            minY = bitmap.Height;
+            rotateBitmapWithMargin = new Bitmap(original.Width, original.Height);
+            minX = original.Width;
+            minY = original.Height;
             maxX = 0;
             maxY = 0;
 
-            double progressRate = 50.0 / bitmap.Height;
-
-            for (int y = 0; y < bitmap.Height; y++)
+            for (int y = 0; y < original.Height; y++)
             {
-                for (int x = 0; x < bitmap.Width; x++)
+                for (int x = 0; x < original.Width; x++)
                 {
                     System.Windows.Point rotate = Common.CalcRotatePoint(new System.Windows.Point(x, y), centerX, centerY, cos, sin);
                     if (rectLine.IsInside(rotate))
@@ -121,14 +122,14 @@ namespace MyTrimmingNew2
                         System.Drawing.Color c;
                         if (interpolate == ImageProcess.Interpolate.PixelMixing)
                         {
-                            c = ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+                            c = ImageProcess.GetPixelColorFakePixelMixing(original, rotate);
                         }
                         else
                         {
                             // Nearest Neighbor
                             int rotateX = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);
                             int rotateY = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);
-                            c = bitmap.GetPixel(rotateX, rotateY);
+                            c = original.GetPixel(rotateX, rotateY);
                         }
 
                         rotateBitmapWithMargin.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
@@ -151,10 +152,8 @@ namespace MyTrimmingNew2
                     }
                 }
 
-                Progress += progressRate;
+                ProgressManager.AddProgressPerHeight();
             }
-
-            bitmap.Dispose();
         }
 
         private System.Drawing.Bitmap TrimMargin(Bitmap bitmap, int minX, int minY, int maxX, int maxY)
@@ -170,15 +169,12 @@ namespace MyTrimmingNew2
                 g.DrawImage(bitmap, draw, trim, GraphicsUnit.Pixel);
             }
 
-            Progress += 25.0;
             return trimBitmap;
         }
 
         private System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
         {
             System.Drawing.Bitmap unsharp = new Bitmap(bitmap.Width, bitmap.Height);
-
-            double progressRate = 25.0 / bitmap.Height;
 
             // 3x3カーネルを適用するため端を無視
             for (int y = 1; y < bitmap.Height - 1; y++)
@@ -199,7 +195,7 @@ namespace MyTrimmingNew2
                     unsharp.SetPixel(x, y, c);
                 }
 
-                Progress += progressRate;
+                ProgressManager.AddProgressPerHeight();
             }
 
             // 3x3カーネル適用時に無視した端を埋める

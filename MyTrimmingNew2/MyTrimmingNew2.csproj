@@ -74,6 +74,7 @@
     <Compile Include="CutLineRotate.cs" />
     <Compile Include="DialogSaveImageFile.cs" />
     <Compile Include="ImageTrim.cs" />
+    <Compile Include="ImageTrimProgressManager.cs" />
     <Compile Include="OriginalImage.cs" />
     <Compile Include="Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>

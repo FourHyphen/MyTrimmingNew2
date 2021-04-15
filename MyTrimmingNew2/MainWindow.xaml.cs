@@ -243,12 +243,13 @@ namespace MyTrimmingNew2
             SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
             SaveImageAsync(si, filePath, interpolate, unsharpMask);
 
-            timer.Interval = 500;  // 0.5[s]
+            timer.Interval = 500;  // [ms]
             timer.Elapsed += (s, e) =>
             {
-                SaveProgressBar.Dispatcher.Invoke(() =>
+                SaveStatus.Dispatcher.Invoke(() =>
                 {
                     SaveProgressBar.Value = si.Progress;
+                    SaveProgressLabel.Content = Math.Round(si.Progress, 1).ToString();
                 });
 
                 if (si.Progress >= 100.0)
