@@ -214,7 +214,6 @@ namespace MyTrimmingNew2
 
         private async void SaveImage(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
-            // TODO: 処理中はプログレスバーを表示する
             await Task.Run(() =>
             {
                 DisplaySaveStatusWindow();
@@ -233,8 +232,8 @@ namespace MyTrimmingNew2
             SaveStatus.Dispatcher.Invoke(() =>
             {
                 // TODO: 他のコントロールをロックする
-                SaveStatus.Visibility = Visibility.Visible;
                 SaveProgressBar.Value = 0.0;
+                SaveStatus.Visibility = Visibility.Visible;
             });
         }
 
