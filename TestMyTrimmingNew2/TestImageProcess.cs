@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestMyTrimmingNew2
@@ -71,6 +72,31 @@ namespace TestMyTrimmingNew2
             rotate = new System.Windows.Point(1.2, 1.1);
             c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(127, 87, 112), actual: c);
+        }
+
+        [TestMethod]
+        public void TestUnsharpFilter()
+        {
+            // テスト作成時点の実際の計算結果を正とする
+            System.Drawing.Bitmap bitmap = CreateTestBitmap();
+            System.Drawing.Color c1 = bitmap.GetPixel(0, 0);
+            System.Drawing.Color c2 = bitmap.GetPixel(1, 0);
+            System.Drawing.Color c3 = bitmap.GetPixel(2, 0);
+            System.Drawing.Color c4 = bitmap.GetPixel(0, 1);
+            System.Drawing.Color c5 = bitmap.GetPixel(1, 1);
+            System.Drawing.Color c6 = bitmap.GetPixel(2, 1);
+            System.Drawing.Color c7 = bitmap.GetPixel(0, 2);
+            System.Drawing.Color c8 = bitmap.GetPixel(1, 2);
+            System.Drawing.Color c9 = bitmap.GetPixel(2, 2);
+            List<System.Drawing.Color> cs = new List<System.Drawing.Color>() { c1, c2, c3, c4, c5, c6, c7, c8, c9 };
+
+            System.Drawing.Color expect = System.Drawing.Color.FromArgb(100, 74, 100);
+            System.Drawing.Color result = MyTrimmingNew2.ImageProcess.ApplyUnsharpFilter(cs, 0.5);
+            Assert.AreEqual(expected: expect, actual: result);
+
+            expect = System.Drawing.Color.FromArgb(100, 75, 100);
+            result = MyTrimmingNew2.ImageProcess.ApplyUnsharpFilter(cs, 0.2);
+            Assert.AreEqual(expected: expect, actual: result);
         }
 
         private System.Drawing.Bitmap CreateTestBitmap()
