@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="CutLineSlope.cs" />
     <Compile Include="DisplayControl.cs" />
     <Compile Include="LabelAdapter.cs" />
     <Compile Include="MainWindowDriver.cs" />

@@ -302,17 +302,11 @@ namespace TestMyTrimmingNew2
             CutLine cl = new CutLine(si);
 
             // 準備: 適当にサイズを小さくして中央に寄せて回転
-            ChangeSizeBaseRightBottom(cl, -300, 0);
-            Move(cl, System.Windows.Input.Key.Right, 200);
-            Move(cl, System.Windows.Input.Key.Down, 50);
-            Rotate(cl, 10);
+            PrepareChangeSizeAfterRotate(cl);
 
             // パラメーターの保持
             System.Windows.Point beforeLeftTop = cl.LeftTop;
-            double beforeLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
-            double beforeLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
-            double beforeRightXSlope = CalcSlope(cl.RightBottom, cl.LeftBottom);
-            double beforeRightYSlope = CalcSlope(cl.RightTop, cl.RightBottom);
+            CutLineSlope beforeSlope = new CutLineSlope(cl);
             double beforeWidth = cl.Width;
             double beforeHeight = cl.Height;
 
@@ -324,15 +318,12 @@ namespace TestMyTrimmingNew2
             Assert.IsTrue(cl.Height < beforeHeight);
 
             // 矩形の角度が変わってないかをチェック
-            double afterLeftXSlope = CalcSlope(cl.LeftTop, cl.RightTop);
-            double afterLeftYSlope = CalcSlope(cl.LeftTop, cl.LeftBottom);
-            double afterRightXSlope = CalcSlope(cl.RightBottom, cl.LeftBottom);
-            double afterRightYSlope = CalcSlope(cl.RightTop, cl.RightBottom);
+            CutLineSlope afterSlope = new CutLineSlope(cl);
             Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
-            Common.AreEqualRound(beforeLeftXSlope, afterLeftXSlope, 10);    // 厳密には17桁目から違う
-            Common.AreEqualRound(beforeLeftYSlope, afterLeftYSlope, 10);    // 厳密には15桁目から違う
-            Common.AreEqualRound(beforeRightXSlope, afterRightXSlope, 10);    // 厳密には15桁目から違う
-            Common.AreEqualRound(beforeRightYSlope, afterRightYSlope, 10);    // 厳密には15桁目から違う
+            Common.AreEqualRound(beforeSlope.LeftXSlope, afterSlope.LeftXSlope, 10);    // 厳密には17桁目から違う
+            Common.AreEqualRound(beforeSlope.LeftYSlope, afterSlope.LeftYSlope, 10);    // 厳密には15桁目から違う
+            Common.AreEqualRound(beforeSlope.RightXSlope, afterSlope.RightXSlope, 10);    // 厳密には15桁目から違う
+            Common.AreEqualRound(beforeSlope.RightYSlope, afterSlope.RightYSlope, 10);    // 厳密には15桁目から違う
         }
 
         [TestMethod]
@@ -625,6 +616,14 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: ansHeight, actual: cl.Height);
         }
 
+        private void PrepareChangeSizeAfterRotate(CutLine cl)
+        {
+            ChangeSizeBaseRightBottom(cl, -300, 0);
+            Move(cl, System.Windows.Input.Key.Right, 200);
+            Move(cl, System.Windows.Input.Key.Down, 50);
+            Rotate(cl, 10);
+        }
+
         private void Rotate(CutLine cutLine, int degree)
         {
             if (degree > 0)
@@ -635,17 +634,6 @@ namespace TestMyTrimmingNew2
             {
                 cutLine.ExecuteCommand(System.Windows.Input.Key.OemMinus, Math.Abs(degree));
             }
-        }
-
-        private double CalcSlope(System.Windows.Point p1, System.Windows.Point p2)
-        {
-            double xDiff = p2.X - p1.X;
-            double yDiff = p2.Y - p1.Y;
-            if (xDiff == 0.0)
-            {
-                return 0.0;
-            }
-            return yDiff / xDiff;
         }
 
         private void Undo(CutLine cutLine, int undoNum)
