@@ -50,7 +50,42 @@ namespace MyTrimmingNew2
 
         protected override CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
         {
-            return Before;
+            System.Windows.Point newRightTop = GetNewRightTopRotate(newHeight);
+            System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newWidth);
+            System.Windows.Point newLeftTop = GetNewLeftTopRotate(newRightTop, newLeftBottom);
+
+            if (DoStickOutImage(newLeftTop, newRightTop, Before.RightBottom, newLeftBottom))
+            {
+                return Before;
+            }
+            return new CutLineParameter(newLeftTop, newRightTop, Before.RightBottom, newLeftBottom, Before.Degree);
+        }
+
+        private System.Windows.Point GetNewRightTopRotate(double newHeight)
+        {
+            double tmp1 = (newHeight - Before.Height) * Before.RightBottom.X - newHeight * Before.RightTop.X;
+            double x = tmp1 / (-Before.Height);
+
+            double tmp2 = (Before.Height - newHeight) * Before.RightBottom.Y + newHeight * Before.RightTop.Y;
+            double y = tmp2 / Before.Height;
+            return new Point(x, y);
+        }
+
+        private System.Windows.Point GetNewLeftBottomRotate(double newWidth)
+        {
+            double tmp1 = (Before.Width - newWidth) * Before.RightBottom.X + newWidth * Before.LeftBottom.X;
+            double x = tmp1 / Before.Width;
+
+            double tmp2 = (Before.Width - newWidth) * Before.RightBottom.Y + newWidth * Before.LeftBottom.Y;
+            double y = tmp2 / Before.Width;
+            return new Point(x, y);
+        }
+
+        private System.Windows.Point GetNewLeftTopRotate(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
+        {
+            double xDist = Before.RightBottom.X - newLeftBottom.X;
+            double yDist = newLeftBottom.Y - Before.RightBottom.Y;
+            return new System.Windows.Point(newRightTop.X - xDist, newRightTop.Y + yDist);
         }
 
         protected override CutLineParameter CreateNewParameterWhenExchangeOrigin(double newWidth, double newHeight)
