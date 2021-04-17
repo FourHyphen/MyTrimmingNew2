@@ -231,7 +231,8 @@ namespace MyTrimmingNew2
         {
             SaveStatus.Dispatcher.Invoke(() =>
             {
-                // TODO: 他のコントロールをロックする
+                Menu.IsEnabled = false;
+                ImageArea.IsEnabled = false;
                 SaveProgressBar.Value = 0.0;
                 SaveStatus.Visibility = Visibility.Visible;
             });
@@ -281,7 +282,8 @@ namespace MyTrimmingNew2
         {
             SaveStatus.Dispatcher.Invoke(() =>
             {
-                // TODO: 他のコントロールのロックを解除する
+                ImageArea.IsEnabled = true;
+                Menu.IsEnabled = true;
                 SaveStatus.Visibility = Visibility.Hidden;
             });
         }

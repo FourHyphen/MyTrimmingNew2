@@ -11,7 +11,8 @@
         Title="MainWindow" Height="700" Width="800">
     <Grid>
         <DockPanel>
-            <Menu DockPanel.Dock="Top">
+            <Menu x:Name="Menu"
+                  DockPanel.Dock="Top">
                 <MenuItem Header="ファイル(_F)">
                     <MenuItem Header="開く(_O)" Click="MenuOpenFileClick" />
                     <MenuItem Header="別名で保存(_S)" Click="MenuSaveFileClick" />
