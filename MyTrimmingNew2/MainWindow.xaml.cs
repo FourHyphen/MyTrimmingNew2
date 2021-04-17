@@ -26,6 +26,8 @@ namespace MyTrimmingNew2
 
         private CutLine _CutLine { get; set; } = null;
 
+        private ImageSaving _ImageSaving { get; set; } = null;
+
         private System.Windows.Point MouseDownPoint { get; set; }
 
         public MainWindow()
@@ -102,7 +104,7 @@ namespace MyTrimmingNew2
         private void InputKey(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
             // 画像保存中は全ての操作を無効にする
-            if (!Menu.IsEnabled)
+            if (_ImageSaving != null)
             {
                 return;
             }
@@ -242,83 +244,10 @@ namespace MyTrimmingNew2
         {
             await Task.Run(() =>
             {
-                DisplaySaveStatusWindow();
-
-                System.Timers.Timer timer = new System.Timers.Timer();
-                StartSaveImageTimer(timer, filePath, interpolate, unsharpMask);
-                WaitToFinishSaveImageTimer(timer);
-
-                HideSaveStatusWindow();
+                _ImageSaving = new ImageSaving(this, _OriginalImage, _ShowingImage, _CutLine);
+                _ImageSaving.Execute(filePath, interpolate, unsharpMask);
+                _ImageSaving = null;
                 ShowSaveResult("画像の保存に成功しました。", "Info");
-            });
-        }
-
-        private void DisplaySaveStatusWindow()
-        {
-            SaveStatus.Dispatcher.Invoke(() =>
-            {
-                Menu.IsEnabled = false;
-                ImageArea.IsEnabled = false;
-                SaveProgressBar.Value = 0.0;
-                SaveStatus.Visibility = Visibility.Visible;
-            });
-        }
-
-        private void StartSaveImageTimer(System.Timers.Timer timer, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
-        {
-            ImageSaving si = new ImageSaving(_OriginalImage, _ShowingImage, _CutLine);
-            SaveImageAsync(si, filePath, interpolate, unsharpMask);
-
-            timer.Interval = 500;  // [ms]
-            timer.Elapsed += (s, e) =>
-            {
-                SaveStatus.Dispatcher.Invoke(() =>
-                {
-                    SaveProgressBar.Value = si.Progress;
-                    SaveProgressLabel.Content = Math.Round(si.Progress, 1).ToString();
-                });
-
-                if (si.Progress >= 100.0)
-                {
-                    timer.Stop();
-                    timer.Enabled = false;
-                }
-            };
-
-            timer.Start();
-        }
-
-        private void WaitToFinishSaveImageTimer(System.Timers.Timer countdownTimer)
-        {
-            Task task = Task.Run(() =>
-            {
-                while (true)
-                {
-                    if (!countdownTimer.Enabled)
-                    {
-                        return;
-                    }
-                }
-            });
-
-            Task.WaitAll(task);
-        }
-
-        private void HideSaveStatusWindow()
-        {
-            SaveStatus.Dispatcher.Invoke(() =>
-            {
-                ImageArea.IsEnabled = true;
-                Menu.IsEnabled = true;
-                SaveStatus.Visibility = Visibility.Hidden;
-            });
-        }
-
-        private async void SaveImageAsync(ImageSaving si, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
-        {
-            await Task.Run(() =>
-            {
-                si.Execute(filePath, interpolate, unsharpMask);
             });
         }
 
