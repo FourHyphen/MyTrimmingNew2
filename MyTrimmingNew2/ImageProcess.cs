@@ -74,15 +74,7 @@ namespace MyTrimmingNew2
             int y = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);
             double directionX = rotate.X - (double)x;
             double directionY = rotate.Y - (double)y;
-            System.Drawing.Color c1 = bitmap.GetPixel(x - 1, y - 1);
-            System.Drawing.Color c2 = bitmap.GetPixel(x, y - 1);
-            System.Drawing.Color c3 = bitmap.GetPixel(x + 1, y - 1);
-            System.Drawing.Color c4 = bitmap.GetPixel(x - 1, y);
             System.Drawing.Color c5 = bitmap.GetPixel(x, y);
-            System.Drawing.Color c6 = bitmap.GetPixel(x + 1, y);
-            System.Drawing.Color c7 = bitmap.GetPixel(x - 1, y + 1);
-            System.Drawing.Color c8 = bitmap.GetPixel(x, y + 1);
-            System.Drawing.Color c9 = bitmap.GetPixel(x + 1, y + 1);
 
             if (directionX == 0.0 && directionY == 0.0)
             {
@@ -90,56 +82,62 @@ namespace MyTrimmingNew2
             }
 
             System.Windows.Point p = new System.Windows.Point(directionX, directionY);
-            double rd = 0.0, gd = 0.0, bd = 0.0;
+            System.Drawing.Color ca, cb, cc, cd;
+            double da, db, dc, dd;
 
             if (directionX < 0.0 && directionY < 0.0)
             {
                 // c1, c2, c4, c5
-                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, -1.0), p);
-                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, -1.0), p);
-                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
-                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double sum = d1 + d2 + d3 + d4;
-                rd = c1.R * d1 / sum + c2.R * d2 / sum + c4.R * d3 / sum + c5.R * d4 / sum;
-                gd = c1.G * d1 / sum + c2.G * d2 / sum + c4.G * d3 / sum + c5.G * d4 / sum;
-                bd = c1.B * d1 / sum + c2.B * d2 / sum + c4.B * d3 / sum + c5.B * d4 / sum;
+                ca = bitmap.GetPixel(x - 1, y - 1);
+                cb = bitmap.GetPixel(x, y - 1);
+                cc = bitmap.GetPixel(x - 1, y);
+                cd = c5;
+                da = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, -1.0), p);
+                db = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, -1.0), p);
+                dc = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
+                dd = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
             }
             else if (directionX >= 0.0 && directionY < 0.0)
             {
                 // c2, c3, c5, c6
-                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, -1.0), p);
-                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, -1.0), p);
-                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 0.0), p);
-                double sum = d1 + d2 + d3 + d4;
-                rd = c2.R * d1 / sum + c3.R * d2 / sum + c5.R * d3 / sum + c6.R * d4 / sum;
-                gd = c2.G * d1 / sum + c3.G * d2 / sum + c5.G * d3 / sum + c6.G * d4 / sum;
-                bd = c2.B * d1 / sum + c3.B * d2 / sum + c5.B * d3 / sum + c6.B * d4 / sum;
+                ca = bitmap.GetPixel(x, y - 1);
+                cb = bitmap.GetPixel(x + 1, y - 1);
+                cc = c5;
+                cd = bitmap.GetPixel(x + 1, y);
+                da = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, -1.0), p);
+                db = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, -1.0), p);
+                dc = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                dd = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 0.0), p);
             }
             else if (directionX < 0.0 && directionY >= 0.0)
             {
                 // c4, c5, c7, c8
-                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
-                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 1.0), p);
-                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 1.0), p);
-                double sum = d1 + d2 + d3 + d4;
-                rd = c4.R * d1 / sum + c5.R * d2 / sum + c7.R * d3 / sum + c8.R * d4 / sum;
-                gd = c4.G * d1 / sum + c5.G * d2 / sum + c7.G * d3 / sum + c8.G * d4 / sum;
-                bd = c4.B * d1 / sum + c5.B * d2 / sum + c7.B * d3 / sum + c8.B * d4 / sum;
+                ca = bitmap.GetPixel(x - 1, y);
+                cb = c5;
+                cc = bitmap.GetPixel(x - 1, y + 1);
+                cd = bitmap.GetPixel(x, y + 1);
+                da = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 0.0), p);
+                db = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                dc = 1.0 / Common.CalcDistance(new System.Windows.Point(-1.0, 1.0), p);
+                dd = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 1.0), p);
             }
             else
             {
                 // c5, c6, c8, c9
-                double d1 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
-                double d2 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 0.0), p);
-                double d3 = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 1.0), p);
-                double d4 = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 1.0), p);
-                double sum = d1 + d2 + d3 + d4;
-                rd = c5.R * d1 / sum + c6.R * d2 / sum + c8.R * d3 / sum + c9.R * d4 / sum;
-                gd = c5.G * d1 / sum + c6.G * d2 / sum + c8.G * d3 / sum + c9.G * d4 / sum;
-                bd = c5.B * d1 / sum + c6.B * d2 / sum + c8.B * d3 / sum + c9.B * d4 / sum;
+                ca = c5;
+                cb = bitmap.GetPixel(x + 1, y);
+                cc = bitmap.GetPixel(x, y + 1);
+                cd = bitmap.GetPixel(x + 1, y + 1);
+                da = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 0.0), p);
+                db = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 0.0), p);
+                dc = 1.0 / Common.CalcDistance(new System.Windows.Point(0.0, 1.0), p);
+                dd = 1.0 / Common.CalcDistance(new System.Windows.Point(1.0, 1.0), p);
             }
+
+            double sum = da + db + dc + dd;
+            double rd = ca.R * da / sum + cb.R * db / sum + cc.R * dc / sum + cd.R * dd / sum;
+            double gd = ca.G * da / sum + cb.G * db / sum + cc.G * dc / sum + cd.G * dd / sum;
+            double bd = ca.B * da / sum + cb.B * db / sum + cc.B * dc / sum + cd.B * dd / sum;
 
             byte r = (rd > 255.0) ? (byte)255 : (byte)rd;
             byte g = (gd > 255.0) ? (byte)255 : (byte)gd;
