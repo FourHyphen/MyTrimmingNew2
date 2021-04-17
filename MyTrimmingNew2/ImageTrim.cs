@@ -21,7 +21,13 @@ namespace MyTrimmingNew2
 
         private double Degree { get; }
 
-        public double Progress { get { return ProgressManager.Progress; } }
+        public double Progress
+        {
+            get
+            {
+                return ((ProgressManager == null) ? 0.0 : ProgressManager.Progress);
+            }
+        }
 
         private ImageTrimProgressManager ProgressManager { get; set; }
 
