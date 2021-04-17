@@ -302,7 +302,7 @@ namespace TestMyTrimmingNew2
             CutLine cl = new CutLine(si);
 
             // 準備: 適当にサイズを小さくして中央に寄せて回転
-            PrepareChangeSizeAfterRotate(cl);
+            PrepareChangeSizeAfterRotate(cl, 10);
 
             // パラメーターの保持
             System.Windows.Point beforeLeftTop = cl.LeftTop;
@@ -583,6 +583,38 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: beforeLeftTopX + 100, actual: cl.LeftTop.X);
         }
 
+        [TestMethod]
+        public void TestChangeSizeBaseLeftTopAfterRotate()
+        {
+            // 回転後のサイズ変更テスト
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 準備: 適当にサイズを小さくして中央に寄せて回転
+            PrepareChangeSizeAfterRotate(cl, -20);
+
+            // パラメーターの保持
+            System.Windows.Point beforeRightBottom = cl.RightBottom;
+            CutLineSlope beforeSlope = new CutLineSlope(cl);
+            double beforeWidth = cl.Width;
+            double beforeHeight = cl.Height;
+
+            // 回転後のサイズ変更を実施
+            cl.ExecuteCommand(cl.LeftTop, new Point(cl.LeftTop.X - 20, cl.LeftTop.Y - 20));
+
+            // サイズは大きくなっていれば良しとする(正解値の計算困難)
+            Assert.IsTrue(cl.Width > beforeWidth);
+            Assert.IsTrue(cl.Height > beforeHeight);
+
+            // 矩形の角度が変わってないかをチェック
+            CutLineSlope afterSlope = new CutLineSlope(cl);
+            Assert.AreEqual(expected: beforeRightBottom, actual: cl.RightBottom);
+            Common.AreEqualRound(beforeSlope.LeftXSlope, afterSlope.LeftXSlope, 10);
+            Common.AreEqualRound(beforeSlope.LeftYSlope, afterSlope.LeftYSlope, 10);
+            Common.AreEqualRound(beforeSlope.RightXSlope, afterSlope.RightXSlope, 10);
+            Common.AreEqualRound(beforeSlope.RightYSlope, afterSlope.RightYSlope, 10);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
@@ -616,12 +648,12 @@ namespace TestMyTrimmingNew2
             Assert.AreEqual(expected: ansHeight, actual: cl.Height);
         }
 
-        private void PrepareChangeSizeAfterRotate(CutLine cl)
+        private void PrepareChangeSizeAfterRotate(CutLine cl, int degree)
         {
             ChangeSizeBaseRightBottom(cl, -300, 0);
-            Move(cl, System.Windows.Input.Key.Right, 200);
-            Move(cl, System.Windows.Input.Key.Down, 50);
-            Rotate(cl, 10);
+            Move(cl, System.Windows.Input.Key.Right, 150);
+            Move(cl, System.Windows.Input.Key.Down, 100);
+            Rotate(cl, degree);
         }
 
         private void Rotate(CutLine cutLine, int degree)
