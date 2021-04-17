@@ -101,6 +101,12 @@ namespace MyTrimmingNew2
 
         private void InputKey(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
+            // 画像保存中は全ての操作を無効にする
+            if (!Menu.IsEnabled)
+            {
+                return;
+            }
+
             if (AppKey.IsPurposeOpenImage(key, modifierKeys))
             {
                 MenuOpenFileClick();
