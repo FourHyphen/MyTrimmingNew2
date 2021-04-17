@@ -266,7 +266,7 @@ namespace MyTrimmingNew2
 
         private void StartSaveImageTimer(System.Timers.Timer timer, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
-            SaveImage si = new SaveImage(_OriginalImage, _ShowingImage, _CutLine);
+            ImageSaving si = new ImageSaving(_OriginalImage, _ShowingImage, _CutLine);
             SaveImageAsync(si, filePath, interpolate, unsharpMask);
 
             timer.Interval = 500;  // [ms]
@@ -314,7 +314,7 @@ namespace MyTrimmingNew2
             });
         }
 
-        private async void SaveImageAsync(SaveImage si, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
+        private async void SaveImageAsync(ImageSaving si, string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             await Task.Run(() =>
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew2
 {
-    public class SaveImage
+    public class ImageSaving
     {
         private OriginalImage _OriginalImage { get; }
 
@@ -24,7 +24,7 @@ namespace MyTrimmingNew2
             }
         }
 
-        public SaveImage(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
+        public ImageSaving(OriginalImage originalImage, ShowingImage showingImage, CutLine cutLine)
         {
             _OriginalImage = originalImage;
             _ShowingImage = showingImage;
