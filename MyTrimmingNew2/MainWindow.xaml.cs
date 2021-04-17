@@ -51,6 +51,11 @@ namespace MyTrimmingNew2
 
         private void MenuOpenFileClick(object sender, RoutedEventArgs e)
         {
+            MenuOpenFileClick();
+        }
+
+        private void MenuOpenFileClick()
+        {
             string filePath = DialogOpenImageFile.Show();
             if (filePath != "")
             {
@@ -96,9 +101,19 @@ namespace MyTrimmingNew2
 
         private void InputKey(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
+            if (AppKey.IsPurposeOpenImage(key, modifierKeys))
+            {
+                MenuOpenFileClick();
+                return;
+            }
+
             if (_CutLine != null)
             {
-                if (AppKey.IsPurposeShowPreview(key, modifierKeys))
+                if (AppKey.IsPurposeSaveImage(key, modifierKeys))
+                {
+                    MenuSaveFileClick();
+                }
+                else if (AppKey.IsPurposeShowPreview(key, modifierKeys))
                 {
                     OpenPreviewWindow();
                 }
@@ -185,6 +200,11 @@ namespace MyTrimmingNew2
         }
 
         private void MenuSaveFileClick(object sender, RoutedEventArgs e)
+        {
+            MenuSaveFileClick();
+        }
+
+        private void MenuSaveFileClick()
         {
             if (_OriginalImage == null)
             {

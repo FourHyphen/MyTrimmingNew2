@@ -4,6 +4,16 @@ namespace MyTrimmingNew2
 {
     public class AppKey
     {
+        public static bool IsPurposeOpenImage(Key key, ModifierKeys modifierKey)
+        {
+            return (key == Key.O && modifierKey == ModifierKeys.Control);
+        }
+
+        public static bool IsPurposeSaveImage(Key key, ModifierKeys modifierKey)
+        {
+            return (key == Key.S && modifierKey == ModifierKeys.Control);
+        }
+
         public static bool IsPurposeShowPreview(Key key, ModifierKeys modifierKey)
         {
             return (key == Key.P && modifierKey == ModifierKeys.Control);
