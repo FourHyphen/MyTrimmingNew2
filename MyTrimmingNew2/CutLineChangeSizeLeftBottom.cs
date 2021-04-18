@@ -50,7 +50,42 @@ namespace MyTrimmingNew2
 
         protected override CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
         {
-            return Before;
+            System.Windows.Point newRightBottom = GetNewRightBottomRotate(newHeight);
+            System.Windows.Point newLeftTop = GetNewLeftTopRotate(newWidth);
+            System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newLeftTop, newRightBottom);
+
+            if (DoStickOutImage(newLeftTop, Before.RightTop, newRightBottom, newLeftBottom))
+            {
+                return Before;
+            }
+            return new CutLineParameter(newLeftTop, Before.RightTop, newRightBottom, newLeftBottom, Before.Degree);
+        }
+
+        private System.Windows.Point GetNewRightBottomRotate(double newHeight)
+        {
+            double tmp = (Before.Height - newHeight) * Before.RightTop.X + newHeight * Before.RightBottom.X;
+            double x = tmp / Before.Height;
+
+            tmp = (Before.Height - newHeight) * Before.RightTop.Y + newHeight * Before.RightBottom.Y;
+            double y = tmp / Before.Height;
+            return new Point(x, y);
+        }
+
+        private System.Windows.Point GetNewLeftTopRotate(double newWidth)
+        {
+            double tmp = (Before.Width - newWidth) * Before.RightTop.X + newWidth * Before.LeftTop.X;
+            double x = tmp / Before.Width;
+
+            tmp = (Before.Width - newWidth) * Before.RightTop.Y + newWidth * Before.LeftTop.Y;
+            double y = tmp / Before.Width;
+            return new Point(x, y);
+        }
+
+        private System.Windows.Point GetNewLeftBottomRotate(System.Windows.Point newLeftTop, System.Windows.Point newRightBottom)
+        {
+            double xDist = Before.RightTop.X - newLeftTop.X;
+            double yDist = newRightBottom.Y - Before.RightTop.Y;
+            return new Point(newRightBottom.X - xDist, newLeftTop.Y + yDist);
         }
 
         protected override CutLineParameter CreateNewParameterWhenExchangeOrigin(double newWidth, double newHeight)
