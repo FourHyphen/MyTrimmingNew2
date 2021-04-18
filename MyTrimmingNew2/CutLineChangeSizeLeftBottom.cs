@@ -63,22 +63,12 @@ namespace MyTrimmingNew2
 
         private System.Windows.Point GetNewRightBottomRotate(double newHeight)
         {
-            double tmp = (Before.Height - newHeight) * Before.RightTop.X + newHeight * Before.RightBottom.X;
-            double x = tmp / Before.Height;
-
-            tmp = (Before.Height - newHeight) * Before.RightTop.Y + newHeight * Before.RightBottom.Y;
-            double y = tmp / Before.Height;
-            return new Point(x, y);
+            return CalcRotatePointBaseOfHeight(Before.RightTop, Before.RightBottom, Before.Height, newHeight);
         }
 
         private System.Windows.Point GetNewLeftTopRotate(double newWidth)
         {
-            double tmp = (Before.Width - newWidth) * Before.RightTop.X + newWidth * Before.LeftTop.X;
-            double x = tmp / Before.Width;
-
-            tmp = (Before.Width - newWidth) * Before.RightTop.Y + newWidth * Before.LeftTop.Y;
-            double y = tmp / Before.Width;
-            return new Point(x, y);
+            return CalcRotatePointBaseOfWidth(Before.RightTop, Before.LeftTop, Before.Width, newWidth);
         }
 
         private System.Windows.Point GetNewLeftBottomRotate(System.Windows.Point newLeftTop, System.Windows.Point newRightBottom)

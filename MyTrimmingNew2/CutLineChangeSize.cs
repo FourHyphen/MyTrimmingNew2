@@ -148,5 +148,25 @@ namespace MyTrimmingNew2
         protected abstract CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight);
 
         protected abstract CutLineParameter CreateNewParameterWhenExchangeOrigin(double newWidth, double newHeight);
+
+        protected System.Windows.Point CalcRotatePointBaseOfWidth(System.Windows.Point p1, System.Windows.Point p2, double oldWidth, double newWidth)
+        {
+            double tmp = (oldWidth - newWidth) * p1.X + newWidth * p2.X;
+            double x = tmp / oldWidth;
+
+            tmp = (oldWidth - newWidth) * p1.Y + newWidth * p2.Y;
+            double y = tmp / oldWidth;
+            return new System.Windows.Point(x, y);
+        }
+
+        protected System.Windows.Point CalcRotatePointBaseOfHeight(System.Windows.Point p1, System.Windows.Point p2, double oldHeight, double newHeight)
+        {
+            double tmp = (oldHeight - newHeight) * p1.X + newHeight * p2.X;
+            double x = tmp / oldHeight;
+
+            tmp = (oldHeight - newHeight) * p1.Y + newHeight * p2.Y;
+            double y = tmp / oldHeight;
+            return new System.Windows.Point(x, y);
+        }
     }
 }

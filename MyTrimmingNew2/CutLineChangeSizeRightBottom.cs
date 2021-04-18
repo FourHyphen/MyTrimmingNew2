@@ -54,8 +54,8 @@ namespace MyTrimmingNew2
 
         protected override CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
         {
-            System.Windows.Point newRightTop = GetNewRightTopRotate(newWidth);
-            System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newHeight);
+            System.Windows.Point newRightTop = GetNewRightTopRotate(newHeight);
+            System.Windows.Point newLeftBottom = GetNewLeftBottomRotate(newWidth);
             System.Windows.Point newRightBottom = GetNewRightBottomRotate(newRightTop, newLeftBottom);
 
             if (DoStickOutImage(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom))
@@ -65,29 +65,14 @@ namespace MyTrimmingNew2
             return new CutLineParameter(Before.LeftTop, newRightTop, newRightBottom, newLeftBottom, Before.Degree);
         }
 
-        private System.Windows.Point GetNewRightTopRotate(double newWidth)
+        private System.Windows.Point GetNewRightTopRotate(double newHeight)
         {
-            double tmp1 = newWidth * (Before.RightTop.X - Before.LeftTop.X);
-            double tmp2 = Before.Width * Before.LeftTop.X;
-            double x = (tmp1 + tmp2) / Before.Width;
-
-            double tmp3 = newWidth * (Before.RightTop.Y - Before.LeftTop.Y);
-            double tmp4 = Before.Width * Before.LeftTop.Y;
-            double y = (tmp3 + tmp4) / Before.Width;
-
-            return new System.Windows.Point(x, y);
+            return CalcRotatePointBaseOfHeight(Before.LeftTop, Before.RightTop, Before.Height, newHeight);
         }
 
-        private System.Windows.Point GetNewLeftBottomRotate(double newHeight)
+        private System.Windows.Point GetNewLeftBottomRotate(double newWidth)
         {
-            double tmp1 = newHeight * (Before.LeftTop.X - Before.LeftBottom.X);
-            double tmp2 = -(Before.Height * Before.LeftTop.X);
-            double x = (tmp1 + tmp2) / (-Before.Height);
-
-            double tmp3 = newHeight * (Before.LeftBottom.Y - Before.LeftTop.Y);
-            double tmp4 = Before.Height * Before.LeftTop.Y;
-            double y = (tmp3 + tmp4) / Before.Height;
-            return new System.Windows.Point(x, y);
+            return CalcRotatePointBaseOfWidth(Before.LeftTop, Before.LeftBottom, Before.Width, newWidth);
         }
 
         private System.Windows.Point GetNewRightBottomRotate(System.Windows.Point newRightTop, System.Windows.Point newLeftBottom)
