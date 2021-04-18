@@ -320,10 +320,7 @@ namespace TestMyTrimmingNew2
             // 矩形の角度が変わってないかをチェック
             CutLineSlope afterSlope = new CutLineSlope(cl);
             Assert.AreEqual(expected: beforeLeftTop, actual: cl.LeftTop);
-            Common.AreEqualRound(beforeSlope.LeftXSlope, afterSlope.LeftXSlope, 10);    // 厳密には17桁目から違う
-            Common.AreEqualRound(beforeSlope.LeftYSlope, afterSlope.LeftYSlope, 10);    // 厳密には15桁目から違う
-            Common.AreEqualRound(beforeSlope.RightXSlope, afterSlope.RightXSlope, 10);    // 厳密には15桁目から違う
-            Common.AreEqualRound(beforeSlope.RightYSlope, afterSlope.RightYSlope, 10);    // 厳密には15桁目から違う
+            AreEqualCutLineSlope(beforeSlope, afterSlope, 10);    // 厳密には15桁目から違う
         }
 
         [TestMethod]
@@ -609,10 +606,7 @@ namespace TestMyTrimmingNew2
             // 矩形の角度が変わってないかをチェック
             CutLineSlope afterSlope = new CutLineSlope(cl);
             Assert.AreEqual(expected: beforeRightBottom, actual: cl.RightBottom);
-            Common.AreEqualRound(beforeSlope.LeftXSlope, afterSlope.LeftXSlope, 10);
-            Common.AreEqualRound(beforeSlope.LeftYSlope, afterSlope.LeftYSlope, 10);
-            Common.AreEqualRound(beforeSlope.RightXSlope, afterSlope.RightXSlope, 10);
-            Common.AreEqualRound(beforeSlope.RightYSlope, afterSlope.RightYSlope, 10);
+            AreEqualCutLineSlope(beforeSlope, afterSlope);
         }
 
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
@@ -676,6 +670,14 @@ namespace TestMyTrimmingNew2
         private void Redo(CutLine cutLine, int redoNum)
         {
             cutLine.ExecuteCommand(System.Windows.Input.Key.Y, System.Windows.Input.ModifierKeys.Control, redoNum);
+        }
+
+        private void AreEqualCutLineSlope(CutLineSlope expected, CutLineSlope actual, int round = 10)
+        {
+            Common.AreEqualRound(expected.LeftXSlope, actual.LeftXSlope, round);
+            Common.AreEqualRound(expected.LeftYSlope, actual.LeftYSlope, round);
+            Common.AreEqualRound(expected.RightXSlope, actual.RightXSlope, round);
+            Common.AreEqualRound(expected.RightYSlope, actual.RightYSlope, round);
         }
     }
 }
