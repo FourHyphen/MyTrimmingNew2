@@ -35,7 +35,7 @@ namespace MyTrimmingNew2
             _CutLine = cutLine;
         }
 
-        public async void Execute(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
+        public void Execute(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             DisplaySaveStatusWindow();
 
