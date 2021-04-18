@@ -135,7 +135,7 @@ namespace MyTrimmingNew2
             }
 
             double sum = da + db + dc + dd;
-            double rd = ca.R * da / sum + cb.R * db / sum + cc.R * dc / sum + cd.R * dd / sum;
+            double rd = ca.R * da / sum + cb.R * db / sum + cc.R * dc / sum + cd.R * dd / sum;    // sumでの除算をまとめるとテストに失敗する
             double gd = ca.G * da / sum + cb.G * db / sum + cc.G * dc / sum + cd.G * dd / sum;
             double bd = ca.B * da / sum + cb.B * db / sum + cc.B * dc / sum + cd.B * dd / sum;
 
@@ -147,16 +147,16 @@ namespace MyTrimmingNew2
 
         public static System.Drawing.Color ApplyUnsharpFilter(List<System.Drawing.Color> cs, double k)
         {
-            byte r = ApplyUnsharpFilter(new List<byte>() { cs[0].R, cs[1].R, cs[2].R, cs[3].R, cs[4].R, cs[5].R, cs[6].R, cs[7].R, cs[8].R }, k);
-            byte g = ApplyUnsharpFilter(new List<byte>() { cs[0].G, cs[1].G, cs[2].G, cs[3].G, cs[4].G, cs[5].G, cs[6].G, cs[7].G, cs[8].G }, k);
-            byte b = ApplyUnsharpFilter(new List<byte>() { cs[0].B, cs[1].B, cs[2].B, cs[3].B, cs[4].B, cs[5].B, cs[6].B, cs[7].B, cs[8].B }, k);
+            double aroundRate = -k / 9.0;
+            double centerRate = (8.0 * k + 9.0) / 9.0;
+            byte r = ApplyUnsharpFilter(new List<byte>() { cs[0].R, cs[1].R, cs[2].R, cs[3].R, cs[4].R, cs[5].R, cs[6].R, cs[7].R, cs[8].R }, aroundRate, centerRate);
+            byte g = ApplyUnsharpFilter(new List<byte>() { cs[0].G, cs[1].G, cs[2].G, cs[3].G, cs[4].G, cs[5].G, cs[6].G, cs[7].G, cs[8].G }, aroundRate, centerRate);
+            byte b = ApplyUnsharpFilter(new List<byte>() { cs[0].B, cs[1].B, cs[2].B, cs[3].B, cs[4].B, cs[5].B, cs[6].B, cs[7].B, cs[8].B }, aroundRate, centerRate);
             return System.Drawing.Color.FromArgb(r, g, b);
         }
 
-        private static byte ApplyUnsharpFilter(List<byte> bytes, double k)
+        private static byte ApplyUnsharpFilter(List<byte> bytes, double aroundRate, double centerRate)
         {
-            double aroundRate = -k / 9.0;
-            double centerRate = (8.0 * k + 9.0) / 9.0;
             double tmp1 = bytes[0] * aroundRate + bytes[1] * aroundRate + bytes[2] * aroundRate;
             double tmp2 = bytes[3] * aroundRate + bytes[4] * centerRate + bytes[5] * aroundRate;
             double tmp3 = bytes[6] * aroundRate + bytes[7] * aroundRate + bytes[8] * aroundRate;

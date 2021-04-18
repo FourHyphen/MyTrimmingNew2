@@ -138,7 +138,7 @@ namespace MyTrimmingNew2
                             c = original.GetPixel(rotateX, rotateY);
                         }
 
-                        rotateBitmapWithMargin.SetPixel(x, y, System.Drawing.Color.FromArgb(c.R, c.G, c.B));
+                        rotateBitmapWithMargin.SetPixel(x, y, c);
                         if (x < minX)
                         {
                             minX = x;
