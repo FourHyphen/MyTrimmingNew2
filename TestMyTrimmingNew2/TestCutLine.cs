@@ -638,6 +638,35 @@ namespace TestMyTrimmingNew2
             AreEqualCutLineSlope(beforeSlope, afterSlope);
         }
 
+        [TestMethod]
+        public void TestChangeSizeBaseLeftBottomAfterRotate()
+        {
+            // 回転後のサイズ変更テスト
+            ShowingImage si = CreateShowingImage("/Resource/test001.jpg", 800, 600);
+            CutLine cl = new CutLine(si);
+
+            // 準備: 適当にサイズを小さくして中央に寄せて回転
+            PrepareChangeSizeAfterRotate(cl, 25);
+
+            // パラメーターの保持
+            System.Windows.Point beforeRightTop = cl.RightTop;
+            CutLineSlope beforeSlope = new CutLineSlope(cl);
+            double beforeWidth = cl.Width;
+            double beforeHeight = cl.Height;
+
+            // 回転後のサイズ変更を実施
+            cl.ExecuteCommand(cl.LeftBottom, new Point(cl.LeftBottom.X + 10, cl.LeftBottom.Y - 50));
+
+            // サイズは小さくなっていれば良しとする(正解値の計算困難)
+            Assert.IsTrue(cl.Width < beforeWidth);
+            Assert.IsTrue(cl.Height < beforeHeight);
+
+            // 矩形の角度が変わってないかをチェック
+            CutLineSlope afterSlope = new CutLineSlope(cl);
+            Assert.AreEqual(expected: beforeRightTop, actual: cl.RightTop);
+            AreEqualCutLineSlope(beforeSlope, afterSlope);
+        }
+
         private ShowingImage CreateShowingImage(string imagePathBase, int imageAreaWidth, int imageAreaHeight)
         {
             string imagePath = Common.GetFilePathOfDependentEnvironment(imagePathBase);
