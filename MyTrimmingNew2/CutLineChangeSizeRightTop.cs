@@ -51,7 +51,42 @@ namespace MyTrimmingNew2
 
         protected override CutLineParameter CreateNewParameterRotate(double newWidth, double newHeight)
         {
-            return Before;
+            System.Windows.Point newRightBottom = GetNewRightBottomRotate(newWidth);
+            System.Windows.Point newLeftTop = GetNewLeftTopRotate(newHeight);
+            System.Windows.Point newRightTop = GetNewRightTopRotate(newLeftTop, newRightBottom);
+
+            if (DoStickOutImage(newLeftTop, newRightTop, newRightBottom, Before.LeftBottom))
+            {
+                return Before;
+            }
+            return new CutLineParameter(newLeftTop, newRightTop, newRightBottom, Before.LeftBottom, Before.Degree);
+        }
+
+        private System.Windows.Point GetNewRightBottomRotate(double newWidth)
+        {
+            double tmp1 = (Before.Width - newWidth) * Before.LeftBottom.X + newWidth * Before.RightBottom.X;
+            double x = tmp1 / Before.Width;
+
+            double tmp2 = (Before.Width - newWidth) * Before.LeftBottom.Y + newWidth * Before.RightBottom.Y;
+            double y = tmp2 / Before.Width;
+            return new Point(x, y);
+        }
+
+        private System.Windows.Point GetNewLeftTopRotate(double newHeight)
+        {
+            double tmp1 = (Before.Height - newHeight) * Before.LeftBottom.X + newHeight * Before.LeftTop.X;
+            double x = tmp1 / Before.Height;
+
+            double tmp2 = (Before.Height - newHeight) * Before.LeftBottom.Y + newHeight * Before.LeftTop.Y;
+            double y = tmp2 / Before.Height;
+            return new Point(x, y);
+        }
+
+        private System.Windows.Point GetNewRightTopRotate(System.Windows.Point newLeftTop, System.Windows.Point newRightBottom)
+        {
+            double xDist = newRightBottom.X - Before.LeftBottom.X;
+            double yDist = Before.LeftBottom.Y - newLeftTop.Y;
+            return new Point(newLeftTop.X + xDist, newRightBottom.Y - yDist);
         }
 
         protected override CutLineParameter CreateNewParameterWhenExchangeOrigin(double newWidth, double newHeight)
