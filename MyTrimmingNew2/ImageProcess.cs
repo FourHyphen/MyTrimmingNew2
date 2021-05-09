@@ -70,13 +70,19 @@ namespace MyTrimmingNew2
 
         public static System.Drawing.Color GetPixelColorFakePixelMixing(Bitmap bitmap, System.Windows.Point rotate)
         {
-            int x = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);
-            int y = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);
+            // 予備実験の際、bitmap.Width = 3840 で rotate.X = 3839.59 の場合があった(再現不可)
+            int x = Math.Min((int)Math.Round(rotate.X, MidpointRounding.AwayFromZero), bitmap.Width - 1);
+            int y = Math.Min((int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero), bitmap.Height - 1);
             double directionX = rotate.X - (double)x;
             double directionY = rotate.Y - (double)y;
             System.Drawing.Color c5 = bitmap.GetPixel(x, y);
 
             if (directionX == 0.0 && directionY == 0.0)
+            {
+                return c5;
+            }
+
+            if (!DoFitPointConsideringFilterSize(bitmap, x, y, 1))
             {
                 return c5;
             }
@@ -143,6 +149,13 @@ namespace MyTrimmingNew2
             byte g = (gd > 255.0) ? (byte)255 : (byte)gd;
             byte b = (bd > 255.0) ? (byte)255 : (byte)bd;
             return System.Drawing.Color.FromArgb(r, g, b);
+        }
+
+        private static bool DoFitPointConsideringFilterSize(System.Drawing.Bitmap bitmap, int x, int y, int filter)
+        {
+            int xMax = bitmap.Width - filter;
+            int yMax = bitmap.Height - filter;
+            return (filter < x && x < xMax) && (filter < y && y < yMax);
         }
 
         public static System.Drawing.Color ApplyUnsharpFilter(List<System.Drawing.Color> cs, double k)
