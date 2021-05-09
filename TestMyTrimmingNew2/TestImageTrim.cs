@@ -43,6 +43,22 @@ namespace TestMyTrimmingNew2
             Assert.IsTrue(AreEqualBitmap(result, answer));
         }
 
+        [TestMethod]
+        public void TestNotClashIfCutLineTouchEdgeOfImage()
+        {
+            // PixelMixingモードかつ切り抜き線がちょうど画像端にある場合、保存時にOutOfBoundsエラーになるバグのテスト
+            // (0に接している分には問題なかった)
+            string imagePath = Common.GetFilePathOfDependentEnvironment("/Resource/test001.jpg");
+            MyTrimmingNew2.ImageTrim it = new MyTrimmingNew2.ImageTrim(imagePath,
+                                                                       new System.Windows.Point(3357.94960276689, 2010.53472495087),
+                                                                       new System.Windows.Point(3840, 2288.84665155637),
+                                                                       new System.Windows.Point(3683.4495412844, 2560),
+                                                                       new System.Windows.Point(3201.39914405129, 2281.6880733945),
+                                                                       20);
+
+            System.Drawing.Bitmap result = it.Create(MyTrimmingNew2.ImageProcess.Interpolate.PixelMixing, 0.5);
+        }
+
         private bool AreEqualBitmap(System.Drawing.Bitmap result, System.Drawing.Bitmap answer)
         {
             // 計算誤差吸収、全Pixelの完全一致でなくても良しとする
