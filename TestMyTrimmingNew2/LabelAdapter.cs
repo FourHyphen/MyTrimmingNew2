@@ -1,5 +1,4 @@
 ﻿using RM.Friendly.WPFStandardControls;
-using System;
 using System.Reflection;
 
 namespace TestMyTrimmingNew2

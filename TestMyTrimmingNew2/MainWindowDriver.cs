@@ -1,8 +1,5 @@
 ﻿using Codeer.Friendly.Windows.Grasp;
 using RM.Friendly.WPFStandardControls;
-using System.Windows.Documents;
-using Codeer.Friendly.Dynamic;
-using System;
 using System.Windows.Input;
 using System.Windows;
 

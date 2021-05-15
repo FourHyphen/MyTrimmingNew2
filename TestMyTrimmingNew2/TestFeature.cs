@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Dynamic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Codeer.Friendly.Dynamic;
 using Codeer.Friendly.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -1,9 +1,6 @@
-﻿using Codeer.Friendly.Dynamic;
-using Codeer.Friendly.Windows;
+﻿using Codeer.Friendly.Windows;
 using Codeer.Friendly.Windows.Grasp;
 using RM.Friendly.WPFStandardControls;
-using System.Windows.Documents;
-using System;
 using System.Windows.Input;
 
 namespace TestMyTrimmingNew2
