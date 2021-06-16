@@ -80,7 +80,7 @@
 ```
 
 # Install
-2021/5/xx時点でコード公開のみ実施しています。お手数ですがご自身でビルドしてください。
+2021/6/16時点でコード公開のみ実施しています。お手数ですがご自身でビルドしてください。
 
 # Licence
 - [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
