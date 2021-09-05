@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace MyTrimmingNew2
 {
@@ -108,16 +110,39 @@ namespace MyTrimmingNew2
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
 
+            // 探索範囲の制限
+            double rectWidth = Common.CalcDistance(LeftTop, RightTop);
+            double rectHeight = Common.CalcDistance(LeftTop, LeftBottom);
+            int xMin = Math.Max(0, (int)(centerX - (rectWidth / 2.0)) - 1);
+            int yMin = Math.Max(0, (int)(centerY - (rectHeight / 2.0)) - 1);
+            int xMax = Math.Min(original.Width, (int)(centerX + (rectWidth / 2.0)) + 1);
+            int yMax = Math.Min(original.Height, (int)(centerY + (rectHeight / 2.0)) + 1);
+
+            // Bitmap.GetPixel() と SetPixel() は遅いのでメモリを直接いじる
+            int widthIndex = original.Width * 4;
+            BitmapData data = original.LockBits(new Rectangle(0, 0, original.Width, original.Height),
+                                                ImageLockMode.ReadWrite,
+                                                PixelFormat.Format32bppArgb);
+            byte[] buf = new byte[widthIndex * original.Height];
+            Marshal.Copy(data.Scan0, buf, 0, buf.Length);
+            original.UnlockBits(data);
+
+            byte[] rBuf = new byte[9];
+            byte[] gBuf = new byte[9];
+            byte[] bBuf = new byte[9];
+            int xRoundMax = original.Width - 1;
+            int yRoundMax = original.Height - 1;
+
+            byte[] resultBuf = new byte[widthIndex * original.Height];
             RectLine rectLine = new RectLine(LeftTop, RightTop, RightBottom, LeftBottom);
-            rotateBitmapWithMargin = new Bitmap(original.Width, original.Height);
             minX = original.Width;
             minY = original.Height;
             maxX = 0;
             maxY = 0;
 
-            for (int y = 0; y < original.Height; y++)
+            for (int y = yMin; y < yMax; y++)
             {
-                for (int x = 0; x < original.Width; x++)
+                for (int x = xMin; x < xMax; x++)
                 {
                     System.Windows.Point rotate = Common.CalcRotatePoint(new System.Windows.Point(x, y), centerX, centerY, cos, sin);
                     if (rectLine.IsInside(rotate))
@@ -125,17 +150,27 @@ namespace MyTrimmingNew2
                         System.Drawing.Color c;
                         if (interpolate == ImageProcess.Interpolate.PixelMixing)
                         {
-                            c = ImageProcess.GetPixelColorFakePixelMixing(original, rotate);
+                            // 予備実験の際、bitmap.Width = 3840 で rotate.X = 3839.59 の場合があった(再現不可)
+                            int xRound = Min(Round(rotate.X), xRoundMax);
+                            int yRound = Min(Round(rotate.Y), yRoundMax);
+                            CreateFilter(buf, xRound, yRound, widthIndex, ref rBuf, ref gBuf, ref bBuf);
+                            c = ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, xRound, yRound, original.Width, original.Height, rotate);
                         }
                         else
                         {
                             // Nearest Neighbor
-                            int rotateX = (int)Math.Round(rotate.X, MidpointRounding.AwayFromZero);
-                            int rotateY = (int)Math.Round(rotate.Y, MidpointRounding.AwayFromZero);
-                            c = original.GetPixel(rotateX, rotateY);
+                            int rotateX = Round(rotate.X);
+                            int rotateY = Round(rotate.Y);
+                            CreateFilter(buf, rotateX, rotateY, widthIndex, ref rBuf, ref gBuf, ref bBuf);
+                            c = Color.FromArgb(rBuf[4], gBuf[4], bBuf[4]);
                         }
 
-                        rotateBitmapWithMargin.SetPixel(x, y, c);
+                        int i = y * widthIndex + x * 4;
+                        resultBuf[i] = c.R;
+                        resultBuf[i + 1] = c.G;
+                        resultBuf[i + 2] = c.B;
+                        resultBuf[i + 3] = 255;    // A が 0 だと画像が真っ黒になる
+
                         if (x < minX)
                         {
                             minX = x;
@@ -157,6 +192,24 @@ namespace MyTrimmingNew2
 
                 ProgressManager.AddProgressPerHeight();
             }
+
+            rotateBitmapWithMargin = new Bitmap(original.Width, original.Height);
+            BitmapData dataResult = rotateBitmapWithMargin.LockBits(new Rectangle(0, 0, rotateBitmapWithMargin.Width, rotateBitmapWithMargin.Height),
+                                                                    ImageLockMode.ReadWrite,
+                                                                    PixelFormat.Format32bppArgb);
+            Marshal.Copy(resultBuf, 0, dataResult.Scan0, resultBuf.Length);
+            rotateBitmapWithMargin.UnlockBits(dataResult);
+        }
+
+        private int Round(double d)
+        {
+            double tmp = d + 0.5;
+            return (int)tmp;
+        }
+
+        private int Min(int a, int b)
+        {
+            return a < b ? a : b;
         }
 
         private System.Drawing.Bitmap TrimMargin(Bitmap bitmap, int minX, int minY, int maxX, int maxY)
@@ -177,43 +230,71 @@ namespace MyTrimmingNew2
 
         private System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
         {
-            System.Drawing.Bitmap unsharp = new Bitmap(bitmap.Width, bitmap.Height);
+            return ApplyUnsharpMaskingUnmanaged(bitmap, k);
+        }
+
+        private System.Drawing.Bitmap ApplyUnsharpMaskingUnmanaged(Bitmap bitmap, double k)
+        {
+            System.Drawing.Bitmap unsharp = new Bitmap(bitmap);
+            BitmapData data = unsharp.LockBits(new Rectangle(0, 0, unsharp.Width, unsharp.Height),
+                                               ImageLockMode.ReadWrite,
+                                               PixelFormat.Format32bppArgb);
+            byte[] buf = new byte[unsharp.Width * unsharp.Height * 4];
+            Marshal.Copy(data.Scan0, buf, 0, buf.Length);
+
+            byte[] resultBuf = new byte[unsharp.Width * unsharp.Height * 4];
+            buf.CopyTo(resultBuf, 0);
 
             // 3x3カーネルを適用するため端を無視
-            for (int y = 1; y < bitmap.Height - 1; y++)
+            byte[] rBuf = new byte[9];
+            byte[] gBuf = new byte[9];
+            byte[] bBuf = new byte[9];
+            int width = unsharp.Width * 4;
+            for (int y = 1; y < unsharp.Height - 1; y++)
             {
-                for (int x = 1; x < bitmap.Width - 1; x++)
+                for (int x = 1; x < unsharp.Width - 1; x++)
                 {
-                    // 参考: https://imagingsolution.blog.fc2.com/blog-entry-114.html
-                    System.Drawing.Color c1 = bitmap.GetPixel(x - 1, y - 1);
-                    System.Drawing.Color c2 = bitmap.GetPixel(x, y - 1);
-                    System.Drawing.Color c3 = bitmap.GetPixel(x + 1, y - 1);
-                    System.Drawing.Color c4 = bitmap.GetPixel(x - 1, y);
-                    System.Drawing.Color c5 = bitmap.GetPixel(x, y);
-                    System.Drawing.Color c6 = bitmap.GetPixel(x + 1, y);
-                    System.Drawing.Color c7 = bitmap.GetPixel(x - 1, y + 1);
-                    System.Drawing.Color c8 = bitmap.GetPixel(x, y + 1);
-                    System.Drawing.Color c9 = bitmap.GetPixel(x + 1, y + 1);
-                    System.Drawing.Color c = ImageProcess.ApplyUnsharpFilter(new List<System.Drawing.Color>() { c1, c2, c3, c4, c5, c6, c7, c8, c9 }, k);
-                    unsharp.SetPixel(x, y, c);
+                    CreateFilter(buf, x, y, width, ref rBuf, ref gBuf, ref bBuf);
+                    Color c = ImageProcess.ApplyUnsharpFilter(rBuf, gBuf, bBuf, k);
+                    int i = y * width + x * 4;
+                    resultBuf[i] = c.R;
+                    resultBuf[i + 1] = c.G;
+                    resultBuf[i + 2] = c.B;
                 }
-
-                ProgressManager.AddProgressPerHeight();
             }
 
-            // 3x3カーネル適用時に無視した端を埋める
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                unsharp.SetPixel(x, 0, bitmap.GetPixel(x, 0));
-                unsharp.SetPixel(x, bitmap.Height - 1, bitmap.GetPixel(x, bitmap.Height - 1));
-            }
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                unsharp.SetPixel(0, y, bitmap.GetPixel(0, y));
-                unsharp.SetPixel(bitmap.Width - 1, y, bitmap.GetPixel(bitmap.Width - 1, y));
-            }
+            Marshal.Copy(resultBuf, 0, data.Scan0, resultBuf.Length);
+            unsharp.UnlockBits(data);
 
             return unsharp;
+        }
+
+        private void CreateFilter(byte[] buf, int x, int y, int width, ref byte[] rBuf, ref byte[] gBuf, ref byte[] bBuf)
+        {
+            int xMinus = (x - 1) * 4;
+            int xCenter = x * 4;
+            int xPlus = (x + 1) * 4;
+            int yMinus = (y - 1) * width;
+            int yCenter = y * width;
+            int yPlus = (y + 1) * width;
+            int i1 = yMinus + xMinus;
+            int i2 = yMinus + xCenter;
+            int i3 = yMinus + xPlus;
+            int i4 = yCenter + xMinus;
+            int i5 = yCenter + xCenter;
+            int i6 = yCenter + xPlus;
+            int i7 = yPlus + xMinus;
+            int i8 = yPlus + xCenter;
+            int i9 = yPlus + xPlus;
+            rBuf[0] = buf[i1]; gBuf[0] = buf[i1 + 1]; bBuf[0] = buf[i1 + 2];
+            rBuf[1] = buf[i2]; gBuf[1] = buf[i2 + 1]; bBuf[1] = buf[i2 + 2];
+            rBuf[2] = buf[i3]; gBuf[2] = buf[i3 + 1]; bBuf[2] = buf[i3 + 2];
+            rBuf[3] = buf[i4]; gBuf[3] = buf[i4 + 1]; bBuf[3] = buf[i4 + 2];
+            rBuf[4] = buf[i5]; gBuf[4] = buf[i5 + 1]; bBuf[4] = buf[i5 + 2];
+            rBuf[5] = buf[i6]; gBuf[5] = buf[i6 + 1]; bBuf[5] = buf[i6 + 2];
+            rBuf[6] = buf[i7]; gBuf[6] = buf[i7 + 1]; bBuf[6] = buf[i7 + 2];
+            rBuf[7] = buf[i8]; gBuf[7] = buf[i8 + 1]; bBuf[7] = buf[i8 + 2];
+            rBuf[8] = buf[i9]; gBuf[8] = buf[i9 + 1]; bBuf[8] = buf[i9 + 2];
         }
     }
 }

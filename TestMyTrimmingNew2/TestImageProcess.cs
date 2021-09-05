@@ -46,31 +46,34 @@ namespace TestMyTrimmingNew2
         public void TestFakePixelMixing()
         {
             // テスト作成時点の実際の計算結果を正とする
-            System.Drawing.Bitmap bitmap = CreateTestBitmap();
+            byte[] rBuf = new byte[9];
+            byte[] gBuf = new byte[9];
+            byte[] bBuf = new byte[9];
+            CreateTestFilter(ref rBuf, ref gBuf, ref bBuf);
 
-            // (1) 中央
-            System.Windows.Point rotate = new System.Windows.Point(2, 2);
-            System.Drawing.Color c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
-            Assert.AreEqual(expected: System.Drawing.Color.FromArgb(100, 75, 100), actual: c);
+            // (1) 中央 -> テスト画像では 200 万 pixel のうち一度も中央にならなかったため、中央ロジックを削除したためテスト対象外
+
+            // 5x5 サイズの bitmap の (2, 2) = 中心 の 3x3 範囲のフィルタを入力とする
+            int x = 2, y = 2, bitmapWidth = 5, bitmapHeight = 5;
 
             // (2) 左上方向
-            rotate = new System.Windows.Point(1.8, 1.9);
-            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            System.Windows.Point rotate = new System.Windows.Point(1.8, 1.9);
+            System.Drawing.Color c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(72, 62, 87), actual: c);
 
             // (3) 右上方向
             rotate = new System.Windows.Point(2.3, 1.7);
-            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(138, 55, 80), actual: c);
 
             // (4) 左下方向
             rotate = new System.Windows.Point(1.6, 2.4);
-            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(55, 97, 122), actual: c);
 
             // (5) 右下方向
             rotate = new System.Windows.Point(2.2, 2.1);
-            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(bitmap, rotate);
+            c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(127, 87, 112), actual: c);
         }
 
@@ -78,40 +81,40 @@ namespace TestMyTrimmingNew2
         public void TestUnsharpFilter()
         {
             // テスト作成時点の実際の計算結果を正とする
-            System.Drawing.Bitmap bitmap = CreateTestBitmap();
-            System.Drawing.Color c1 = bitmap.GetPixel(1, 1);
-            System.Drawing.Color c2 = bitmap.GetPixel(2, 1);
-            System.Drawing.Color c3 = bitmap.GetPixel(3, 1);
-            System.Drawing.Color c4 = bitmap.GetPixel(1, 2);
-            System.Drawing.Color c5 = bitmap.GetPixel(2, 2);
-            System.Drawing.Color c6 = bitmap.GetPixel(3, 2);
-            System.Drawing.Color c7 = bitmap.GetPixel(1, 3);
-            System.Drawing.Color c8 = bitmap.GetPixel(2, 3);
-            System.Drawing.Color c9 = bitmap.GetPixel(3, 3);
-            List<System.Drawing.Color> cs = new List<System.Drawing.Color>() { c1, c2, c3, c4, c5, c6, c7, c8, c9 };
+            byte[] rBuf = new byte[9];
+            byte[] gBuf = new byte[9];
+            byte[] bBuf = new byte[9];
+            CreateTestFilter(ref rBuf, ref gBuf, ref bBuf);
 
             System.Drawing.Color expect = System.Drawing.Color.FromArgb(100, 74, 100);
-            System.Drawing.Color result = MyTrimmingNew2.ImageProcess.ApplyUnsharpFilter(cs, 0.5);
+            System.Drawing.Color result = MyTrimmingNew2.ImageProcess.ApplyUnsharpFilter(rBuf, gBuf, bBuf, 0.5);
             Assert.AreEqual(expected: expect, actual: result);
 
             expect = System.Drawing.Color.FromArgb(100, 75, 100);
-            result = MyTrimmingNew2.ImageProcess.ApplyUnsharpFilter(cs, 0.2);
+            result = MyTrimmingNew2.ImageProcess.ApplyUnsharpFilter(rBuf, gBuf, bBuf, 0.2);
             Assert.AreEqual(expected: expect, actual: result);
         }
 
-        private System.Drawing.Bitmap CreateTestBitmap()
+        private void CreateTestFilter(ref byte[] rBuf, ref byte[] gBuf, ref byte[] bBuf)
         {
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(5, 5);
-            bitmap.SetPixel(1, 1, System.Drawing.Color.FromArgb(0, 25, 50));
-            bitmap.SetPixel(1, 2, System.Drawing.Color.FromArgb(0, 75, 100));
-            bitmap.SetPixel(1, 3, System.Drawing.Color.FromArgb(0, 125, 150));
-            bitmap.SetPixel(2, 1, System.Drawing.Color.FromArgb(100, 25, 50));
-            bitmap.SetPixel(2, 2, System.Drawing.Color.FromArgb(100, 75, 100));
-            bitmap.SetPixel(2, 3, System.Drawing.Color.FromArgb(100, 125, 150));
-            bitmap.SetPixel(3, 1, System.Drawing.Color.FromArgb(200, 25, 50));
-            bitmap.SetPixel(3, 2, System.Drawing.Color.FromArgb(200, 75, 100));
-            bitmap.SetPixel(3, 3, System.Drawing.Color.FromArgb(200, 125, 150));
-            return bitmap;
+            System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 25, 50);
+            System.Drawing.Color c2 = System.Drawing.Color.FromArgb(100, 25, 50);
+            System.Drawing.Color c3 = System.Drawing.Color.FromArgb(200, 25, 50);
+            System.Drawing.Color c4 = System.Drawing.Color.FromArgb(0, 75, 100);
+            System.Drawing.Color c5 = System.Drawing.Color.FromArgb(100, 75, 100);
+            System.Drawing.Color c6 = System.Drawing.Color.FromArgb(200, 75, 100);
+            System.Drawing.Color c7 = System.Drawing.Color.FromArgb(0, 125, 150);
+            System.Drawing.Color c8 = System.Drawing.Color.FromArgb(100, 125, 150);
+            System.Drawing.Color c9 = System.Drawing.Color.FromArgb(200, 125, 150);
+            rBuf[0] = c1.R; gBuf[0] = c1.G; bBuf[0] = c1.B;
+            rBuf[1] = c2.R; gBuf[1] = c2.G; bBuf[1] = c2.B;
+            rBuf[2] = c3.R; gBuf[2] = c3.G; bBuf[2] = c3.B;
+            rBuf[3] = c4.R; gBuf[3] = c4.G; bBuf[3] = c4.B;
+            rBuf[4] = c5.R; gBuf[4] = c5.G; bBuf[4] = c5.B;
+            rBuf[5] = c6.R; gBuf[5] = c6.G; bBuf[5] = c6.B;
+            rBuf[6] = c7.R; gBuf[6] = c7.G; bBuf[6] = c7.B;
+            rBuf[7] = c8.R; gBuf[7] = c8.G; bBuf[7] = c8.B;
+            rBuf[8] = c9.R; gBuf[8] = c9.G; bBuf[8] = c9.B;
         }
     }
 }
