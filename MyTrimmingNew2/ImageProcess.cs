@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace MyTrimmingNew2
 {
@@ -65,6 +67,31 @@ namespace MyTrimmingNew2
             {
                 DeleteObject(handle);
             }
+        }
+
+        public static void Copy(Bitmap src, out byte[] dst)
+        {
+            BitmapData data = src.LockBits(new Rectangle(0, 0, src.Width, src.Height),
+                                           ImageLockMode.ReadWrite,
+                                           PixelFormat.Format32bppArgb);
+            dst = new byte[src.Width * 4 * src.Height];
+            Marshal.Copy(data.Scan0, dst, 0, dst.Length);
+            src.UnlockBits(data);
+        }
+
+        public static void Copy(byte[] src, int bitmapWidth, int bitmapHeight, out Bitmap dst)
+        {
+            dst = new Bitmap(bitmapWidth, bitmapHeight);
+            Copy(src, dst);
+        }
+
+        public static void Copy(byte[] src, Bitmap dst)
+        {
+            BitmapData dataResult = dst.LockBits(new Rectangle(0, 0, dst.Width, dst.Height),
+                                                 ImageLockMode.ReadWrite,
+                                                 PixelFormat.Format32bppArgb);
+            Marshal.Copy(src, 0, dataResult.Scan0, src.Length);
+            dst.UnlockBits(dataResult);
         }
 
         public static System.Drawing.Color GetPixelColorFakePixelMixing(byte[] rBuf, byte[] gBuf, byte[] bBuf, int x, int y, int width, int height, System.Windows.Point rotate)

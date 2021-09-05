@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 
 namespace MyTrimmingNew2
 {
@@ -106,26 +104,15 @@ namespace MyTrimmingNew2
             // 回転パラメーター準備
             double centerX = Common.CalcCenterX(LeftTop, RightBottom);
             double centerY = Common.CalcCenterY(LeftBottom, RightTop);
-            double radian = (double)Degree * Math.PI / 180;
+            double radian = Common.ToRadian((double)Degree);
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
 
             // 探索範囲の制限
-            double rectWidth = Common.CalcDistance(LeftTop, RightTop);
-            double rectHeight = Common.CalcDistance(LeftTop, LeftBottom);
-            int xMin = Math.Max(0, (int)(centerX - (rectWidth / 2.0)) - 1);
-            int yMin = Math.Max(0, (int)(centerY - (rectHeight / 2.0)) - 1);
-            int xMax = Math.Min(original.Width, (int)(centerX + (rectWidth / 2.0)) + 1);
-            int yMax = Math.Min(original.Height, (int)(centerY + (rectHeight / 2.0)) + 1);
+            LimitSearchArea(original, centerX, centerY, out int xMin, out int yMin, out int xMax, out int yMax);
 
-            // Bitmap.GetPixel() と SetPixel() は遅いのでメモリを直接いじる
-            int widthIndex = original.Width * 4;
-            BitmapData data = original.LockBits(new Rectangle(0, 0, original.Width, original.Height),
-                                                ImageLockMode.ReadWrite,
-                                                PixelFormat.Format32bppArgb);
-            byte[] buf = new byte[widthIndex * original.Height];
-            Marshal.Copy(data.Scan0, buf, 0, buf.Length);
-            original.UnlockBits(data);
+            // Bitmap.GetPixel() と SetPixel() は遅いので byte 配列を使用する
+            ImageProcess.Copy(original, out byte[] buf);
 
             byte[] rBuf = new byte[9];
             byte[] gBuf = new byte[9];
@@ -133,6 +120,7 @@ namespace MyTrimmingNew2
             int xRoundMax = original.Width - 1;
             int yRoundMax = original.Height - 1;
 
+            int widthIndex = original.Width * 4;
             byte[] resultBuf = new byte[widthIndex * original.Height];
             RectLine rectLine = new RectLine(LeftTop, RightTop, RightBottom, LeftBottom);
             minX = original.Width;
@@ -193,12 +181,17 @@ namespace MyTrimmingNew2
                 ProgressManager.AddProgressPerHeight();
             }
 
-            rotateBitmapWithMargin = new Bitmap(original.Width, original.Height);
-            BitmapData dataResult = rotateBitmapWithMargin.LockBits(new Rectangle(0, 0, rotateBitmapWithMargin.Width, rotateBitmapWithMargin.Height),
-                                                                    ImageLockMode.ReadWrite,
-                                                                    PixelFormat.Format32bppArgb);
-            Marshal.Copy(resultBuf, 0, dataResult.Scan0, resultBuf.Length);
-            rotateBitmapWithMargin.UnlockBits(dataResult);
+            ImageProcess.Copy(resultBuf, original.Width, original.Height, out rotateBitmapWithMargin);
+        }
+
+        private void LimitSearchArea(Bitmap original, double centerX, double centerY, out int xMin, out int yMin, out int xMax, out int yMax)
+        {
+            double rectWidth = Common.CalcDistance(LeftTop, RightTop);
+            double rectHeight = Common.CalcDistance(LeftTop, LeftBottom);
+            xMin = Math.Max(0, (int)(centerX - (rectWidth / 2.0)) - 1);
+            yMin = Math.Max(0, (int)(centerY - (rectHeight / 2.0)) - 1);
+            xMax = Math.Min(original.Width, (int)(centerX + (rectWidth / 2.0)) + 1);
+            yMax = Math.Min(original.Height, (int)(centerY + (rectHeight / 2.0)) + 1);
         }
 
         private int Round(double d)
@@ -236,20 +229,17 @@ namespace MyTrimmingNew2
         private System.Drawing.Bitmap ApplyUnsharpMaskingUnmanaged(Bitmap bitmap, double k)
         {
             System.Drawing.Bitmap unsharp = new Bitmap(bitmap);
-            BitmapData data = unsharp.LockBits(new Rectangle(0, 0, unsharp.Width, unsharp.Height),
-                                               ImageLockMode.ReadWrite,
-                                               PixelFormat.Format32bppArgb);
-            byte[] buf = new byte[unsharp.Width * unsharp.Height * 4];
-            Marshal.Copy(data.Scan0, buf, 0, buf.Length);
+            ImageProcess.Copy(unsharp, out byte[] buf);
 
             byte[] resultBuf = new byte[unsharp.Width * unsharp.Height * 4];
             buf.CopyTo(resultBuf, 0);
 
-            // 3x3カーネルを適用するため端を無視
             byte[] rBuf = new byte[9];
             byte[] gBuf = new byte[9];
             byte[] bBuf = new byte[9];
             int width = unsharp.Width * 4;
+
+            // 3x3カーネルを適用するため端を無視
             for (int y = 1; y < unsharp.Height - 1; y++)
             {
                 for (int x = 1; x < unsharp.Width - 1; x++)
@@ -263,8 +253,7 @@ namespace MyTrimmingNew2
                 }
             }
 
-            Marshal.Copy(resultBuf, 0, data.Scan0, resultBuf.Length);
-            unsharp.UnlockBits(data);
+            ImageProcess.Copy(resultBuf, unsharp);
 
             return unsharp;
         }
