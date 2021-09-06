@@ -1,39 +1,81 @@
-﻿using System.Drawing;
-
-namespace MyTrimmingNew2
+﻿namespace MyTrimmingNew2
 {
     public class ImageTrimProgressManager
     {
+        private readonly static double Complete = 100.0;
+
         public double Progress { get; private set; } = 0.0;
 
-        private double Complete { get { return 100.0; } }
+        private int _RotateRateLineNum = 0;
 
-        private double RatePerHeight { get; set; } = 0.0;
-
-        public ImageTrimProgressManager(Bitmap original, double unsharpMask)
+        public int RotateRateLineNum
         {
-            Init(original.Height, unsharpMask);
+            get
+            {
+                return _RotateRateLineNum;
+            }
+            set
+            {
+                _RotateRateLineNum = value;
+                double rate = DoUnsharpMask ? 50.0 : 100.0;
+                RotateRate = rate / (double)_RotateRateLineNum;
+            }
         }
 
-        private void Init(double imageHeight, double unsharpMask)
+        private double RotateRate { get; set; }
+
+        private int _UnsharpMaskLineNum = 0;
+
+        public int UnsharpMaskLineNum
         {
-            double baseHeight = imageHeight - 2;    // 3x3マスク適用のため端を無視する
-            if (unsharpMask == 0.0)
+            get
             {
-                RatePerHeight = 100.0 / baseHeight;
+                return _UnsharpMaskLineNum;
+            }
+            set
+            {
+                _UnsharpMaskLineNum = value;
+                UnsharpMaskRate = 100.0 / (double)_UnsharpMaskLineNum;
+            }
+        }
+
+        private double UnsharpMaskRate { get; set; }
+
+        private bool DoUnsharpMask { get; set; }
+
+        public ImageTrimProgressManager(double unsharpMask)
+        {
+            Init(unsharpMask);
+        }
+
+        private void Init(double unsharpMask)
+        {
+            DoUnsharpMask = (unsharpMask == 0.0) ? false : true;
+        }
+
+        public void AddProgressRotate()
+        {
+            Progress += RotateRate;
+        }
+
+        public void SetCompleteRotate()
+        {
+            if (DoUnsharpMask)
+            {
+                Progress = Complete / 2.0;
             }
             else
             {
-                RatePerHeight = 50.0 / baseHeight;
+                Progress = Complete;
             }
         }
 
-        public void AddProgressPerHeight()
+        public void AddProgressUnsharpMask()
         {
-            Progress += RatePerHeight;
+            Progress += UnsharpMaskRate;
         }
 
-        public void SetComplete()
+        public void SetCompleteUnsharpMask()
         {
             Progress = Complete;
         }
