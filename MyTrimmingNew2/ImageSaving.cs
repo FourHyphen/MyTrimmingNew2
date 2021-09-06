@@ -47,6 +47,7 @@ namespace MyTrimmingNew2
         {
             Main.SaveStatus.Dispatcher.Invoke(() =>
             {
+                Main.SaveProgressLabel.Content = "0.0";
                 Main.Menu.IsEnabled = false;
                 Main.ImageArea.IsEnabled = false;
                 Main.SaveProgressBar.Value = 0.0;
