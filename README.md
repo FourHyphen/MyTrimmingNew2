@@ -13,22 +13,15 @@
     - テスト側にロジックを2重実装しませんでした
     - 機能テスト＝受け入れテストと呼べるものを実装しました
 - 注意事項
-  - 回転してトリミングする際の処理は相変わらず遅いです
+  - ~~回転してトリミングする際の処理は相変わらず遅いです~~
+    - Ver. 1.1.0 にてある程度高速化しました。1920 x 1080 画像なら補正込みで 23 秒 -> 3 秒程度にしました
+    - 高速化作業履歴は SpeedUp ブランチを参照ください
 
-# Requirement
-- ビルドに必要な環境
-  - Visual Studio
-  - .NET Framework 4.5
-- Nuget 取得Package
-  - テスト
-    - MSTest
-      - MSTest.TestAdapter 2.1.2
-      - MSTest.TestFramework 2.1.2
-    - 自動化API
-      - Codeer.Friendly 2.6.1
-      - Codeer.Friendly.Windows 2.15.0
-      - Codeer.Friendly.Windows.Grasp 2.12.0
-      - RM.Friendly.WPFStandardControls 1.41.2
+# History
+|日付     |タグ  |内容|
+|---      |---   |--- |
+|2021/9/xx|v1.1.0|見た目からテスト用情報を削除、画像保存処理の高速化|
+|2021/6/16|v1.0.0|初回実装|
 
 # Usage
 
@@ -64,13 +57,14 @@
 
 ### 切り取り範囲を示す赤枠矩形
 ```
-"+"            : 時計回りに1度回転
-"-"            : 反時計回りに1度回転
-"Ctrl" + "+"   : 時計回りに10度回転
-"Ctrl" + "-"   : 反時計回りに10度回転
-"上下左右キー" : 1pixel単位での移動
-"Ctrl" + "z"   : 取り消し
-"Ctrl" + "y"   : やり直し
+";"                      : 時計回りに1度回転
+"-"                      : 反時計回りに1度回転
+"Shift" + ";"            : 時計回りに10度回転
+"Shift" + "-"            : 反時計回りに10度回転
+"カーソルキー"           : 1pixel単位での移動
+"Shift" + "カーソルキー" : 10pixel単位での移動
+"Ctrl" + "z"             : 取り消し
+"Ctrl" + "y"             : やり直し
 ```
 
 ### その他
@@ -80,7 +74,22 @@
 ```
 
 # Install
-2021/6/16時点でコード公開のみ実施しています。お手数ですがご自身でビルドしてください。
+2021/9/xx時点でコード公開のみ実施しています。お手数ですがご自身でビルドしてください。
+
+# Requirement
+- ビルドに必要な環境
+  - Visual Studio
+  - .NET Framework 4.5
+- Nuget 取得Package
+  - テスト
+    - MSTest
+      - MSTest.TestAdapter 2.1.2
+      - MSTest.TestFramework 2.1.2
+    - 自動化API
+      - Codeer.Friendly 2.6.1
+      - Codeer.Friendly.Windows 2.15.0
+      - Codeer.Friendly.Windows.Grasp 2.12.0
+      - RM.Friendly.WPFStandardControls 1.41.2
 
 # Licence
 - [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
