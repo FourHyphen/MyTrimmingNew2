@@ -48,9 +48,8 @@
                 <!--parameter-->
                 <Grid Column="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition Height="3*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
@@ -59,44 +58,35 @@
                     <Border Grid.Row="2" BorderBrush="Black" BorderThickness="0.5"/>
                     <Border Grid.Row="3" BorderBrush="Black" BorderThickness="0.5"/>
 
-                    <!--画像-->
+                    <!--画像実寸-->
                     <Grid Grid.Row="0">
                         <StackPanel>
                             <Label Content="画像実寸(pixel)"/>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="横"/>
                                 <Label x:Name="OriginalImageWidth"
-                                   Content="0"/>
-                                <Label Content=" x 縦"/>
-                                <Label x:Name="OriginalImageHeight"
-                                   Content="0"/>
+                                       Content="0"/>
                             </StackPanel>
-
-                            <Label Content="画像見た目(pixel)"/>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="横"/>
-                                <Label x:Name="ShowingImageWidth"
-                                   Content="0"/>
-                                <Label Content=" x 縦"/>
-                                <Label x:Name="ShowingImageHeight"
-                                   Content="0"/>
+                                <Label Content="縦"/>
+                                <Label x:Name="OriginalImageHeight"
+                                       Content="0"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
 
+                    <!--回転時パラメーター-->
                     <Grid Grid.Row="1">
-                        <StackPanel>
-                            <Label Content="保存画像サイズ(pixel)"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="横"/>
-                                <Label x:Name="CutSizeWidth"
+                        <StackPanel Cursor="Hand">
+                            <Label Content="回転角(度)"/>
+                            <Label x:Name="CutLineRotateDegree"
                                    Content="0"/>
-                                <Label Content=" x 縦"/>
-                                <Label x:Name="CutSizeHeight"
-                                   Content="0"/>
-                            </StackPanel>
 
-                            <Label Content=""/>
+                            <Rectangle Height="1"
+                                       Stroke="Black"
+                                       StrokeDashArray="4 4"
+                                       StrokeThickness="1"/>
+
                             <Label Content="以下回転時のみ"/>
                             <StackPanel>
                                 <Label Content="Pixel補間方法"/>
@@ -106,6 +96,8 @@
                                              Content="Pixel Mixing"
                                              IsChecked="True"/>
                             </StackPanel>
+
+                            <Label Visibility="Hidden"/>
 
                             <StackPanel>
                                 <Label Content="Unsharp Mask"/>
@@ -122,79 +114,19 @@
                         </StackPanel>
                     </Grid>
 
-                    <!--切り抜き線-->
+                    <!--保存画像サイズ-->
                     <Grid Grid.Row="2">
                         <StackPanel>
-                            <Label Content="切り抜き線(pixel)"/>
-
+                            <Label Content="保存画像サイズ(pixel)"/>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="横"/>
-                                <Label x:Name="CutLineWidth"
-                                   Content="0"/>
-                                <Label Content=" x 縦"/>
-                                <Label x:Name="CutLineHeight"
-                                   Content="0"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="左上("/>
-                                <Label x:Name="CutLineLeftTopX"
-                                   Content="0"/>
-                                <Label Content=","/>
-                                <Label x:Name="CutLineLeftTopY"
-                                   Content="0"/>
-                                <Label Content=")"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="右上("/>
-                                <Label x:Name="CutLineRightTopX"
-                                   Content="0"/>
-                                <Label Content=","/>
-                                <Label x:Name="CutLineRightTopY"
-                                   Content="0"/>
-                                <Label Content=")"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="左下("/>
-                                <Label x:Name="CutLineLeftBottomX"
-                                   Content="0"/>
-                                <Label Content=","/>
-                                <Label x:Name="CutLineLeftBottomY"
-                                   Content="0"/>
-                                <Label Content=")"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="右下("/>
-                                <Label x:Name="CutLineRightBottomX"
-                                   Content="0"/>
-                                <Label Content=","/>
-                                <Label x:Name="CutLineRightBottomY"
-                                   Content="0"/>
-                                <Label Content=")"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="回転角(度)"/>
-                                <Label x:Name="CutLineRotateDegree"
+                                <Label x:Name="CutSizeWidth"
                                        Content="0"/>
                             </StackPanel>
-                        </StackPanel>
-                    </Grid>
-
-                    <!--テスト用：画像領域-->
-                    <Grid Grid.Row="4">
-                        <StackPanel>
-                            <Label Content="画像領域(pixel)"/>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="横"/>
-                                <Label x:Name="ImageAreaWidth"
-                                   Content="0"/>
-                                <Label Content=" x 縦"/>
-                                <Label x:Name="ImageAreaHeight"
-                                   Content="0"/>
+                                <Label Content="縦"/>
+                                <Label x:Name="CutSizeHeight"
+                                       Content="0"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -237,6 +169,36 @@
                                    HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
+                </Grid>
+
+                <!--以下テスト用-->
+                <Grid Visibility="Hidden">
+                    <!--画像見た目(pixel)-->
+                    <Label x:Name="ShowingImageWidth" Content="0"/>
+                    <Label x:Name="ShowingImageHeight" Content="0"/>
+
+                    <!--切り抜き線-->
+                    <!--横幅-->
+                    <Label x:Name="CutLineWidth" Content="0"/>
+                    <!--縦幅-->
+                    <Label x:Name="CutLineHeight" Content="0"/>
+
+                    <!--4 隅の座標-->
+                    <Label x:Name="CutLineLeftTopX" Content="0"/>
+                    <Label x:Name="CutLineLeftTopY" Content="0"/>
+
+                    <Label x:Name="CutLineRightTopX" Content="0"/>
+                    <Label x:Name="CutLineRightTopY" Content="0"/>
+
+                    <Label x:Name="CutLineLeftBottomX" Content="0"/>
+                    <Label x:Name="CutLineLeftBottomY" Content="0"/>
+
+                    <Label x:Name="CutLineRightBottomX" Content="0"/>
+                    <Label x:Name="CutLineRightBottomY" Content="0"/>
+
+                    <!--画像領域(pixel)-->
+                    <Label x:Name="ImageAreaWidth" Content="0"/>
+                    <Label x:Name="ImageAreaHeight" Content="0"/>
                 </Grid>
             </Grid>
         </DockPanel>
