@@ -57,22 +57,22 @@ namespace TestMyTrimmingNew2
             int x = 2, y = 2, bitmapWidth = 5, bitmapHeight = 5;
 
             // (2) 左上方向
-            System.Windows.Point rotate = new System.Windows.Point(1.8, 1.9);
+            (double X, double Y) rotate = (1.8, 1.9);
             System.Drawing.Color c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(72, 62, 87), actual: c);
 
             // (3) 右上方向
-            rotate = new System.Windows.Point(2.3, 1.7);
+            rotate = (2.3, 1.7);
             c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(138, 55, 80), actual: c);
 
             // (4) 左下方向
-            rotate = new System.Windows.Point(1.6, 2.4);
+            rotate = (1.6, 2.4);
             c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(55, 97, 122), actual: c);
 
             // (5) 右下方向
-            rotate = new System.Windows.Point(2.2, 2.1);
+            rotate = (2.2, 2.1);
             c = MyTrimmingNew2.ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, x, y, bitmapWidth, bitmapHeight, rotate);
             Assert.AreEqual(expected: System.Drawing.Color.FromArgb(127, 87, 112), actual: c);
         }

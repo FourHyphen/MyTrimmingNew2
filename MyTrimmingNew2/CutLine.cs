@@ -134,7 +134,7 @@ namespace MyTrimmingNew2
         public bool IsPointInside(Point p)
         {
             RectLine rl = new RectLine(LeftTop, RightTop, RightBottom, LeftBottom);
-            return (rl.IsInside(p));
+            return (rl.IsInside((p.X, p.Y)));
         }
     }
 }

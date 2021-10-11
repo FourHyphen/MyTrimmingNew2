@@ -36,7 +36,7 @@ namespace MyTrimmingNew2
             LineBottomB = CalcLineB(rightBottom.X, rightBottom.Y, LineBottomA);
         }
 
-        public bool IsInside(System.Windows.Point p)
+        public bool IsInside((double X, double Y) p)
         {
             if (!IsYInsideRectLineLeft(p))
             {
@@ -61,7 +61,7 @@ namespace MyTrimmingNew2
             return true;
         }
 
-        private bool IsYInsideRectLineLeft(System.Windows.Point p)
+        private bool IsYInsideRectLineLeft((double X, double Y) p)
         {
             double lineY = LineLeftA * p.X + LineLeftB;
             if (LineLeftA > 0.0)
@@ -74,7 +74,7 @@ namespace MyTrimmingNew2
             }
         }
 
-        private bool IsYInsideRectLineRight(System.Windows.Point p)
+        private bool IsYInsideRectLineRight((double X, double Y) p)
         {
             double lineY = LineRightA * p.X + LineRightB;
             if (LineRightA > 0.0)
@@ -87,13 +87,13 @@ namespace MyTrimmingNew2
             }
         }
 
-        private bool IsYInsideRectLineTop(System.Windows.Point p)
+        private bool IsYInsideRectLineTop((double X, double Y) p)
         {
             double lineY = LineTopA * p.X + LineTopB;
             return (lineY < p.Y);
         }
 
-        private bool IsYInsideRectLineBottom(System.Windows.Point p)
+        private bool IsYInsideRectLineBottom((double X, double Y) p)
         {
             double lineY = LineBottomA * p.X + LineBottomB;
             return (lineY > p.Y);

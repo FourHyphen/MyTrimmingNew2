@@ -23,6 +23,13 @@ namespace MyTrimmingNew2
             return Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
         }
 
+        public static double CalcDistance((double X, double Y) p1, (double X, double Y) p2)
+        {
+            double xDiff = p1.X - p2.X;
+            double yDiff = p1.Y - p2.Y;
+            return Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+        }
+
         public static double ToRadian(double degree)
         {
             return degree * Math.PI / 180.0;
@@ -42,6 +49,15 @@ namespace MyTrimmingNew2
             double rotateX = x * cos - y * sin;
             double rotateY = y * cos + x * sin;
             return new System.Windows.Point(rotateX + centerX, rotateY + centerY);
+        }
+
+        public static (double X, double Y) CalcRotatePoint(double x, double y, double centerX, double centerY, double cos, double sin)
+        {
+            double tmpX = x - centerX;
+            double tmpY = y - centerY;
+            double rotateX = tmpX * cos - tmpY * sin;
+            double rotateY = tmpY * cos + tmpX * sin;
+            return (rotateX + centerX, rotateY + centerY);
         }
     }
 }

@@ -94,7 +94,7 @@ namespace MyTrimmingNew2
             dst.UnlockBits(dataResult);
         }
 
-        public static System.Drawing.Color GetPixelColorFakePixelMixing(byte[] rBuf, byte[] gBuf, byte[] bBuf, int x, int y, int width, int height, System.Windows.Point rotate)
+        public static System.Drawing.Color GetPixelColorFakePixelMixing(byte[] rBuf, byte[] gBuf, byte[] bBuf, int x, int y, int width, int height, (double X, double Y) rotate)
         {
             double directionX = rotate.X - (double)x;
             double directionY = rotate.Y - (double)y;
@@ -104,9 +104,9 @@ namespace MyTrimmingNew2
                 return Color.FromArgb(rBuf[4], gBuf[4], bBuf[4]);
             }
 
-            System.Windows.Point p = new System.Windows.Point(directionX, directionY);
+            (double X, double Y) p = (directionX, directionY);
             int ia, ib, ic, id;
-            System.Windows.Point pa, pb, pc, pd;
+            (double X, double Y) pa, pb, pc, pd;
 
             if (directionX < 0.0 && directionY < 0.0)
             {
@@ -115,10 +115,10 @@ namespace MyTrimmingNew2
                 ib = 1;
                 ic = 3;
                 id = 4;
-                pa = new System.Windows.Point(-1.0, -1.0);
-                pb = new System.Windows.Point(0.0, -1.0);
-                pc = new System.Windows.Point(-1.0, 0.0);
-                pd = new System.Windows.Point(0.0, 0.0);
+                pa = (-1.0, -1.0);
+                pb = (0.0, -1.0);
+                pc = (-1.0, 0.0);
+                pd = (0.0, 0.0);
             }
             else if (directionX >= 0.0 && directionY < 0.0)
             {
@@ -127,10 +127,10 @@ namespace MyTrimmingNew2
                 ib = 2;
                 ic = 4;
                 id = 5;
-                pa = new System.Windows.Point(0.0, -1.0);
-                pb = new System.Windows.Point(1.0, -1.0);
-                pc = new System.Windows.Point(0.0, 0.0);
-                pd = new System.Windows.Point(1.0, 0.0);
+                pa = (0.0, -1.0);
+                pb = (1.0, -1.0);
+                pc = (0.0, 0.0);
+                pd = (1.0, 0.0);
             }
             else if (directionX < 0.0 && directionY >= 0.0)
             {
@@ -139,10 +139,10 @@ namespace MyTrimmingNew2
                 ib = 4;
                 ic = 6;
                 id = 7;
-                pa = new System.Windows.Point(-1.0, 0.0);
-                pb = new System.Windows.Point(0.0, 0.0);
-                pc = new System.Windows.Point(-1.0, 1.0);
-                pd = new System.Windows.Point(0.0, 1.0);
+                pa = (-1.0, 0.0);
+                pb = (0.0, 0.0);
+                pc = (-1.0, 1.0);
+                pd = (0.0, 1.0);
             }
             else
             {
@@ -151,10 +151,10 @@ namespace MyTrimmingNew2
                 ib = 5;
                 ic = 7;
                 id = 8;
-                pa = new System.Windows.Point(0.0, 0.0);
-                pb = new System.Windows.Point(1.0, 0.0);
-                pc = new System.Windows.Point(0.0, 1.0);
-                pd = new System.Windows.Point(1.0, 1.0);
+                pa = (0.0, 0.0);
+                pb = (1.0, 0.0);
+                pc = (0.0, 1.0);
+                pd = (1.0, 1.0);
             }
 
             double da = 1.0 / Common.CalcDistance(pa, p);
@@ -184,17 +184,17 @@ namespace MyTrimmingNew2
             // 参考: https://imagingsolution.blog.fc2.com/blog-entry-114.html
             double aroundRate = -k / 9.0;
             double centerRate = (8.0 * k + 9.0) / 9.0;
-            byte r = ApplyUnsharpFilter(rBuf[0], rBuf[1], rBuf[2], rBuf[3], rBuf[4], rBuf[5], rBuf[6], rBuf[7], rBuf[8], aroundRate, centerRate);
-            byte g = ApplyUnsharpFilter(gBuf[0], gBuf[1], gBuf[2], gBuf[3], gBuf[4], gBuf[5], gBuf[6], gBuf[7], gBuf[8], aroundRate, centerRate);
-            byte b = ApplyUnsharpFilter(bBuf[0], bBuf[1], bBuf[2], bBuf[3], bBuf[4], bBuf[5], bBuf[6], bBuf[7], bBuf[8], aroundRate, centerRate);
+            byte r = ApplyUnsharpFilter(rBuf, aroundRate, centerRate);
+            byte g = ApplyUnsharpFilter(gBuf, aroundRate, centerRate);
+            byte b = ApplyUnsharpFilter(bBuf, aroundRate, centerRate);
             return System.Drawing.Color.FromArgb(r, g, b);
         }
 
-        private static byte ApplyUnsharpFilter(byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8, byte b9, double aroundRate, double centerRate)
+        private static byte ApplyUnsharpFilter(byte[] b, double aroundRate, double centerRate)
         {
-            double tmp1 = b1 * aroundRate + b2 * aroundRate + b3 * aroundRate;
-            double tmp2 = b4 * aroundRate + b5 * centerRate + b6 * aroundRate;
-            double tmp3 = b7 * aroundRate + b8 * aroundRate + b9 * aroundRate;
+            double tmp1 = b[0] * aroundRate + b[1] * aroundRate + b[2] * aroundRate;
+            double tmp2 = b[3] * aroundRate + b[4] * centerRate + b[5] * aroundRate;
+            double tmp3 = b[6] * aroundRate + b[7] * aroundRate + b[8] * aroundRate;
             double result = tmp1 + tmp2 + tmp3;
 
             if (result < 0.0) return (byte)0;

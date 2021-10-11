@@ -114,25 +114,25 @@ namespace MyTrimmingNew2
             // Bitmap.GetPixel() と SetPixel() は遅いので byte 配列を使用する
             ImageProcess.Copy(original, out byte[] buf);
 
-            byte[] rBuf = new byte[9];
-            byte[] gBuf = new byte[9];
-            byte[] bBuf = new byte[9];
-            int xRoundMax = original.Width - 1;
-            int yRoundMax = original.Height - 1;
+            int originalWidth = original.Width;
+            int originalHeight = original.Height;
+            int xRoundMax = originalWidth - 1;
+            int yRoundMax = originalHeight - 1;
 
-            int widthIndex = original.Width * 4;
-            byte[] resultBuf = new byte[widthIndex * original.Height];
+            int widthIndex = originalWidth * 4;
+            byte[] resultBuf = new byte[widthIndex * originalHeight];
             RectLine rectLine = new RectLine(LeftTop, RightTop, RightBottom, LeftBottom);
-            minX = original.Width;
-            minY = original.Height;
-            maxX = 0;
-            maxY = 0;
 
-            for (int y = yMin; y < yMax; y++)
+            int[] rangeX = new int[originalWidth];
+            int[] rangeY = new int[originalHeight];
+            System.Threading.Tasks.Parallel.For(yMin, yMax, y =>
             {
+                byte[] rBuf = new byte[9];
+                byte[] gBuf = new byte[9];
+                byte[] bBuf = new byte[9];
                 for (int x = xMin; x < xMax; x++)
                 {
-                    System.Windows.Point rotate = Common.CalcRotatePoint(new System.Windows.Point(x, y), centerX, centerY, cos, sin);
+                    (double X, double Y) rotate = Common.CalcRotatePoint(x, y, centerX, centerY, cos, sin);
                     if (rectLine.IsInside(rotate))
                     {
                         System.Drawing.Color c;
@@ -142,7 +142,7 @@ namespace MyTrimmingNew2
                             int xRound = Min(Round(rotate.X), xRoundMax);
                             int yRound = Min(Round(rotate.Y), yRoundMax);
                             CreateFilter(buf, xRound, yRound, widthIndex, ref rBuf, ref gBuf, ref bBuf);
-                            c = ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, xRound, yRound, original.Width, original.Height, rotate);
+                            c = ImageProcess.GetPixelColorFakePixelMixing(rBuf, gBuf, bBuf, xRound, yRound, originalWidth, originalHeight, rotate);
                         }
                         else
                         {
@@ -159,27 +159,18 @@ namespace MyTrimmingNew2
                         resultBuf[i + 2] = c.B;
                         resultBuf[i + 3] = 255;    // A が 0 だと画像が真っ黒になる
 
-                        if (x < minX)
-                        {
-                            minX = x;
-                        }
-                        if (x > maxX)
-                        {
-                            maxX = x;
-                        }
-                        if (y < minY)
-                        {
-                            minY = y;
-                        }
-                        if (y > maxY)
-                        {
-                            maxY = y;
-                        }
+                        rangeX[x]++;
+                        rangeY[y]++;
                     }
                 }
 
                 ProgressManager.AddProgressRotate();
-            }
+            });
+
+            minX = Array.FindIndex(rangeX, value => value > 0);
+            minY = Array.FindIndex(rangeY, value => value > 0);
+            maxX = Array.FindLastIndex(rangeX, value => value > 0);
+            maxY = Array.FindLastIndex(rangeY, value => value > 0);
 
             ImageProcess.Copy(resultBuf, original.Width, original.Height, out rotateBitmapWithMargin);
             ProgressManager.SetCompleteRotate();
@@ -239,15 +230,17 @@ namespace MyTrimmingNew2
             byte[] resultBuf = new byte[unsharp.Width * unsharp.Height * 4];
             buf.CopyTo(resultBuf, 0);
 
-            byte[] rBuf = new byte[9];
-            byte[] gBuf = new byte[9];
-            byte[] bBuf = new byte[9];
             int width = unsharp.Width * 4;
 
             // 3x3カーネルを適用するため端を無視
-            for (int y = 1; y < unsharp.Height - 1; y++)
+            int maxWidth = unsharp.Width - 1;
+            int maxHeight = unsharp.Height - 1;
+            System.Threading.Tasks.Parallel.For(1, maxHeight, y =>
             {
-                for (int x = 1; x < unsharp.Width - 1; x++)
+                byte[] rBuf = new byte[9];
+                byte[] gBuf = new byte[9];
+                byte[] bBuf = new byte[9];
+                for (int x = 1; x < maxWidth; x++)
                 {
                     CreateFilter(buf, x, y, width, ref rBuf, ref gBuf, ref bBuf);
                     Color c = ImageProcess.ApplyUnsharpFilter(rBuf, gBuf, bBuf, k);
@@ -258,7 +251,7 @@ namespace MyTrimmingNew2
                 }
 
                 ProgressManager.AddProgressUnsharpMask();
-            }
+            });
 
             ImageProcess.Copy(resultBuf, unsharp);
 
