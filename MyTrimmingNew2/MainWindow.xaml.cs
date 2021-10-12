@@ -15,7 +15,7 @@ namespace MyTrimmingNew2
 
         private CutLine _CutLine { get; set; } = null;
 
-        private ImageSaving _ImageSaving { get; set; } = null;
+        private bool _DoSaving { get; set; }
 
         private System.Windows.Point MouseDownPoint { get; set; }
 
@@ -93,7 +93,7 @@ namespace MyTrimmingNew2
         private void InputKey(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifierKeys)
         {
             // 画像保存中は全ての操作を無効にする
-            if (_ImageSaving != null)
+            if (_DoSaving)
             {
                 return;
             }
@@ -217,27 +217,27 @@ namespace MyTrimmingNew2
 
         private void SaveImage(string filePath)
         {
+            _DoSaving = true;
+            Menu.IsEnabled = false;
+            ImageArea.IsEnabled = false;
+
             ImageProcess.Interpolate interpolate = GetInterpolate();
             double unsharpMask = GetUnsharpMaskValue();
             try
             {
-                SaveImage(filePath, interpolate, unsharpMask);
+                ImageSaving.Execute(_OriginalImage, _ShowingImage, _CutLine, filePath, interpolate, unsharpMask);
+                ShowSaveResult("画像の保存に成功しました。", "Info");
             }
             catch
             {
                 ShowSaveResult("画像の保存に失敗しました。再度保存してください。", "Error");
             }
-        }
-
-        private async void SaveImage(string filePath, ImageProcess.Interpolate interpolate, double unsharpMask)
-        {
-            await Task.Run(() =>
+            finally
             {
-                _ImageSaving = new ImageSaving(this, _OriginalImage, _ShowingImage, _CutLine);
-                _ImageSaving.Execute(filePath, interpolate, unsharpMask);
-                _ImageSaving = null;
-                ShowSaveResult("画像の保存に成功しました。", "Info");
-            });
+                ImageArea.IsEnabled = true;
+                Menu.IsEnabled = true;
+                _DoSaving = false;
+            }
         }
 
         private ImageProcess.Interpolate GetInterpolate()

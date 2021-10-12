@@ -18,16 +18,6 @@ namespace MyTrimmingNew2
 
         private double Degree { get; }
 
-        public double Progress
-        {
-            get
-            {
-                return ((ProgressManager == null) ? 0.0 : ProgressManager.Progress);
-            }
-        }
-
-        private ImageTrimProgressManager ProgressManager { get; set; }
-
         public ImageTrim(string originalImagePath,
                          System.Windows.Point leftTop,
                          System.Windows.Point rightTop,
@@ -46,8 +36,6 @@ namespace MyTrimmingNew2
         public System.Drawing.Bitmap Create(ImageProcess.Interpolate interpolate, double unsharpMask)
         {
             System.Drawing.Bitmap original = new Bitmap(OriginalImagePath);
-            ProgressManager = new ImageTrimProgressManager(unsharpMask);
-
             System.Drawing.Bitmap trim;
             if (Degree == 0)
             {
@@ -109,7 +97,6 @@ namespace MyTrimmingNew2
 
             // 探索範囲の制限
             LimitSearchArea(original, centerX, centerY, out int xMin, out int yMin, out int xMax, out int yMax);
-            ProgressManager.RotateRateLineNum = yMax - yMin + 1;
 
             // Bitmap.GetPixel() と SetPixel() は遅いので byte 配列を使用する
             ImageProcess.Copy(original, out byte[] buf);
@@ -163,8 +150,6 @@ namespace MyTrimmingNew2
                         rangeY[y]++;
                     }
                 }
-
-                ProgressManager.AddProgressRotate();
             });
 
             minX = Array.FindIndex(rangeX, value => value > 0);
@@ -173,7 +158,6 @@ namespace MyTrimmingNew2
             maxY = Array.FindLastIndex(rangeY, value => value > 0);
 
             ImageProcess.Copy(resultBuf, original.Width, original.Height, out rotateBitmapWithMargin);
-            ProgressManager.SetCompleteRotate();
         }
 
         private void LimitSearchArea(Bitmap original, double centerX, double centerY, out int xMin, out int yMin, out int xMax, out int yMax)
@@ -215,11 +199,7 @@ namespace MyTrimmingNew2
 
         private System.Drawing.Bitmap ApplyUnsharpMasking(Bitmap bitmap, double k)
         {
-            ProgressManager.UnsharpMaskLineNum = bitmap.Height;
-            System.Drawing.Bitmap result = ApplyUnsharpMaskingUnmanaged(bitmap, k);
-            ProgressManager.SetCompleteUnsharpMask();
-
-            return result;
+            return ApplyUnsharpMaskingUnmanaged(bitmap, k);
         }
 
         private System.Drawing.Bitmap ApplyUnsharpMaskingUnmanaged(Bitmap bitmap, double k)
@@ -249,8 +229,6 @@ namespace MyTrimmingNew2
                     resultBuf[i + 1] = c.G;
                     resultBuf[i + 2] = c.B;
                 }
-
-                ProgressManager.AddProgressUnsharpMask();
             });
 
             ImageProcess.Copy(resultBuf, unsharp);
