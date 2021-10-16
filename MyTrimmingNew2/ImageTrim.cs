@@ -141,9 +141,9 @@ namespace MyTrimmingNew2
                         }
 
                         int i = y * widthIndex + x * 4;
-                        resultBuf[i] = c.R;
+                        resultBuf[i] = c.B;
                         resultBuf[i + 1] = c.G;
-                        resultBuf[i + 2] = c.B;
+                        resultBuf[i + 2] = c.R;
                         resultBuf[i + 3] = 255;    // A が 0 だと画像が真っ黒になる
 
                         rangeX[x]++;
@@ -225,9 +225,9 @@ namespace MyTrimmingNew2
                     CreateFilter(buf, x, y, width, ref rBuf, ref gBuf, ref bBuf);
                     Color c = ImageProcess.ApplyUnsharpFilter(rBuf, gBuf, bBuf, k);
                     int i = y * width + x * 4;
-                    resultBuf[i] = c.R;
+                    resultBuf[i] = c.B;
                     resultBuf[i + 1] = c.G;
-                    resultBuf[i + 2] = c.B;
+                    resultBuf[i + 2] = c.R;
                 }
             });
 
@@ -253,15 +253,15 @@ namespace MyTrimmingNew2
             int i7 = yPlus + xMinus;
             int i8 = yPlus + xCenter;
             int i9 = yPlus + xPlus;
-            rBuf[0] = buf[i1]; gBuf[0] = buf[i1 + 1]; bBuf[0] = buf[i1 + 2];
-            rBuf[1] = buf[i2]; gBuf[1] = buf[i2 + 1]; bBuf[1] = buf[i2 + 2];
-            rBuf[2] = buf[i3]; gBuf[2] = buf[i3 + 1]; bBuf[2] = buf[i3 + 2];
-            rBuf[3] = buf[i4]; gBuf[3] = buf[i4 + 1]; bBuf[3] = buf[i4 + 2];
-            rBuf[4] = buf[i5]; gBuf[4] = buf[i5 + 1]; bBuf[4] = buf[i5 + 2];
-            rBuf[5] = buf[i6]; gBuf[5] = buf[i6 + 1]; bBuf[5] = buf[i6 + 2];
-            rBuf[6] = buf[i7]; gBuf[6] = buf[i7 + 1]; bBuf[6] = buf[i7 + 2];
-            rBuf[7] = buf[i8]; gBuf[7] = buf[i8 + 1]; bBuf[7] = buf[i8 + 2];
-            rBuf[8] = buf[i9]; gBuf[8] = buf[i9 + 1]; bBuf[8] = buf[i9 + 2];
+            bBuf[0] = buf[i1]; gBuf[0] = buf[i1 + 1]; rBuf[0] = buf[i1 + 2];
+            bBuf[1] = buf[i2]; gBuf[1] = buf[i2 + 1]; rBuf[1] = buf[i2 + 2];
+            bBuf[2] = buf[i3]; gBuf[2] = buf[i3 + 1]; rBuf[2] = buf[i3 + 2];
+            bBuf[3] = buf[i4]; gBuf[3] = buf[i4 + 1]; rBuf[3] = buf[i4 + 2];
+            bBuf[4] = buf[i5]; gBuf[4] = buf[i5 + 1]; rBuf[4] = buf[i5 + 2];
+            bBuf[5] = buf[i6]; gBuf[5] = buf[i6 + 1]; rBuf[5] = buf[i6 + 2];
+            bBuf[6] = buf[i7]; gBuf[6] = buf[i7 + 1]; rBuf[6] = buf[i7 + 2];
+            bBuf[7] = buf[i8]; gBuf[7] = buf[i8 + 1]; rBuf[7] = buf[i8 + 2];
+            bBuf[8] = buf[i9]; gBuf[8] = buf[i9 + 1]; rBuf[8] = buf[i9 + 2];
         }
     }
 }
