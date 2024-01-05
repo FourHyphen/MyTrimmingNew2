@@ -22,6 +22,7 @@
 # History
 |日付      |タグ  |内容|
 |---       |---   |--- |
+|2024/ 1/ 5|v1.2.0|.NET Framework バージョンを 4.5 から 4.8 に更新|
 |2021/10/16|v1.1.2|BitmapDataの色の並び順の間違いを修正|
 |2021/10/13|v1.1.1|画像保存処理を更に高速化|
 |2021/ 9/11|v1.1.0|見た目からテスト用情報を削除、画像保存処理の高速化|
@@ -83,7 +84,7 @@
 # Requirement
 - ビルドに必要な環境
   - Visual Studio
-  - .NET Framework 4.5
+  - .NET Framework 4.8
 - Nuget 取得Package
   - テスト
     - MSTest
